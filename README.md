@@ -1,7 +1,5 @@
 <p align="center">
-<a href="https://open-admin.org/">
-<img src="https://open-admin.org/gfx/logo.png" alt="open-admin" style="height:200px;background:transparent;">
-</a>
+<span style="color: #ef8030">Menqz</span>Admin
 </p>
 
 <p align="center"><code>menqz-admin</code> is administrative interface builder for laravel which can help you build CRUD backends just with few lines of code.</p>
