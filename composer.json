@@ -1,6 +1,6 @@
 {
     "name": "menqz/menqz-admin",
-    "description": "menqz-admin. Open-source Laravel Admin panel. No pro or paid package, free & open. Based on menqz-admin",
+    "description": "menqz-admin. Open-source Laravel Admin panel. No pro or paid package, free & open. Based on open-admin",
     "type": "library",
     "keywords": ["laravel", "admin", "grid", "form", "menqz-admin","open","free","menqz", "menqz-admin"],
     "homepage": "https://github.com/Menqz/menqz-admin",
