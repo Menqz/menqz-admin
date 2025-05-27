@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Widgets;
+namespace MenqzAdmin\Admin\Widgets;
 
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
@@ -9,11 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\Validator;
-use OpenAdmin\Admin\Facades\Admin;
-use OpenAdmin\Admin\Form as BaseForm;
-use OpenAdmin\Admin\Form\Concerns\HasFormAttributes;
-use OpenAdmin\Admin\Form\Field;
-use OpenAdmin\Admin\Layout\Content;
+use MenqzAdmin\Admin\Facades\Admin;
+use MenqzAdmin\Admin\Form as BaseForm;
+use MenqzAdmin\Admin\Form\Concerns\HasFormAttributes;
+use MenqzAdmin\Admin\Form\Field;
+use MenqzAdmin\Admin\Layout\Content;
 
 /**
  * Class Form.

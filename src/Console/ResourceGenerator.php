@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Console;
+namespace MenqzAdmin\Admin\Console;
 
 use Illuminate\Database\Eloquent\Model;
 

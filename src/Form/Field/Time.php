@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Form\Field;
+namespace MenqzAdmin\Admin\Form\Field;
 
 class Time extends Date
 {

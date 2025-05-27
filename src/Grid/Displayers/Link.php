@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Displayers;
+namespace MenqzAdmin\Admin\Grid\Displayers;
 
 class Link extends AbstractDisplayer
 {

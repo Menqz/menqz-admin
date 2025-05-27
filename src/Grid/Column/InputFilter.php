@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Column;
+namespace MenqzAdmin\Admin\Grid\Column;
 
-use OpenAdmin\Admin\Admin;
-use OpenAdmin\Admin\Grid\Model;
+use MenqzAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Grid\Model;
 
 class InputFilter extends Filter
 {

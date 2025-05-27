@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAdmin\Admin\Widgets\Navbar;
+namespace MenqzAdmin\Admin\Widgets\Navbar;
 
 use Illuminate\Contracts\Support\Renderable;
-use OpenAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Admin;
 
 /**
  * Class FullScreen.

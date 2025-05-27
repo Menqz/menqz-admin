@@ -1,12 +1,12 @@
 <?php
 
-namespace OpenAdmin\Admin\Traits;
+namespace MenqzAdmin\Admin\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
-use OpenAdmin\Admin\Tree;
+use MenqzAdmin\Admin\Tree;
 
 trait ModelTree
 {

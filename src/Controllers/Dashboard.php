@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAdmin\Admin\Controllers;
+namespace MenqzAdmin\Admin\Controllers;
 
 use Illuminate\Support\Arr;
-use OpenAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Admin;
 
 class Dashboard
 {
@@ -47,53 +47,53 @@ class Dashboard
     {
         $extensions = [
             'helpers' => [
-                'name' => 'open-admin-ext/helpers',
-                'link' => 'https://github.com/open-admin-org/helpers',
+                'name' => 'menqz-admin-ext/helpers',
+                'link' => 'https://github.com/menqz-admin-org/helpers',
                 'icon' => 'cogs',
             ],
             'log-viewer' => [
-                'name' => 'open-admin-ext/log-viewer',
-                'link' => 'https://github.com/open-admin-org/log-viewer',
+                'name' => 'menqz-admin-ext/log-viewer',
+                'link' => 'https://github.com/menqz-admin-org/log-viewer',
                 'icon' => 'database',
             ],
             'backup' => [
-                'name' => 'open-admin-ext/backup',
-                'link' => 'https://github.com/open-admin-org/backup',
+                'name' => 'menqz-admin-ext/backup',
+                'link' => 'https://github.com/menqz-admin-org/backup',
                 'icon' => 'copy',
             ],
             'config' => [
-                'name' => 'open-admin-ext/config',
-                'link' => 'https://github.com/open-admin-org/config',
+                'name' => 'menqz-admin-ext/config',
+                'link' => 'https://github.com/menqz-admin-org/config',
                 'icon' => 'toggle-on',
             ],
             'api-tester' => [
-                'name' => 'open-admin-ext/api-tester',
-                'link' => 'https://github.com/open-admin-org/api-tester',
+                'name' => 'menqz-admin-ext/api-tester',
+                'link' => 'https://github.com/menqz-admin-org/api-tester',
                 'icon' => 'sliders-h',
             ],
             'media-manager' => [
-                'name' => 'open-admin-ext/media-manager',
-                'link' => 'https://github.com/open-admin-org/media-manager',
+                'name' => 'menqz-admin-ext/media-manager',
+                'link' => 'https://github.com/menqz-admin-org/media-manager',
                 'icon' => 'file',
             ],
             'scheduling' => [
-                'name' => 'open-admin-ext/scheduling',
-                'link' => 'https://github.com/open-admin-org/scheduling',
+                'name' => 'menqz-admin-ext/scheduling',
+                'link' => 'https://github.com/menqz-admin-org/scheduling',
                 'icon' => 'clock',
             ],
             'reporter' => [
-                'name' => 'open-admin-ext/reporter',
-                'link' => 'https://github.com/open-admin-org/reporter',
+                'name' => 'menqz-admin-ext/reporter',
+                'link' => 'https://github.com/menqz-admin-org/reporter',
                 'icon' => 'bug',
             ],
             'redis-manager' => [
-                'name' => 'open-admin-ext/redis-manager',
-                'link' => 'https://github.com/open-admin-org/redis-manager',
+                'name' => 'menqz-admin-ext/redis-manager',
+                'link' => 'https://github.com/menqz-admin-org/redis-manager',
                 'icon' => 'flask',
             ],
             'grid-sortable' => [
-                'name' => 'open-admin-ext/grid-sortable',
-                'link' => 'https://github.com/open-admin-org/grid-sortable',
+                'name' => 'menqz-admin-ext/grid-sortable',
+                'link' => 'https://github.com/menqz-admin-org/grid-sortable',
                 'icon' => 'arrows-alt-v',
             ],
         ];

@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Filter\Presenter;
+namespace MenqzAdmin\Admin\Grid\Filter\Presenter;
 
-use OpenAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Admin;
 
 class Text extends Presenter
 {

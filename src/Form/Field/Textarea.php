@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAdmin\Admin\Form\Field;
+namespace MenqzAdmin\Admin\Form\Field;
 
-use OpenAdmin\Admin\Admin;
-use OpenAdmin\Admin\Form\Field;
-use OpenAdmin\Admin\Form\Field\Traits\HasValuePicker;
+use MenqzAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Form\Field;
+use MenqzAdmin\Admin\Form\Field\Traits\HasValuePicker;
 
 class Textarea extends Field
 {

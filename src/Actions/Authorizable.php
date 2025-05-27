@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAdmin\Admin\Actions;
+namespace MenqzAdmin\Admin\Actions;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use OpenAdmin\Admin\Facades\Admin;
+use MenqzAdmin\Admin\Facades\Admin;
 
 /**
  * @mixin Action

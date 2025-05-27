@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Concerns;
+namespace MenqzAdmin\Admin\Grid\Concerns;
 
 use Illuminate\Support\Collection;
-use OpenAdmin\Admin\Grid\Tools\FixColumns;
+use MenqzAdmin\Admin\Grid\Tools\FixColumns;
 
 trait CanFixColumns
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Concerns;
+namespace MenqzAdmin\Admin\Grid\Concerns;
 
-use OpenAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Admin;
 
 trait CanFixHeader
 {

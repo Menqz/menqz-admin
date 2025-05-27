@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Exporters;
+namespace MenqzAdmin\Admin\Grid\Exporters;
 
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\Exportable;

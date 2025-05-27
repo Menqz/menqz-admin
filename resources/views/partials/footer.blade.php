@@ -9,10 +9,10 @@
         &nbsp;&nbsp;&nbsp;&nbsp;
 
         @if(config('admin.show_version'))
-        <strong>Version</strong>&nbsp;&nbsp; {!! \OpenAdmin\Admin\Admin::VERSION !!}
+        <strong>Version</strong>&nbsp;&nbsp; {!! \MenqzAdmin\Admin\Admin::VERSION !!}
         @endif
 
     </div>
     <!-- Default to the left -->
-    <strong>Powered by <a href="https://github.com/wishbone-productions/open-admin" target="_blank">open-admin</a></strong>
+    <strong>Powered by <a href="https://github.com/wishbone-productions/menqz-admin" target="_blank">menqz-admin</a></strong>
 </footer>

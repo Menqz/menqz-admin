@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAdmin\Admin\Form;
+namespace MenqzAdmin\Admin\Form;
 
 use Illuminate\Contracts\Support\Renderable;
-use OpenAdmin\Admin\Form;
+use MenqzAdmin\Admin\Form;
 
 class Row implements Renderable
 {

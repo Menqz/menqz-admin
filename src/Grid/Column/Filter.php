@@ -1,11 +1,11 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Column;
+namespace MenqzAdmin\Admin\Grid\Column;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Arr;
-use OpenAdmin\Admin\Grid\Column;
-use OpenAdmin\Admin\Grid\Model;
+use MenqzAdmin\Admin\Grid\Column;
+use MenqzAdmin\Admin\Grid\Model;
 
 class Filter implements Renderable
 {

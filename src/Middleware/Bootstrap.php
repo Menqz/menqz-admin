@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAdmin\Admin\Middleware;
+namespace MenqzAdmin\Admin\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use OpenAdmin\Admin\Facades\Admin;
+use MenqzAdmin\Admin\Facades\Admin;
 
 class Bootstrap
 {

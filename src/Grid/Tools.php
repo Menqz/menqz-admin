@@ -1,17 +1,17 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid;
+namespace MenqzAdmin\Admin\Grid;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Collection;
-use OpenAdmin\Admin\Actions\Action;
-use OpenAdmin\Admin\Actions\BatchAction;
-use OpenAdmin\Admin\Actions\GridAction;
-use OpenAdmin\Admin\Grid;
-use OpenAdmin\Admin\Grid\Tools\AbstractTool;
-use OpenAdmin\Admin\Grid\Tools\BatchActions;
-use OpenAdmin\Admin\Grid\Tools\FilterButton;
+use MenqzAdmin\Admin\Actions\Action;
+use MenqzAdmin\Admin\Actions\BatchAction;
+use MenqzAdmin\Admin\Actions\GridAction;
+use MenqzAdmin\Admin\Grid;
+use MenqzAdmin\Admin\Grid\Tools\AbstractTool;
+use MenqzAdmin\Admin\Grid\Tools\BatchActions;
+use MenqzAdmin\Admin\Grid\Tools\FilterButton;
 
 class Tools implements Renderable
 {

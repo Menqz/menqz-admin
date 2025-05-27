@@ -1,7 +1,7 @@
 <?php
 
-use OpenAdmin\Admin\Auth\Database\Administrator;
-use OpenAdmin\Admin\Auth\Database\Role;
+use MenqzAdmin\Admin\Auth\Database\Administrator;
+use MenqzAdmin\Admin\Auth\Database\Role;
 
 class RolesTest extends TestCase
 {

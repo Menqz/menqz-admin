@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAdmin\Admin\Controllers;
+namespace MenqzAdmin\Admin\Controllers;
 
 use Illuminate\Support\Arr;
-use OpenAdmin\Admin\Auth\Database\OperationLog;
-use OpenAdmin\Admin\Grid;
+use MenqzAdmin\Admin\Auth\Database\OperationLog;
+use MenqzAdmin\Admin\Grid;
 
 class LogController extends AdminController
 {

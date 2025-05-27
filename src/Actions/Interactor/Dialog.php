@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Actions\Interactor;
+namespace MenqzAdmin\Admin\Actions\Interactor;
 
 class Dialog extends Interactor
 {

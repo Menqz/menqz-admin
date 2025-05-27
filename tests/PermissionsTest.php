@@ -1,8 +1,8 @@
 <?php
 
-use OpenAdmin\Admin\Auth\Database\Administrator;
-use OpenAdmin\Admin\Auth\Database\Permission;
-use OpenAdmin\Admin\Auth\Database\Role;
+use MenqzAdmin\Admin\Auth\Database\Administrator;
+use MenqzAdmin\Admin\Auth\Database\Permission;
+use MenqzAdmin\Admin\Auth\Database\Role;
 
 class PermissionsTest extends TestCase
 {

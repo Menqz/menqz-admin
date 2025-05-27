@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Tools;
+namespace MenqzAdmin\Admin\Grid\Tools;
 
 use Illuminate\Support\Collection;
-use OpenAdmin\Admin\Actions\BatchAction;
-use OpenAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Actions\BatchAction;
+use MenqzAdmin\Admin\Admin;
 
 class BatchActions extends AbstractTool
 {
@@ -139,13 +139,13 @@ class BatchActions extends AbstractTool
     {
         if (!$this->enableEdit) {
             $this->actions = $this->actions->filter(function ($action, $key) {
-                return get_class($action) != "OpenAdmin\Admin\Grid\Tools\BatchEdit";
+                return get_class($action) != "MenqzAdmin\Admin\Grid\Tools\BatchEdit";
             });
         }
 
         if (!$this->enableDelete) {
             $this->actions = $this->actions->filter(function ($action, $key) {
-                return get_class($action) != "OpenAdmin\Admin\Grid\Tools\BatchDelete";
+                return get_class($action) != "MenqzAdmin\Admin\Grid\Tools\BatchDelete";
             });
         }
 

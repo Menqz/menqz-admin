@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Form\Field;
+namespace MenqzAdmin\Admin\Form\Field;
 
 class Currency extends Text
 {
@@ -13,7 +13,7 @@ class Currency extends Text
      * @var array
      */
     protected static $js = [
-        '/vendor/open-admin/inputmask/inputmask.min.js',
+        '/vendor/menqz-admin/inputmask/inputmask.min.js',
     ];
 
     /**

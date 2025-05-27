@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Controllers;
+namespace MenqzAdmin\Admin\Controllers;
 
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
-use OpenAdmin\Admin\Actions\Action;
-use OpenAdmin\Admin\Actions\GridAction;
-use OpenAdmin\Admin\Actions\Response;
-use OpenAdmin\Admin\Actions\RowAction;
-use OpenAdmin\Admin\Widgets\Form;
+use MenqzAdmin\Admin\Actions\Action;
+use MenqzAdmin\Admin\Actions\GridAction;
+use MenqzAdmin\Admin\Actions\Response;
+use MenqzAdmin\Admin\Actions\RowAction;
+use MenqzAdmin\Admin\Widgets\Form;
 
 class HandleController extends Controller
 {
@@ -158,7 +158,7 @@ class HandleController extends Controller
         $class = str_replace('_', '\\', $class);
 
         if (class_exists($class)) {
-            /** @var \OpenAdmin\Admin\Grid\Selectable $selectable */
+            /** @var \MenqzAdmin\Admin\Grid\Selectable $selectable */
             $selectable = new $class(...array_values($args));
 
             return $selectable->render();

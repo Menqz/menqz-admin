@@ -1,11 +1,11 @@
 <?php
 
-namespace OpenAdmin\Admin\Form;
+namespace MenqzAdmin\Admin\Form;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use OpenAdmin\Admin\Form;
-use OpenAdmin\Admin\Widgets\Form as WidgetForm;
+use MenqzAdmin\Admin\Form;
+use MenqzAdmin\Admin\Widgets\Form as WidgetForm;
 
 /**
  * Class EmbeddedForm.

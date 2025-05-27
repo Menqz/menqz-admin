@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Column;
+namespace MenqzAdmin\Admin\Grid\Column;
 
-use OpenAdmin\Admin\Grid\Displayers;
+use MenqzAdmin\Admin\Grid\Displayers;
 
 trait InlineEditing
 {

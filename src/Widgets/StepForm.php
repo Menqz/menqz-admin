@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Widgets;
+namespace MenqzAdmin\Admin\Widgets;
 
 class StepForm extends Form
 {

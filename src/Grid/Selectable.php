@@ -1,12 +1,12 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid;
+namespace MenqzAdmin\Admin\Grid;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
-use OpenAdmin\Admin\Grid;
-use OpenAdmin\Admin\Grid\Selectable\Checkbox;
-use OpenAdmin\Admin\Grid\Selectable\Radio;
+use MenqzAdmin\Admin\Grid;
+use MenqzAdmin\Admin\Grid\Selectable\Checkbox;
+use MenqzAdmin\Admin\Grid\Selectable\Radio;
 
 /**
  * @mixin Grid

@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Filter\Presenter;
+namespace MenqzAdmin\Admin\Grid\Filter\Presenter;
 
 class Checkbox extends Radio
 {

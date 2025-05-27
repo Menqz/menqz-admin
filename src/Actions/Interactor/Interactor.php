@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAdmin\Admin\Actions\Interactor;
+namespace MenqzAdmin\Admin\Actions\Interactor;
 
-use OpenAdmin\Admin\Actions\Action;
+use MenqzAdmin\Admin\Actions\Action;
 
 abstract class Interactor
 {

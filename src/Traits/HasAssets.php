@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Traits;
+namespace MenqzAdmin\Admin\Traits;
 
 trait HasAssets
 {
@@ -42,7 +42,7 @@ trait HasAssets
     /**
      * @var string
      */
-    public static $manifest = 'vendor/open-admin/minify-manifest.json';
+    public static $manifest = 'vendor/menqz-admin/minify-manifest.json';
 
     /**
      * @var array
@@ -53,8 +53,8 @@ trait HasAssets
      * @var array
      */
     public static $min = [
-        'js'  => 'vendor/open-admin/open-admin.min.js',
-        'css' => 'vendor/open-admin/open-admin.min.css',
+        'js'  => 'vendor/menqz-admin/menqz-admin.min.js',
+        'css' => 'vendor/menqz-admin/menqz-admin.min.css',
     ];
 
     /**
@@ -62,42 +62,42 @@ trait HasAssets
      */
     public static $baseCss = [
         // first libraries
-        'vendor/open-admin/nprogress/nprogress.css',
-        'vendor/open-admin/sweetalert2/sweetalert2.min.css',
-        'vendor/open-admin/toastify-js/toastify.css',
-        'vendor/open-admin/flatpickr/flatpicker-custom.css',
-        'vendor/open-admin/choicesjs/styles/choices.min.css',
-        'vendor/open-admin/sortablejs/nestable.css',
+        'vendor/menqz-admin/nprogress/nprogress.css',
+        'vendor/menqz-admin/sweetalert2/sweetalert2.min.css',
+        'vendor/menqz-admin/toastify-js/toastify.css',
+        'vendor/menqz-admin/flatpickr/flatpicker-custom.css',
+        'vendor/menqz-admin/choicesjs/styles/choices.min.css',
+        'vendor/menqz-admin/sortablejs/nestable.css',
 
-        // custom open admin stuff
+        // custom Menqz Admin stuff
         // generated through sass
-        'vendor/open-admin/open-admin/css/styles.css',
+        'vendor/menqz-admin/menqz-admin/css/styles.css',
     ];
 
     /**
      * @var array
      */
     public static $baseJs = [
-        'vendor/open-admin/bootstrap5/bootstrap.bundle.min.js',
-        'vendor/open-admin/nprogress/nprogress.js',
-        'vendor/open-admin/axios/axios.min.js',
-        'vendor/open-admin/sweetalert2/sweetalert2.min.js',
-        'vendor/open-admin/toastify-js/toastify.js',
-        'vendor/open-admin/flatpickr/flatpickr.min.js',
-        'vendor/open-admin/choicesjs/scripts/choices.min.js',
-        'vendor/open-admin/sortablejs/Sortable.min.js',
+        'vendor/menqz-admin/bootstrap5/bootstrap.bundle.min.js',
+        'vendor/menqz-admin/nprogress/nprogress.js',
+        'vendor/menqz-admin/axios/axios.min.js',
+        'vendor/menqz-admin/sweetalert2/sweetalert2.min.js',
+        'vendor/menqz-admin/toastify-js/toastify.js',
+        'vendor/menqz-admin/flatpickr/flatpickr.min.js',
+        'vendor/menqz-admin/choicesjs/scripts/choices.min.js',
+        'vendor/menqz-admin/sortablejs/Sortable.min.js',
 
-        'vendor/open-admin/open-admin/js/polyfills.js',
-        'vendor/open-admin/open-admin/js/helpers.js',
-        'vendor/open-admin/open-admin/js/open-admin.js',
-        'vendor/open-admin/open-admin/js/open-admin-actions.js',
-        'vendor/open-admin/open-admin/js/open-admin-grid.js',
-        'vendor/open-admin/open-admin/js/open-admin-grid-inline-edit.js',
-        'vendor/open-admin/open-admin/js/open-admin-form.js',
-        'vendor/open-admin/open-admin/js/open-admin-toastr.js',
-        'vendor/open-admin/open-admin/js/open-admin-resource.js',
-        'vendor/open-admin/open-admin/js/open-admin-tree.js',
-        'vendor/open-admin/open-admin/js/open-admin-selectable.js',
+        'vendor/menqz-admin/menqz-admin/js/polyfills.js',
+        'vendor/menqz-admin/menqz-admin/js/helpers.js',
+        'vendor/menqz-admin/menqz-admin/js/menqz-admin.js',
+        'vendor/menqz-admin/menqz-admin/js/menqz-admin-actions.js',
+        'vendor/menqz-admin/menqz-admin/js/menqz-admin-grid.js',
+        'vendor/menqz-admin/menqz-admin/js/menqz-admin-grid-inline-edit.js',
+        'vendor/menqz-admin/menqz-admin/js/menqz-admin-form.js',
+        'vendor/menqz-admin/menqz-admin/js/menqz-admin-toastr.js',
+        'vendor/menqz-admin/menqz-admin/js/menqz-admin-resource.js',
+        'vendor/menqz-admin/menqz-admin/js/menqz-admin-tree.js',
+        'vendor/menqz-admin/menqz-admin/js/menqz-admin-selectable.js',
 
     ];
 
@@ -148,7 +148,7 @@ trait HasAssets
         }
 
         $skin = config('admin.skin', 'skin-blue-light');
-        //array_unshift(static::$baseCss, "vendor/open-admin/AdminLTE/dist/css/skins/{$skin}.min.css");
+        //array_unshift(static::$baseCss, "vendor/menqz-admin/AdminLTE/dist/css/skins/{$skin}.min.css");
 
         return static::$baseCss;
     }

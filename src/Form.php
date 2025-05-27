@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin;
+namespace MenqzAdmin\Admin;
 
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
@@ -14,18 +14,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
-use OpenAdmin\Admin\Exception\Handler;
-use OpenAdmin\Admin\Form\Builder;
-use OpenAdmin\Admin\Form\Concerns\HandleCascadeFields;
-use OpenAdmin\Admin\Form\Concerns\HasFields;
-use OpenAdmin\Admin\Form\Concerns\HasFormAttributes;
-use OpenAdmin\Admin\Form\Concerns\HasHooks;
-use OpenAdmin\Admin\Form\Field;
-use OpenAdmin\Admin\Form\Layout\Layout;
-use OpenAdmin\Admin\Form\Row;
-use OpenAdmin\Admin\Form\Tab;
-use OpenAdmin\Admin\Grid\Tools\BatchEdit;
-use OpenAdmin\Admin\Traits\ShouldSnakeAttributes;
+use MenqzAdmin\Admin\Exception\Handler;
+use MenqzAdmin\Admin\Form\Builder;
+use MenqzAdmin\Admin\Form\Concerns\HandleCascadeFields;
+use MenqzAdmin\Admin\Form\Concerns\HasFields;
+use MenqzAdmin\Admin\Form\Concerns\HasFormAttributes;
+use MenqzAdmin\Admin\Form\Concerns\HasHooks;
+use MenqzAdmin\Admin\Form\Field;
+use MenqzAdmin\Admin\Form\Layout\Layout;
+use MenqzAdmin\Admin\Form\Row;
+use MenqzAdmin\Admin\Form\Tab;
+use MenqzAdmin\Admin\Grid\Tools\BatchEdit;
+use MenqzAdmin\Admin\Traits\ShouldSnakeAttributes;
 use Spatie\EloquentSortable\Sortable;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -1379,7 +1379,7 @@ class Form implements Renderable
      *
      * @param Closure $callback
      *
-     * @return \OpenAdmin\Admin\Form\Footer
+     * @return \MenqzAdmin\Admin\Form\Footer
      */
     public function footer(Closure $callback = null)
     {

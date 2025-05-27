@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Concerns;
+namespace MenqzAdmin\Admin\Grid\Concerns;
 
 use Closure;
-use OpenAdmin\Admin\Grid\Tools\Header;
+use MenqzAdmin\Admin\Grid\Tools\Header;
 
 trait HasHeader
 {

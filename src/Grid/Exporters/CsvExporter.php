@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Exporters;
+namespace MenqzAdmin\Admin\Grid\Exporters;
 
-use OpenAdmin\Admin\Grid\Column;
+use MenqzAdmin\Admin\Grid\Column;
 
 class CsvExporter extends AbstractExporter
 {

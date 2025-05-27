@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Filter;
+namespace MenqzAdmin\Admin\Grid\Filter;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use OpenAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Admin;
 
 class Group extends AbstractFilter
 {

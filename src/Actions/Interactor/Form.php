@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Actions\Interactor;
+namespace MenqzAdmin\Admin\Actions\Interactor;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Validator;
-use OpenAdmin\Admin\Actions\RowAction;
-use OpenAdmin\Admin\Admin;
-use OpenAdmin\Admin\Form as ModalForm;
-use OpenAdmin\Admin\Form\Field;
+use MenqzAdmin\Admin\Actions\RowAction;
+use MenqzAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Form as ModalForm;
+use MenqzAdmin\Admin\Form\Field;
 use Symfony\Component\DomCrawler\Crawler;
 
 class Form extends Interactor
@@ -56,7 +56,7 @@ class Form extends Interactor
      */
     public function getRow()
     {
-        if ($this->extendsFrom($this->action, 'OpenAdmin\Admin\Actions\RowAction')) {
+        if ($this->extendsFrom($this->action, 'MenqzAdmin\Admin\Actions\RowAction')) {
             return $this->action->getRow();
         }
 
@@ -65,7 +65,7 @@ class Form extends Interactor
 
     public function getKey()
     {
-        if ($this->extendsFrom($this->action, 'OpenAdmin\Admin\Actions\RowAction')) {
+        if ($this->extendsFrom($this->action, 'MenqzAdmin\Admin\Actions\RowAction')) {
             return $this->getRow()->getKey();
         }
 
@@ -177,7 +177,7 @@ class Form extends Interactor
         if ($this->hasTrait($field, 'UploadField')) {
             $this->multipart = true;
         }
-        if ($this->extendsFrom($field, 'OpenAdmin\Admin\Form\Field\File')) {
+        if ($this->extendsFrom($field, 'MenqzAdmin\Admin\Form\Field\File')) {
             $this->multipart = true;
         }
     }

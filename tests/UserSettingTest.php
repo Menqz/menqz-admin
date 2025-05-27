@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\File;
-use OpenAdmin\Admin\Auth\Database\Administrator;
+use MenqzAdmin\Admin\Auth\Database\Administrator;
 
 class UserSettingTest extends TestCase
 {

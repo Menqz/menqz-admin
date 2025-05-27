@@ -2,9 +2,9 @@
 
 namespace Tests\Controllers;
 
-use OpenAdmin\Admin\Controllers\AdminController;
-use OpenAdmin\Admin\Form;
-use OpenAdmin\Admin\Grid;
+use MenqzAdmin\Admin\Controllers\AdminController;
+use MenqzAdmin\Admin\Form;
+use MenqzAdmin\Admin\Grid;
 use Tests\Models\Image;
 
 class ImageController extends AdminController

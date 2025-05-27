@@ -2,10 +2,10 @@
 
 namespace DummyNamespace;
 
-use OpenAdmin\Admin\Controllers\AdminController;
-use OpenAdmin\Admin\Form;
-use OpenAdmin\Admin\Grid;
-use OpenAdmin\Admin\Show;
+use MenqzAdmin\Admin\Controllers\AdminController;
+use MenqzAdmin\Admin\Form;
+use MenqzAdmin\Admin\Grid;
+use MenqzAdmin\Admin\Show;
 
 class ExampleController extends AdminController
 {

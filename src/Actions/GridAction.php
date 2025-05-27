@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenAdmin\Admin\Actions;
+namespace MenqzAdmin\Admin\Actions;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
-use OpenAdmin\Admin\Grid;
+use MenqzAdmin\Admin\Grid;
 
 /**
  * Class GridAction.

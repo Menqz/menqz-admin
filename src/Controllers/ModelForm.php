@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Controllers;
+namespace MenqzAdmin\Admin\Controllers;
 
 /**
  * Trait ModelForm.

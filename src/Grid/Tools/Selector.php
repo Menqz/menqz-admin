@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Tools;
+namespace MenqzAdmin\Admin\Grid\Tools;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Arr;

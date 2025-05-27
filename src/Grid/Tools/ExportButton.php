@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Tools;
+namespace MenqzAdmin\Admin\Grid\Tools;
 
-use OpenAdmin\Admin\Admin;
-use OpenAdmin\Admin\Grid;
+use MenqzAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Grid;
 
 class ExportButton extends AbstractTool
 {

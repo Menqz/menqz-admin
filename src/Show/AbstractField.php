@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Show;
+namespace MenqzAdmin\Admin\Show;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;

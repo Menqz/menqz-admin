@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Show;
+namespace MenqzAdmin\Admin\Show;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
-use OpenAdmin\Admin\Form\Field\Traits\UploadField;
-use OpenAdmin\Admin\Show;
-use OpenAdmin\Admin\Widgets\Carousel;
+use MenqzAdmin\Admin\Form\Field\Traits\UploadField;
+use MenqzAdmin\Admin\Show;
+use MenqzAdmin\Admin\Widgets\Carousel;
 
 class Field implements Renderable
 {

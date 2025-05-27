@@ -1,11 +1,11 @@
 <?php
 
-namespace OpenAdmin\Admin\Actions;
+namespace MenqzAdmin\Admin\Actions;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use OpenAdmin\Admin\Admin;
-use OpenAdmin\Admin\Form\Field;
+use MenqzAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Form\Field;
 
 /**
  * @method $this                success($title, $text = '', $options = [])

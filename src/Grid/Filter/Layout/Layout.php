@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Filter\Layout;
+namespace MenqzAdmin\Admin\Grid\Filter\Layout;
 
 use Illuminate\Support\Collection;
-use OpenAdmin\Admin\Grid\Filter;
+use MenqzAdmin\Admin\Grid\Filter;
 
 class Layout
 {

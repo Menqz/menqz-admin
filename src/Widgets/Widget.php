@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Widgets;
+namespace MenqzAdmin\Admin\Widgets;
 
 use Illuminate\Support\Fluent;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAdmin\Admin\Middleware;
+namespace MenqzAdmin\Admin\Middleware;
 
 use Closure;
-use OpenAdmin\Admin\Facades\Admin;
+use MenqzAdmin\Admin\Facades\Admin;
 
 class Authenticate
 {

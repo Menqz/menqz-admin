@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Filter;
+namespace MenqzAdmin\Admin\Grid\Filter;
 
 class Year extends Date
 {

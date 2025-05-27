@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Form\Concerns;
+namespace MenqzAdmin\Admin\Form\Concerns;
 
 use Illuminate\Support\Arr;
 

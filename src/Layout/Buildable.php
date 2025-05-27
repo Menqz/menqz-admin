@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenAdmin\Admin\Layout;
+namespace MenqzAdmin\Admin\Layout;
 
 interface Buildable
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace OpenAdmin\Admin\Form\Field;
+namespace MenqzAdmin\Admin\Form\Field;
 
 class Ip extends Text
 {
     protected $rules = 'nullable|ip';
 
     protected static $js = [
-        '/vendor/open-admin/inputmask/inputmask.min.js',
+        '/vendor/menqz-admin/inputmask/inputmask.min.js',
     ];
 
     /**

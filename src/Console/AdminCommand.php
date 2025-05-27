@@ -1,11 +1,11 @@
 <?php
 
-namespace OpenAdmin\Admin\Console;
+namespace MenqzAdmin\Admin\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
-use OpenAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Admin;
 
 class AdminCommand extends Command
 {

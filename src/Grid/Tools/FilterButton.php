@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Tools;
+namespace MenqzAdmin\Admin\Grid\Tools;
 
-use OpenAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Admin;
 
 class FilterButton extends AbstractTool
 {

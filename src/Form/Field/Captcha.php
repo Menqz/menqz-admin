@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAdmin\Admin\Form\Field;
+namespace MenqzAdmin\Admin\Form\Field;
 
-use OpenAdmin\Admin\Form;
+use MenqzAdmin\Admin\Form;
 
 class Captcha extends Text
 {

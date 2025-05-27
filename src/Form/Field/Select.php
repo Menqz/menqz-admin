@@ -1,13 +1,13 @@
 <?php
 
-namespace OpenAdmin\Admin\Form\Field;
+namespace MenqzAdmin\Admin\Form\Field;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use OpenAdmin\Admin\Form\Field;
-use OpenAdmin\Admin\Form\Field\Traits\CanCascadeFields;
+use MenqzAdmin\Admin\Form\Field;
+use MenqzAdmin\Admin\Form\Field\Traits\CanCascadeFields;
 
 class Select extends Field
 {
@@ -321,10 +321,10 @@ JS;
         $class = get_class($this);
 
         return in_array($class, [
-            'OpenAdmin\Admin\Form\Field\Select',
-            'OpenAdmin\Admin\Form\Field\Tags',
-            'OpenAdmin\Admin\Form\Field\MultipleSelect',
-            'OpenAdmin\Admin\Form\Field\Timezone',
+            'MenqzAdmin\Admin\Form\Field\Select',
+            'MenqzAdmin\Admin\Form\Field\Tags',
+            'MenqzAdmin\Admin\Form\Field\MultipleSelect',
+            'MenqzAdmin\Admin\Form\Field\Timezone',
         ]);
     }
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAdmin\Admin\Form\Field\Traits;
+namespace MenqzAdmin\Admin\Form\Field\Traits;
 
-use OpenAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Admin;
 
 trait Sortable
 {

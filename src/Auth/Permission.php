@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAdmin\Admin\Auth;
+namespace MenqzAdmin\Admin\Auth;
 
-use OpenAdmin\Admin\Facades\Admin;
-use OpenAdmin\Admin\Middleware\Pjax;
+use MenqzAdmin\Admin\Facades\Admin;
+use MenqzAdmin\Admin\Middleware\Pjax;
 
 class Permission
 {

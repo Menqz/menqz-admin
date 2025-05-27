@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Filter\Presenter;
+namespace MenqzAdmin\Admin\Grid\Filter\Presenter;
 
-use OpenAdmin\Admin\Facades\Admin;
+use MenqzAdmin\Admin\Facades\Admin;
 
 class MultipleSelect extends Select
 {

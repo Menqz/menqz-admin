@@ -1,11 +1,11 @@
 <?php
 
-namespace OpenAdmin\Admin\Form\Field\Traits;
+namespace MenqzAdmin\Admin\Form\Field\Traits;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
-use OpenAdmin\Admin\Form;
+use MenqzAdmin\Admin\Form;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 trait UploadField

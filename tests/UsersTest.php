@@ -1,6 +1,6 @@
 <?php
 
-use OpenAdmin\Admin\Auth\Database\Administrator;
+use MenqzAdmin\Admin\Auth\Database\Administrator;
 
 class UsersTest extends TestCase
 {

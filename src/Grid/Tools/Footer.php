@@ -1,11 +1,11 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Tools;
+namespace MenqzAdmin\Admin\Grid\Tools;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Query\Builder;
-use OpenAdmin\Admin\Grid;
+use MenqzAdmin\Admin\Grid;
 
 class Footer extends AbstractTool
 {

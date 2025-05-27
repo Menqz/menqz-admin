@@ -1,9 +1,9 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Filter;
+namespace MenqzAdmin\Admin\Grid\Filter;
 
 use Illuminate\Support\Arr;
-use OpenAdmin\Admin\Admin;
+use MenqzAdmin\Admin\Admin;
 
 class Between extends AbstractFilter
 {

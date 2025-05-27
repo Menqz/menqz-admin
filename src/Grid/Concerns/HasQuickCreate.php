@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenAdmin\Admin\Grid\Concerns;
+namespace MenqzAdmin\Admin\Grid\Concerns;
 
-use OpenAdmin\Admin\Grid\Tools\QuickCreate;
+use MenqzAdmin\Admin\Grid\Tools\QuickCreate;
 
 trait HasQuickCreate
 {
