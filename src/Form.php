@@ -185,6 +185,9 @@ class Form implements Renderable
      */
     public function model(): Model
     {
+        if ($this->model instanceof Actions\Interactor\Form) {
+            return $this->model->getRow(); 
+        }
         return $this->model;
     }
 
@@ -563,6 +566,9 @@ class Form implements Renderable
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
             if (!$isEditable) {
+                if (\request()->ajax() && !\request()->pjax()) {
+                    return $this->responseValidationError($validationMessages);
+                }
                 return back()->withInput()->withErrors($validationMessages);
             }
 

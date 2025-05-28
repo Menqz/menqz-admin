@@ -127,8 +127,21 @@
     let right_trs = document.querySelectorAll('.table-fixed-right tbody tr');
     tableMain.querySelectorAll('tbody tr').forEach((tr,i)=>{
         var height = tr.clientHeight;
-        left_trs[i].style.height = height+"px";
-        right_trs[i].style.height = height+"px";
+        // console.log(right_trs.length)
+        // left_trs[i].style.height = height+"px";
+        // right_trs[i].style.height = height+"px";
+
+        try {
+            left_trs[i].style.height = height+"px";
+        } catch (error) {
+            //
+        }
+
+        try {
+            right_trs[i].style.height = height+"px";
+        } catch (error) {
+            //
+        }
     });
 
     if (tableMain.clientWidth >= tableMain.scrollWidth) {

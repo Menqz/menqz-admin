@@ -184,7 +184,7 @@ JS;
         $this->config = array_merge([
             'removeItems'        => true,
             'removeItemButton'   => true,
-            'placeholder'        => $this->label,
+            'placeholder'        => $this->label ?? '',
         ], $this->config);
 
         $this->additional_script = <<<JS
