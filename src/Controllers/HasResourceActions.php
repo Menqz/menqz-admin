@@ -9,9 +9,9 @@ trait HasResourceActions
      *
      * @return \MenqzAdmin\Admin\Form;
      */
-    public function getForm()
+    public function getForm($id = 0)
     {
-        $form = $this->form();
+        $form = $this->form($id);
         if (method_exists($this, 'hasHooks') && $this->hasHooks('alterForm')) {
             $form = $this->callHooks('alterForm', $form);
         }
@@ -28,7 +28,8 @@ trait HasResourceActions
      */
     public function update($id)
     {
-        return $this->getForm()->update($id);
+        $form = $this->getForm($id);
+        return $form->update($form->model()->id);
     }
 
     /**
@@ -38,7 +39,11 @@ trait HasResourceActions
      */
     public function store()
     {
-        return $this->getForm()->store();
+        $id = null;
+        if ($id == null) {
+            $id = request('id_object', null);
+        }
+        return $this->getForm($id)->store();
     }
 
     /**
@@ -50,6 +55,7 @@ trait HasResourceActions
      */
     public function destroy($id)
     {
-        return $this->getForm()->destroy($id);
+        $form = $this->getForm($id);
+        return $form->destroy($form->model()->id);
     }
 }
