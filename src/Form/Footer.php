@@ -3,6 +3,7 @@
 namespace MenqzAdmin\Admin\Form;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Facades\Route;
 
 class Footer implements Renderable
 {
@@ -40,9 +41,14 @@ class Footer implements Renderable
     protected $defaultCheck;
 
     /**
-     * @var string
+     * @var bool
      */
     public $fixedFooter = true;
+
+    /**
+     * @var bool
+     */
+    public $useDestroyInCancel = true;
 
     /**
      * Footer constructor.
@@ -183,6 +189,65 @@ class Footer implements Renderable
     }
 
     /**
+     * Set `continue_editing` as default check.
+     *
+     * @return $this
+     */
+    public function useDestroyInCancel($set = true)
+    {
+        $this->useDestroyInCancel = $set;
+
+        return $this;
+    }
+
+    protected function getRoutePrincipal()
+    {
+        // Quebrando o nome da rota atual em partes (ex: ['parceiro', 'contato', 'edit'])
+        $routeParts = explode('.', Route::currentRouteName());
+
+        // Remover a última parte (que geralmente é 'create', 'edit', etc.)
+        array_pop($routeParts);
+
+        $routePrincipal = implode('.', $routeParts);
+
+        return $routePrincipal;
+    }
+
+    protected function getRouteCancel()
+    {
+        $routePrincipal = $this->getRoutePrincipal();
+
+        // Construir o nome da rota 'index' (ex: 'parceiro.contato.index')
+        $indexRoute = $routePrincipal . '.index';
+
+        // Obter os parâmetros atuais da rota (ex: ['id' => 1])
+        $routeParameters = request()->route()->parameters();
+
+        $route = '';
+        try {
+            $route = route($indexRoute, $routeParameters);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+        return $route;
+    }
+
+    protected function getRouteDestroy()
+    {
+        $routePrincipal = $this->getRoutePrincipal();
+
+        $routeDestroy = '';
+        try {
+            $routeDestroy = route($routePrincipal.'.destroy', ['#id#']);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+        return $routeDestroy;
+    }
+
+    /**
      * Render footer.
      *
      * @return string
@@ -202,7 +267,12 @@ class Footer implements Renderable
             'checkboxes'       => $this->checkboxes,
             'submit_redirects' => $submitRedirects,
             'default_check'    => $this->defaultCheck,
-            'fixedFooter'      => $this->fixedFooter,
+            'route_cancel'     => $this->getRouteCancel(),
+            'route_destroy'    => $this->getRouteDestroy(),
+            'fixed_footer'      => $this->fixedFooter,
+            'use_destroy_in_cancel' => $this->useDestroyInCancel,
+            'is_creating' => $this->builder->isCreating(),
+            'is_editing' => $this->builder->isEditing(),
         ];
 
         return view($this->view, $data)->render();

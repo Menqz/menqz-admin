@@ -41,7 +41,6 @@ class AdminController extends Controller
     {
         $this->hook("alterGrid", function ($scope, $grid) {
             // alter the grid here
-            $grid->model()->where('persistent', true);
             return $grid;
         });
 
@@ -52,22 +51,10 @@ class AdminController extends Controller
 
         $this->hook("alterForm", function ($scope, $form) {
             // alter the form here
-            $form->hidden('persistent');
-            $form->hidden('id_object', 'id_object')->default($form->model->id);
-            $form->ignore('id_object');
+            $previousSess = $scope->gerenateCustomPreview();
 
-            if ($scope->controll_id != null) {
-                $previous_controll = $scope->controll_id.'_previous';
-                $previousSess = session($previous_controll, null);
-                $previous = url()->previous();
-
-                if (($previous != $previousSess) && (!strpos($previous, 'edit') && !strpos($previous, 'create'))) {
-                    $previousSess = $previous;
-                }
-                session([$previous_controll => $previousSess]);
-                $form->hidden('_custom_previous_')->value($previousSess);
-                $form->ignore('_custom_previous_');
-            }
+            $form->hidden('_custom_previous_')->value($previousSess);
+            $form->ignore('_custom_previous_');
             return $form;
         });
     }
@@ -166,6 +153,20 @@ class AdminController extends Controller
             ->body($form);
     }
 
+    protected function gerenateCustomPreview()
+    {
+       if ($this->controll_id != null) {
+            $previous_controll = $this->controll_id.'_previous';
+            $previousSess = session($previous_controll, null);
+            $previous = url()->previous();
+
+            if (($previous != $previousSess) && (!strpos($previous, 'edit') && !strpos($previous, 'create'))) {
+                $previousSess = $previous;
+            }
+            session([$previous_controll => $previousSess]);
+            return $previousSess;
+        }
+    }
     public function getControllIDCreate()
     {
         return $this->controll_id.'_create';
