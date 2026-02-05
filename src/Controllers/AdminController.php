@@ -31,6 +31,48 @@ class AdminController extends Controller
     ];
 
     /**
+    * id for current resource.
+    *
+    * @var string
+    */
+    protected $controll_id = 'controll';
+
+    public function __construct()
+    {
+        $this->hook("alterGrid", function ($scope, $grid) {
+            // alter the grid here
+            $grid->model()->where('persistent', true);
+            return $grid;
+        });
+
+        $this->hook("alterDetail", function ($scope, $detail) {
+            // alter the detail here
+            return $detail;
+        });
+
+        $this->hook("alterForm", function ($scope, $form) {
+            // alter the form here
+            $form->hidden('persistent');
+            $form->hidden('id_object', 'id_object')->default($form->model->id);
+            $form->ignore('id_object');
+
+            if ($scope->controll_id != null) {
+                $previous_controll = $scope->controll_id.'_previous';
+                $previousSess = session($previous_controll, null);
+                $previous = url()->previous();
+
+                if (($previous != $previousSess) && (!strpos($previous, 'edit') && !strpos($previous, 'create'))) {
+                    $previousSess = $previous;
+                }
+                session([$previous_controll => $previousSess]);
+                $form->hidden('_custom_previous_')->value($previousSess);
+                $form->ignore('_custom_previous_');
+            }
+            return $form;
+        });
+    }
+
+    /**
      * Get content title.
      *
      * @return string
@@ -91,7 +133,7 @@ class AdminController extends Controller
      */
     public function edit($id, Content $content)
     {
-        $form = $this->form();
+        $form = $this->form($id);
         if ($this->hasHooks('alterForm')) {
             $form = $this->callHooks('alterForm', $form);
         }
@@ -111,7 +153,9 @@ class AdminController extends Controller
      */
     public function create(Content $content)
     {
-        $form = $this->form();
+        $id = old('id_object', null);
+        $form = $this->form($id);
+
         if ($this->hasHooks('alterForm')) {
             $form = $this->callHooks('alterForm', $form);
         }
@@ -120,5 +164,15 @@ class AdminController extends Controller
             ->title($this->title())
             ->description($this->description['create'] ?? trans('admin.create'))
             ->body($form);
+    }
+
+    public function getControllIDCreate()
+    {
+        return $this->controll_id.'_create';
+    }
+
+    public function getControllIDEdit()
+    {
+        return $this->controll_id.'_edit';
     }
 }
