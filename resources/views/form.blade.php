@@ -46,3 +46,11 @@
     {!! $form->close() !!}
 
 </div>
+
+@if(!$partObj->isEmpty())
+    <div class="row fields-group">
+        <div class="col-md-12">
+            @include('admin::form.parts', compact('partObj'))
+        </div>
+    </div>
+@endif

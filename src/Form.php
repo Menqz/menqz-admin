@@ -22,6 +22,7 @@ use MenqzAdmin\Admin\Form\Concerns\HasFormAttributes;
 use MenqzAdmin\Admin\Form\Concerns\HasHooks;
 use MenqzAdmin\Admin\Form\Field;
 use MenqzAdmin\Admin\Form\Layout\Layout;
+use MenqzAdmin\Admin\Form\Part;
 use MenqzAdmin\Admin\Form\Row;
 use MenqzAdmin\Admin\Form\Tab;
 use MenqzAdmin\Admin\Grid\Tools\BatchEdit;
@@ -121,6 +122,11 @@ class Form implements Renderable
     protected $tab = null;
 
     /**
+     * @var Form\Part
+     */
+    protected $part = null;
+
+    /**
      * Field rows in form.
      *
      * @var array
@@ -140,7 +146,7 @@ class Form implements Renderable
      * @param $model
      * @param \Closure $callback
      */
-    public function __construct($model, Closure $callback = null)
+    public function __construct($model, ?Closure $callback = null)
     {
         $this->model = $model;
 
@@ -238,6 +244,25 @@ class Form implements Renderable
     }
 
     /**
+     * Use tab to split form.
+     *
+     * @param string  $title
+     * @param Closure $content
+     * @param bool    $active
+     *
+     * @return $this
+     */
+    public function part($title, $partController, bool $active = false): self
+    {
+        $class          = $partController;
+        $parentId       = $this->model->id;
+        $parentClass    = get_class($this->model);
+        $this->setPart()->append($title, $class, $parentClass, $parentId, $active);
+
+        return $this;
+    }
+
+    /**
      * Get Tab instance.
      *
      * @return Tab
@@ -259,6 +284,30 @@ class Form implements Renderable
         }
 
         return $this->tab;
+    }
+
+     /**
+     * Get Part instance.
+     *
+     * @return Part
+     */
+    public function getPart()
+    {
+        return $this->part;
+    }
+
+    /**
+     * Set Part instance.
+     *
+     * @return Part
+     */
+    public function setPart(): Part
+    {
+        if ($this->part === null) {
+            $this->part = new Part($this);
+        }
+
+        return $this->part;
     }
 
     /**

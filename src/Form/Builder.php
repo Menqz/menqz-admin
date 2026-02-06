@@ -625,13 +625,16 @@ JS;
 
         $tabObj = $this->form->setTab();
 
+        $partObj = $this->form->setPart();
+
         $this->addCascadeScript();
 
         $data = [
-            'form'   => $this,
-            'tabObj' => $tabObj,
-            'width'  => $this->width,
-            'layout' => $this->form->getLayout(),
+            'form'      => $this,
+            'tabObj'    => $tabObj,
+            'partObj'   => $partObj,
+            'width'     => $this->width,
+            'layout'    => $this->form->getLayout(),
         ];
 
         return view($this->view, $data)->render();
