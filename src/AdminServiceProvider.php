@@ -33,6 +33,7 @@ class AdminServiceProvider extends ServiceProvider
         Console\GenerateMenuCommand::class,
         Console\ConfigCommand::class,
         Console\DevLinksCommand::class,
+        Console\MakeMenuCommand::class,
     ];
 
     /**
