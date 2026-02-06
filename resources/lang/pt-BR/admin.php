@@ -43,6 +43,7 @@ return [
     'back'                  => 'Voltar',
     'back_to_list'          => 'Voltar para Listagem',
     'submit'                => 'Salvar',
+    'submiting'             => 'Salvando...',
     'menu'                  => 'Menu',
     'input'                 => '',
     'succeeded'             => 'Completado com Sucesso',
@@ -80,7 +81,9 @@ return [
     'permission'            => 'Permissão',
     'route'                 => 'Rota',
     'confirm'               => 'Confirmar',
+    'confirming'            => 'Confirmando...',
     'cancel'                => 'Cancelar',
+    'canceling'             => 'Cancelando...',
     'http'                  => [
         'method' => 'Método HTTP',
         'path'   => 'Caminho HTTP',
