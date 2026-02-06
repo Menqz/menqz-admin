@@ -98,6 +98,13 @@ class Builder
     protected $title;
 
     /**
+     * Form subtitle.
+     *
+     * @var string
+     */
+    protected $subTitle;
+
+    /**
      * @var string
      */
     protected $formClass;
@@ -430,6 +437,29 @@ class Builder
             return $this->title;
         }
 
+        if ($this->mode === static::MODE_CREATE) {
+            return trans('admin.create');
+        }
+
+        if ($this->mode === static::MODE_EDIT) {
+            return trans('admin.edit');
+        }
+
+        return '';
+    }
+
+    public function subTitle(): string
+    {
+        return $this->getSubTitle();
+    }
+
+    /**
+     * Get form subtitle.
+     *
+     * @return string
+     */
+    public function getSubTitle(): string
+    {
         if ($this->mode === static::MODE_CREATE) {
             return trans('admin.create');
         }

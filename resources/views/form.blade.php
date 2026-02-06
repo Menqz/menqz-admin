@@ -1,6 +1,8 @@
 <div class="card box-info">
     <div class="card-header with-border">
-        <h3 class="card-title">{{ $form->title() }}</h3>
+        <h4 class="content-header clearfix">
+            {{ $form->title() }} <small>{{ $form->subTitle() }}</small>
+        </h4>
 
         <div class="card-tools">
             {!! $form->renderTools() !!}

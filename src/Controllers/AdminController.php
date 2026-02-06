@@ -128,7 +128,7 @@ class AdminController extends Controller
         return $content
             ->title($this->title())
             ->description($this->description['edit'] ?? trans('admin.edit'))
-            ->body($form->edit($id));
+            ->body($form->setTitle($this->title())->edit($id));
     }
 
     /**
@@ -150,7 +150,7 @@ class AdminController extends Controller
         return $content
             ->title($this->title())
             ->description($this->description['create'] ?? trans('admin.create'))
-            ->body($form);
+            ->body($form->setTitle($this->title()));
     }
 
     protected function gerenateCustomPreview()
