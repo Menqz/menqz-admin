@@ -1,4 +1,4 @@
-<div class="nav-tabs-custom no-border-radius">
+<div class="nav-tabs-custom no-border-radius px-2" >
     <ul class="nav nav-tabs">
 
         @foreach($partObj->getParts() as $part)
@@ -17,7 +17,7 @@
     <div class="tab-content fields-group">
 
         @foreach($partObj->getParts() as $part)
-            <div class="tab-pane {{ $part['active'] ? 'active' : '' }}" id="tab-part-{{ $part['id'] }}">
+            <div class="tab-pane {{ $part['active'] ? 'active' : '' }} px-2" id="tab-part-{{ $part['id'] }}">
 
             </div>
         @endforeach
