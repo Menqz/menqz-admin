@@ -94,6 +94,7 @@ trait HasAssets
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-grid.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-grid-inline-edit.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-form.js',
+        'vendor/menqz-admin/menqz-admin/js/menqz-admin-modal.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-toastr.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-resource.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-tree.js',
