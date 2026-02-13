@@ -83,6 +83,10 @@ class AdminController extends Controller
             $grid = $this->callHooks('alterGrid', $grid);
         }
 
+        if ($this->hasHooks('alterGridCustom')) {
+            $grid = $this->callHooks('alterGridCustom', $grid);
+        }
+
         return $content
             ->title($this->title())
             ->description($this->description['index'] ?? trans('admin.list'))
@@ -102,6 +106,10 @@ class AdminController extends Controller
         $detail = $this->detail($id);
         if ($this->hasHooks('alterDetail')) {
             $detail = $this->callHooks('alterDetail', $detail);
+        }
+
+        if ($this->hasHooks('alterDetailCustom')) {
+            $detail = $this->callHooks('alterDetailCustom', $detail);
         }
 
         return $content
@@ -125,6 +133,10 @@ class AdminController extends Controller
             $form = $this->callHooks('alterForm', $form);
         }
 
+        if ($this->hasHooks('alterFormCustom')) {
+            $form = $this->callHooks('alterFormCustom', $form);
+        }
+
         return $content
             ->title($this->title())
             ->description($this->description['edit'] ?? trans('admin.edit'))
@@ -145,6 +157,10 @@ class AdminController extends Controller
 
         if ($this->hasHooks('alterForm')) {
             $form = $this->callHooks('alterForm', $form);
+        }
+
+        if ($this->hasHooks('alterFormCustom')) {
+            $form = $this->callHooks('alterFormCustom', $form);
         }
 
         return $content

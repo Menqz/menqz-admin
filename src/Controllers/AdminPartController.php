@@ -73,6 +73,10 @@ abstract class AdminPartController extends Controller
             $grid = $this->callHooks('alterGrid', $grid);
         }
 
+        if ($this->hasHooks('alterGridCustom')) {
+            $grid = $this->callHooks('alterGridCustom', $grid);
+        }
+
         return $grid->render();
     }
 
@@ -82,6 +86,11 @@ abstract class AdminPartController extends Controller
         if ($this->hasHooks('alterForm')) {
             $form = $this->callHooks('alterForm', $form);
         }
+
+        if ($this->hasHooks('alterFormCustom')) {
+            $form = $this->callHooks('alterFormCustom', $form);
+        }
+
         return $form->render();
     }
 
@@ -91,6 +100,11 @@ abstract class AdminPartController extends Controller
         if ($this->hasHooks('alterForm')) {
             $form = $this->callHooks('alterForm', $form);
         }
+
+        if ($this->hasHooks('alterFormCustom')) {
+            $form = $this->callHooks('alterFormCustom', $form);
+        }
+
         return $form->render();
     }
 
