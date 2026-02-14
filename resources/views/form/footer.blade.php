@@ -1,7 +1,6 @@
 
 <footer class="navbar form-footer navbar-light bg-white py-3 px-4 @if (!empty($fixed_footer))shadow fixed-bottom @endif">
     <div class="row">
-    {{ csrf_field() }}
 
 
     <div class="col-9 d-flex align-items-center flex-row">
