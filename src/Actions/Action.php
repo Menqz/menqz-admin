@@ -101,6 +101,11 @@ abstract class Action implements Renderable
      */
     public $icon = 'icon-file';
 
+     /**
+     * @var string
+     */
+    public $customClass = '';
+
     /**
      * Action constructor.
      */

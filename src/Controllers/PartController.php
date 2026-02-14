@@ -7,7 +7,7 @@ use Illuminate\Routing\Controller;
 
 class PartController extends Controller
 {
-    public function handle(Request $request)
+    public function handle(Request $request, ?string $id = null, ?string $modo = null)
     {
         $class = $request->get('class');
         $parentId = $request->get('parent_id');
@@ -22,9 +22,15 @@ class PartController extends Controller
             $parentModel = $parentClass::find($parentId);
         }
 
+        if (!$modo && !is_numeric($id)) {
+            $modo = $id;
+        } else if (!$modo && is_numeric($id)) {
+            $modo = 'show';
+        }
+
         try {
             $part = new $class($parentModel);
-            return $part->handle($request);
+            return $part->handle($request, $id, $modo);
         } catch (\Exception $e) {
              return "<div class='alert alert-danger'>Error loading part: " . $e->getMessage() . "</div>";
         }

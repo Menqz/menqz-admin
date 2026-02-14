@@ -20,10 +20,24 @@ abstract class AdminPartController extends Controller
      */
     protected $parentModel;
 
+     /**
+     * Query string for grid.
+     *
+     * @var string
+     */
+    protected $hasManyString = '';
+
     /**
      * @var string
      */
     protected $title;
+
+     /**
+     * Query string for grid.
+     *
+     * @var string
+     */
+    protected $queryString = '';
 
     /**
      * Part constructor.
@@ -36,16 +50,35 @@ abstract class AdminPartController extends Controller
 
         $this->hook("alterGrid", function ($scope, $grid) {
             // alter the grid here
+            $grid->disableFilter(true);
+            $grid->disableExport(true);
+            $grid->disableRowSelector(true);
+            $grid->disableBatchActions(true);
+            $grid->disablePagination(true);
+            $grid->disableColumnSelector(true);
+
+            if ($this->parentModel) {
+                $grid->model()->where($this->hasManyString . '_type', get_class($this->parentModel))
+                              ->where($this->hasManyString . '_id', $this->parentModel->id);
+            }
             return $grid;
         });
 
         $this->hook("alterDetail", function ($scope, $detail) {
             // alter the detail here
+            $detail->panel()
+                ->tools(function ($tools) {
+                    $tools->disableEdit();
+                    $tools->disableList();
+                    $tools->disableDelete();
+                });
             return $detail;
         });
 
         $this->hook("alterForm", function ($scope, $form) {
             // alter the form here
+            $form->hasFooter(false);
+            $form->setTitle($this->title());
             return $form;
         });
     }
@@ -77,8 +110,33 @@ abstract class AdminPartController extends Controller
             $grid = $this->callHooks('alterGridCustom', $grid);
         }
 
+        $grid->queryString($this->queryString);
+
         return $grid->render();
     }
+
+     /**
+     * Show interface.
+     *
+     * @param mixed   $id
+     * @param Content $content
+     *
+     * @return Content
+     */
+    public function show($id)
+    {
+        $detail = $this->detail($id);
+        if ($this->hasHooks('alterDetail')) {
+            $detail = $this->callHooks('alterDetail', $detail);
+        }
+
+        if ($this->hasHooks('alterDetailCustom')) {
+            $detail = $this->callHooks('alterDetailCustom', $detail);
+        }
+
+        return $detail;
+    }
+
 
     public function create()
     {
@@ -94,7 +152,7 @@ abstract class AdminPartController extends Controller
         return $form->render();
     }
 
-    public function edit()
+    public function edit($id)
     {
         $form = $this->form();
         if ($this->hasHooks('alterForm')) {
@@ -105,7 +163,7 @@ abstract class AdminPartController extends Controller
             $form = $this->callHooks('alterFormCustom', $form);
         }
 
-        return $form->render();
+        return $form->edit($id)->render();
     }
 
     /**
@@ -128,14 +186,28 @@ abstract class AdminPartController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function handle(Request $request)
+    public function handle(Request $request, ?string $id = null, ?string $modo = null)
     {
-        if ($request->get('_mode') === 'create') {
+        $this->queryString = $this->formatQueryString($request->query());
+        if ($modo === 'create') {
             return $this->create();
-        } else if ($request->get('_mode') === 'edit') {
-            return $this->edit();
+        } else if ($modo === 'edit') {
+            return $this->edit($id);
+        } else if ($modo === 'show') {
+            return $this->show($id);
         }
 
         return $this->index();
+    }
+
+    /**
+     * Format query string.
+     *
+     * @param array $query
+     * @return string
+     */
+    protected function formatQueryString(array $query)
+    {
+        return http_build_query($query);
     }
 }

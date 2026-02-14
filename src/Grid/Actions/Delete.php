@@ -11,6 +11,8 @@ class Delete extends RowAction
 {
     public $icon = 'icon-trash';
 
+    public $customClass = 'grid-delete-btn';
+
     /**
      * @return array|null|string
      */
@@ -21,9 +23,17 @@ class Delete extends RowAction
 
     public function addScript()
     {
+        $queryString = $this->parent->getQueryString();
+        $dataUrl = sprintf(
+            '%s/%s%s',
+            $this->getResource(),
+            $this->getKey(),
+            $queryString ? ('?'.$queryString) : ''
+        );
+
         $this->attributes = [
             'onclick' => 'admin.resource.delete(event,this)',
-            'data-url'=> "{$this->getResource()}/{$this->getKey()}",
+            'data-url'=> $dataUrl,
         ];
     }
 

@@ -8,6 +8,8 @@ class Show extends RowAction
 {
     public $icon = 'icon-eye';
 
+    public $customClass = 'grid-show-btn';
+
     /**
      * @return array|null|string
      */
@@ -21,6 +23,13 @@ class Show extends RowAction
      */
     public function href()
     {
-        return "{$this->getResource()}/{$this->getKey()}";
+        $queryString = $this->parent->getQueryString();
+        return sprintf(
+            '%s/%s%s',
+            $this->getResource(),
+            $this->getKey(),
+            $queryString ? ('?'.$queryString) : ''
+        );
+        // return "{$this->getResource()}/{$this->getKey()}";
     }
 }
