@@ -74,6 +74,14 @@ class Builder
     protected $footer;
 
     /**
+     * Whether the form has footer.
+     *
+     * @var bool
+     */
+    protected $hasFooter = true;
+
+
+    /**
      * Width for label and field.
      *
      * @var array
@@ -204,6 +212,20 @@ class Builder
     public function isEditing(): bool
     {
         return $this->isMode(static::MODE_EDIT);
+    }
+
+    /**
+     * Whether the form has footer.
+     *
+     * @return bool
+     */
+    public function hasFooter($hasFooter = null): bool
+    {
+        if ($hasFooter !== null) {
+            $this->hasFooter = $hasFooter;
+        }
+
+        return $this->hasFooter;
     }
 
     /**

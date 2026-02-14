@@ -138,6 +138,12 @@ class Form implements Renderable
      */
     protected $isSoftDeletes = false;
 
+
+    /**
+     * Whether the footer is fixed.
+     *
+     * @var bool
+     */
     public $fixedFooter = true;
 
     /**
@@ -208,6 +214,16 @@ class Form implements Renderable
     public function fields()
     {
         return $this->builder()->fields();
+    }
+
+    /**
+     * Whether the form has footer.
+     *
+     * @return bool
+     */
+    public function hasFooter($hasFooter = null): bool
+    {
+        return $this->builder()->hasFooter($hasFooter);
     }
 
     /**

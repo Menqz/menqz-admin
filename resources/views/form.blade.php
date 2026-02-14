@@ -38,12 +38,15 @@
     </div>
     <!-- /.box-body -->
 
-    {!! $form->renderFooter() !!}
+    @if($form->hasFooter())
+        {!! $form->renderFooter() !!}
+    @endif
 
     @foreach($form->getHiddenFields() as $field)
         {!! $field->render() !!}
     @endforeach
 
+    {{ csrf_field() }}
 <!-- /.box-footer -->
     {!! $form->close() !!}
 
