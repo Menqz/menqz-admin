@@ -25,6 +25,24 @@ admin.form = {
         }
     },
 
+    disableSubmitButton: function(form){
+        const submitButton = form.querySelector('button[type="submit"]');
+        if (!submitButton) {
+            return;
+        }
+        submitButton.setAttribute('disabled', 'true');
+        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> '+trans('submiting');
+    },
+
+    enableSubmitButton: function(form){
+        const submitButton = form.querySelector('button[type="submit"]');
+        if (!submitButton) {
+            return;
+        }
+        submitButton.removeAttribute('disabled');
+        submitButton.innerHTML = trans('submit');
+    },
+
     addAjaxSubmit: function () {
         // forms that should be submitted with ajax
         Array.from(document.getElementsByTagName('form')).forEach((form) => {
@@ -41,36 +59,38 @@ admin.form = {
         });
     },
 
-    submit: function (form, result_function) {
+    submit: function (form, result_function, error_function) {
+        this.disableSubmitButton(form);
         let method = form.getAttribute('method').toLowerCase();
         let url = String(form.getAttribute('action')).split('?')[0];
         let obj = {};
-
         this.beforeSave();
-
         if (admin.form.validate(form)) {
             if (method === 'post' || method === 'put') {
                 obj.data = new FormData(form);
                 obj.method = method;
+                url = form.getAttribute('action');
             } else {
                 //let data = Object.fromEntries(new FormData(form).entries()); //this doesn't get arrays, not sure why used in the first place
                 let data = new FormData(form);
                 let searchParams = new URLSearchParams(data);
                 let query_str = searchParams.toString();
                 url += '?' + query_str;
-
                 if (typeof result_function !== 'function') {
                     admin.ajax.setUrl(url);
                 }
             }
-
             if (typeof result_function === 'function') {
                 admin.ajax.request(url, obj, result_function);
             } else {
                 admin.ajax.load(url, obj);
             }
         } else {
+            this.enableSubmitButton(form);
             console.log('Form still has errors');
+            if (typeof error_function === 'function') {
+                error_function();
+            }
         }
     },
 
@@ -156,6 +176,7 @@ admin.form = {
 
         if (form.classList.contains('needs-validation')) {
             res = form.checkValidity();
+            form.reportValidity();
             form.classList.add('was-validated');
             admin.form.check_tab_errors();
         }
