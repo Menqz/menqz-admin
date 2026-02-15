@@ -21,8 +21,10 @@ admin.form.part = {
             return;
         }
         const container = document.querySelector(`#tab-part-${id_part}`);
+        const urlIndex = url + '?class='+main_class+'&parent_id='+parent_id+'&parent_class='+parent_class;
         const part = {
             url: url,
+            url_index: urlIndex,
             id_part: id_part,
             main_class: main_class,
             parent_id: parent_id,
@@ -54,28 +56,20 @@ admin.form.part = {
 
         part.container.addEventListener('click', function (e) {
             e.preventDefault();
+
+            const partId = this.getAttribute('data-part-id');
+            const partObj = admin.form.part.getPartById(partId);
+
             let target = e.target.closest('.grid-create-btn');
             if (target) {
                 let url = target.getAttribute('href');
-                admin.modal.open({
-                    title: '',
-                    ajaxUrl: url,
-                    actionText: 'Salvar',
-                    showSpinOnActionButton: true,
-                    closeOnlyActionResultTrue: true,
-                });
+                admin.form.part.showAction(url, partObj);
             }
 
             target = e.target.closest('.grid-edit-btn');
             if (target) {
                 let url = target.getAttribute('href');
-                admin.modal.open({
-                    title: '',
-                    ajaxUrl: url,
-                    actionText: 'Salvar',
-                    showSpinOnActionButton: true,
-                    closeOnlyActionResultTrue: true,
-                });
+                admin.form.part.showAction(url, partObj);
             }
 
             target = e.target.closest('.grid-show-btn');
@@ -90,9 +84,49 @@ admin.form.part = {
                 });
             }
 
-            target = e.target.closest('.icon-sort');
+            target = e.target.closest('.icon-fw');
             if (target) {
-                console.log(target);
+                let url = target.getAttribute('href');
+                admin.form.part.loadPart(url, partObj.container);
+            }
+        });
+    },
+
+    showAction: function (url, partObj) {
+        admin.modal.open({
+            title: '',
+            ajaxUrl: url,
+            actionText: 'Salvar',
+            showSpinOnActionButton: false,
+            closeOnlyActionResultTrue: true,
+            onAction: async function () {
+                admin.modal.setLoading(true);
+                let form = admin.modal.getForm();
+                if (!form) {
+                    admin.modal.showAlert('Formulário inválido.');
+                    return false;
+                }
+                let url = admin.modal.getUrlForm();
+                if (!url) {
+                    admin.modal.showAlert('URL inválida.');
+                    return false;
+                }
+                url += '?class='+partObj.main_class+'&parent_id='+partObj.parent_id+'&parent_class='+partObj.parent_class;
+
+                form.setAttribute('action', url);
+
+                admin.form.submit(form, function (response) {
+                    if (response.status == 200) {
+                        admin.modal.showAlert('Registro salvo com sucesso.');
+                        admin.form.part.loadPart(partObj.url_index, partObj.container);
+                        admin.modal.close();
+                    } else {
+                        admin.modal.showAlert('Erro ao salvar registro.');
+                    }
+                    admin.modal.setLoading(false);
+                }, function () {
+                    admin.modal.setLoading(false);
+                });
             }
         });
     },
@@ -104,6 +138,10 @@ admin.form.part = {
 
     getPartById: function (id_part) {
         return this.parts.find((p) => p.id_part == id_part);
+    },
+
+    sendForm: async function (form, callback) {
+        return admin.form.submit(form, callback);
     },
 
     loadPart: function (url, container) {
