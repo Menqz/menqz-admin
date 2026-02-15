@@ -165,6 +165,22 @@ admin.modal = {
         }
     },
 
+    getForm: function () {
+        const form = this.bodyElement.querySelector('form');
+        if (!form) {
+            return null;
+        }
+        return form;
+    },
+
+    getUrlForm: function () {
+        const form = this.bodyElement.querySelector('form');
+        if (!form) {
+            return null;
+        }
+        return form.action;
+    },
+
     getLoadingHTML: function() {
          return '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
     },
@@ -233,6 +249,7 @@ admin.modal = {
             this.modalInstance.hide();
             this.clearModalHTML();
         }
+        this.modalInstance = null;
     },
 
     /**
