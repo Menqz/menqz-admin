@@ -11,7 +11,7 @@ use MenqzAdmin\Admin\Traits\HasCustomHooks;
 
 abstract class AdminPartController extends Controller
 {
-
+    use HasResourceActions;
     use HasCustomHooks;
     /**
      * The parent model instance.
@@ -79,6 +79,11 @@ abstract class AdminPartController extends Controller
             // alter the form here
             $form->hasFooter(false);
             $form->setTitle($this->title());
+
+            if ($this->parentModel) {
+                $form->hidden($this->hasManyString . '_type')->value(get_class($this->parentModel));
+                $form->hidden($this->hasManyString . '_id')->value($this->parentModel->id);
+            }
             return $form;
         });
     }

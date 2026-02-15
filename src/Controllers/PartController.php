@@ -35,4 +35,50 @@ class PartController extends Controller
              return "<div class='alert alert-danger'>Error loading part: " . $e->getMessage() . "</div>";
         }
     }
+
+    public function handleStore(Request $request)
+    {
+        $class = $request->get('class');
+        $parentId = $request->get('parent_id');
+        $parentClass = $request->get('parent_class');
+
+        if (!$class || !class_exists($class)) {
+            return "<div class='alert alert-danger'>Part class not found: {$class}</div>";
+        }
+
+        $parentModel = null;
+        if ($parentId && $parentClass && class_exists($parentClass)) {
+            $parentModel = $parentClass::find($parentId);
+        }
+
+        try {
+            $part = new $class($parentModel);
+            return $part->store();
+        } catch (\Exception $e) {
+            return "<div class='alert alert-danger'>Error loading part: " . $e->getMessage() . "</div>";
+        }
+    }
+
+    public function handleUpdate(Request $request, $id)
+    {
+        $class = $request->get('class');
+        $parentId = $request->get('parent_id');
+        $parentClass = $request->get('parent_class');
+
+        if (!$class || !class_exists($class)) {
+            return "<div class='alert alert-danger'>Part class not found: {$class}</div>";
+        }
+
+        $parentModel = null;
+        if ($parentId && $parentClass && class_exists($parentClass)) {
+            $parentModel = $parentClass::find($parentId);
+        }
+
+        try {
+            $part = new $class($parentModel);
+            return $part->update($id);
+        } catch (\Exception $e) {
+            return "<div class='alert alert-danger'>Error loading part: " . $e->getMessage() . "</div>";
+        }
+    }
 }

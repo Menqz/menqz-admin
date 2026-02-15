@@ -151,10 +151,11 @@ abstract class RowAction extends GridAction
         $attributes = $this->formatAttributes();
 
         return sprintf(
-            "<a data-_key='%s' href='javascript:void(0);' class='%s %s {$linkClass}' {$attributes}>{$icon}<span class='label'>%s</span></a>",
+            "<a data-_key='%s' href='javascript:void(0);' class='%s %s {$linkClass}' %s>{$icon}<span class='label'>%s</span></a>",
             $this->getKey(),
             $this->getElementClass(),
             $this->customClass,
+            $attributes,
             $this->asColumn ? $this->display($this->row($this->column->getName())) : $this->name()
         );
     }

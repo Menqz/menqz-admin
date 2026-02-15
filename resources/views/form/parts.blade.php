@@ -20,6 +20,7 @@
         @foreach($partObj->getParts() as $part)
             <div class="tab-pane {{ $part['active'] ? 'active' : '' }} px-2"
                 id="tab-part-{{ $part['id'] }}"
+                data-part-id="{{ $part['id'] }}"
                 data-url="{{ route('admin.handle-part') }}?class={{ urlencode($part['class']) }}&parent_id={{ $part['parentId'] }}&parent_class={{ urlencode($part['parentClass']) }}">
 
             </div>

@@ -330,6 +330,9 @@ class Admin
                 $router->get('_handle_selectable_', 'HandleController@handleSelectable')->name('admin.handle-selectable');
                 $router->get('_handle_renderable_', 'HandleController@handleRenderable')->name('admin.handle-renderable');
                 $router->get('_handle_part_/{id?}/{modo?}', 'PartController@handle')->name('admin.handle-part');
+                $router->post('_handle_part_', 'PartController@handleStore')->name('admin.handle-part.store');
+                $router->match(['put', 'patch'], '_handle_part_/{id?}', 'PartController@handleUpdate')->name('admin.handle-part.update');
+                $router->delete('_handle_part_/{id?}', 'PartController@handleDestroy')->name('admin.handle-part.destroy');
             });
 
             $authController = config('admin.auth.controller', AuthController::class);
