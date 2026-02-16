@@ -84,6 +84,12 @@ admin.form.part = {
                 });
             }
 
+            target = e.target.closest('.grid-delete-btn');
+            if (target) {
+                let url = target.getAttribute('data-url');
+                admin.form.part.delete(url, partObj);
+            }
+
             target = e.target.closest('.icon-fw');
             if (target) {
                 let url = target.getAttribute('href');
@@ -174,6 +180,27 @@ admin.form.part = {
 
     sendForm: async function (form, callback) {
         return admin.form.submit(form, callback);
+    },
+
+    delete: function (url, partObj) {
+        Swal.fire({
+            title: __('delete_confirm'),
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: __('confirm'),
+            showLoaderOnConfirm: true,
+            cancelButtonText:  __('cancel'),
+            preConfirm: function() {
+                return new Promise(function(resolve) {
+                    let data = {_method:'delete'};
+                    admin.ajax.post(url,data,function(data){
+                        resolve(data);
+                        admin.form.part.loadPart(partObj.url_index, partObj.container);
+                    });
+                });
+            }
+        }).then(admin.resource.default_swal_response);
     },
 
     loadPart: function (url, container) {

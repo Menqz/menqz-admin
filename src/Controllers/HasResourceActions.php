@@ -59,6 +59,6 @@ trait HasResourceActions
     public function destroy($id)
     {
         $form = $this->getForm($id);
-        return $form->destroy($form->model()->id);
+        return $form->destroy($id);
     }
 }
