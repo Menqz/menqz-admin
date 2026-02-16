@@ -22,14 +22,15 @@ class Pjax
      */
     public function handle($request, Closure $next)
     {
-        $response = $next($request);
-
-        if (!$request->pjax() || $response->isRedirection() || Admin::guard()->guest()) {
-            return $response;
-        }
-
-        if (!$response->isSuccessful()) {
-            return $this->handleErrorResponse($response);
+        try {
+            $response = $next($request);
+            if (!$request->pjax() || $response->isRedirection() || Admin::guard()->guest()) {
+                return $response;
+            }
+        } catch (\Throwable $exception) {
+            if (!$response->isSuccessful()) {
+                return $this->handleException($request, $exception);
+            }
         }
 
         try {
@@ -77,6 +78,19 @@ class Pjax
 
         return back()->withInput()->withErrors($error, 'exception');
     }
+
+    protected function handleException($request, \Throwable $exception)
+    {
+        $error = new MessageBag([
+            'type'    => get_class($exception),
+            'message' => $exception->getMessage(),
+            'file'    => $exception->getFile(),
+            'line'    => $exception->getLine(),
+        ]);
+
+        return back()->withInput()->withErrors($error, 'exception');
+    }
+
 
     /**
      * Prepare the PJAX-specific response content.
