@@ -84,7 +84,8 @@ abstract class AdminPartController extends Controller
                 $form->hidden($this->hasManyString . '_type')->value(get_class($this->parentModel));
                 $form->hidden($this->hasManyString . '_id')->value($this->parentModel->id);
             }
-            $form->hidden('_edit_inline')->value(true);
+            $form->hidden('_form_parts')->value(true);
+            $form->ignore('_form_parts');
             return $form;
         });
     }

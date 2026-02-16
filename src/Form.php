@@ -410,8 +410,13 @@ class Form implements Renderable
     {
         $data = \request()->all();
 
+        $isFormParts = $this->isFormParts($data);
+
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
+            if ($isFormParts) {
+                return response()->json(['errors' => Arr::dot($validationMessages->getMessages())], 422);
+            }
             return $this->responseValidationError($validationMessages);
         }
 
@@ -609,6 +614,7 @@ class Form implements Renderable
         $data = ($data) ?: request()->all();
 
         $isEditable = $this->isEditable($data);
+        $isFormParts = $this->isFormParts($data);
 
         if (($data = $this->handleColumnUpdates($id, $data)) instanceof Response) {
             return $data;
@@ -627,7 +633,7 @@ class Form implements Renderable
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
-            if (!$isEditable) {
+            if (!$isEditable && !$isFormParts) {
                 return back()->withInput()->withErrors($validationMessages);
             }
 
@@ -733,6 +739,18 @@ class Form implements Renderable
     protected function isEditable(array $input = []): bool
     {
         return array_key_exists('_editable', $input) || array_key_exists('_edit_inline', $input);
+    }
+
+    /**
+     * Check if request is from editable.
+     *
+     * @param array $input
+     *
+     * @return bool
+     */
+    protected function isFormParts(array $input = []): bool
+    {
+        return array_key_exists('_form_parts', $input);
     }
 
     /**

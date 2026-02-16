@@ -106,7 +106,7 @@
                             cancelButtonText:  __('cancel'),
                         }).then(function (res){
                             if (res.isConfirmed){
-                                let route_previous = document.querySelector('._previous_') ? document.querySelector('._previous_').value : undefined;
+                                let route_previous = document.querySelector('._custom_previous_') ? document.querySelector('._custom_previous_').value : undefined;
                                 if (typeof route_previous == 'undefined') {
                                     route_previous = '{{$route_cancel}}';
                                 }

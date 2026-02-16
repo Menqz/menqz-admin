@@ -142,8 +142,6 @@ admin.form.part = {
                         admin.modal.close();
                         return true;
                     }
-
-                    admin.modal.showAlert({ type: 'danger', message: 'Erro ao salvar registro.' });
                     admin.modal.setLoading(false);
                     return false;
                 } catch (error) {
@@ -152,7 +150,6 @@ admin.form.part = {
                     if (res && res.status === 422 && res.data && res.data.errors) {
                         admin.form.part.applyValidationErrors(form, res.data.errors);
                         const headerMessage = res.data.message || 'Há erros de validação no formulário.';
-                        admin.modal.showAlert({ type: 'warning', message: headerMessage });
                     } else if (res && res.data && res.data.message) {
                         admin.modal.showAlert({ type: 'danger', message: res.data.message });
                     } else {
