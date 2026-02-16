@@ -103,30 +103,65 @@ admin.form.part = {
                 admin.modal.setLoading(true);
                 let form = admin.modal.getForm();
                 if (!form) {
-                    admin.modal.showAlert('Formulário inválido.');
+                    admin.modal.showAlert({ type: 'danger', message: 'Formulário inválido.' });
+                    admin.modal.setLoading(false);
                     return false;
                 }
                 let url = admin.modal.getUrlForm();
                 if (!url) {
-                    admin.modal.showAlert('URL inválida.');
+                    admin.modal.showAlert({ type: 'danger', message: 'URL inválida.' });
+                    admin.modal.setLoading(false);
                     return false;
                 }
                 url += '?class='+partObj.main_class+'&parent_id='+partObj.parent_id+'&parent_class='+partObj.parent_class;
 
                 form.setAttribute('action', url);
 
-                admin.form.submit(form, function (response) {
-                    if (response.status == 200) {
-                        admin.modal.showAlert('Registro salvo com sucesso.');
+                if (!admin.form.validate(form)) {
+                    admin.modal.setLoading(false);
+                    return false;
+                }
+
+                admin.form.part.clearFormErrors(form);
+
+                const method = (form.getAttribute('method') || 'post').toLowerCase();
+                const formData = new FormData(form);
+                const headers = Object.assign({}, admin.ajax.defaults.headers || {}, { Accept: 'application/json' });
+
+                try {
+                    const response = await axios({
+                        url: url,
+                        method: method,
+                        data: formData,
+                        headers: headers,
+                    });
+
+                    if (response && response.status >= 200 && response.status < 300) {
                         admin.form.part.loadPart(partObj.url_index, partObj.container);
+                        admin.modal.setLoading(false);
                         admin.modal.close();
-                    } else {
-                        admin.modal.showAlert('Erro ao salvar registro.');
+                        return true;
                     }
+
+                    admin.modal.showAlert({ type: 'danger', message: 'Erro ao salvar registro.' });
                     admin.modal.setLoading(false);
-                }, function () {
+                    return false;
+                } catch (error) {
+                    const res = error && error.response ? error.response : null;
+
+                    if (res && res.status === 422 && res.data && res.data.errors) {
+                        admin.form.part.applyValidationErrors(form, res.data.errors);
+                        const headerMessage = res.data.message || 'Há erros de validação no formulário.';
+                        admin.modal.showAlert({ type: 'warning', message: headerMessage });
+                    } else if (res && res.data && res.data.message) {
+                        admin.modal.showAlert({ type: 'danger', message: res.data.message });
+                    } else {
+                        admin.modal.showAlert({ type: 'danger', message: 'Erro ao salvar registro.' });
+                    }
+
                     admin.modal.setLoading(false);
-                });
+                    return false;
+                }
             }
         });
     },
@@ -159,5 +194,99 @@ admin.form.part = {
                 <i class="spinner-border" role="status"></i>
             </div>
         `;
+    },
+
+    clearFormErrors: function (form) {
+        if (!form) {
+            return;
+        }
+
+        form.querySelectorAll('.form-group.has-error').forEach(function (group) {
+            group.classList.remove('has-error');
+        });
+
+        form.querySelectorAll('.form-group div.alert.alert-danger').forEach(function (alert) {
+            if (alert.querySelector('li[for="inputError"]')) {
+                alert.remove();
+            }
+        });
+    },
+
+    applyValidationErrors: function (form, errors) {
+        if (!form || !errors) {
+            return;
+        }
+
+        this.clearFormErrors(form);
+
+        var fieldErrors = {};
+
+        Object.keys(errors).forEach(function (fieldName) {
+            var messages = errors[fieldName];
+            if (!messages) {
+                return;
+            }
+
+            var fieldBaseName = fieldName.replace(/\.\d+$/, '');
+
+            if (!fieldErrors[fieldBaseName]) {
+                fieldErrors[fieldBaseName] = [];
+            }
+
+            if (Array.isArray(messages)) {
+                fieldErrors[fieldBaseName] = fieldErrors[fieldBaseName].concat(messages);
+            } else {
+                fieldErrors[fieldBaseName].push(messages);
+            }
+        });
+
+        Object.keys(fieldErrors).forEach(function (fieldBaseName) {
+            var messages = fieldErrors[fieldBaseName];
+            if (!messages || !messages.length) {
+                return;
+            }
+
+            var field =
+                form.querySelector('[name="' + fieldBaseName + '"]') ||
+                form.querySelector('[name="' + fieldBaseName + '[]"]');
+
+            if (!field) {
+                return;
+            }
+
+            var group = field.closest('.form-group') || field.parentElement || field;
+            group.classList.add('has-error');
+
+            var content =
+                group.querySelector('.col-sm-8') ||
+                group.querySelector('.col-sm-9') ||
+                group.querySelector('.col-sm-10') ||
+                group;
+
+            var inputGroup = content.querySelector('.input-group') || field.closest('.input-group');
+
+            var alert = document.createElement('div');
+            alert.className = 'alert alert-danger';
+
+            var ul = document.createElement('ul');
+            ul.className = 'm-0 ps-3';
+
+            messages.forEach(function (msg) {
+                var li = document.createElement('li');
+                li.setAttribute('for', 'inputError');
+                li.textContent = msg;
+                ul.appendChild(li);
+            });
+
+            alert.appendChild(ul);
+
+            if (inputGroup && inputGroup.parentNode === content) {
+                content.insertBefore(alert, inputGroup);
+            } else if (field.parentNode === content) {
+                content.insertBefore(alert, field);
+            } else {
+                content.insertBefore(alert, content.firstChild);
+            }
+        });
     }
 }
