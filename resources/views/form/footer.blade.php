@@ -96,9 +96,22 @@
 
             @if($use_destroy_in_cancel)
                 <script>
+                    var destroy = false;
+                    function cancelDestroy(route_previous) {
+                        const id_object = document.querySelector('.id_object') ? document.querySelector('.id_object').value : null;
+                        var rotaDelete = "{{$route_destroy}}?forceDelete=1";
+                        destroy = true;
+                        if (id_object > 0 && rotaDelete != '') {
+                            rotaDelete = rotaDelete.replace('#id#', id_object);
+                            admin.ajax.post(rotaDelete, {
+                                _token: '{{ csrf_token() }}',
+                                _method: 'DELETE'
+                            });
+                        }
+                    }
                     document.getElementById('btn-cancel').addEventListener('click', function(e){
                         e.preventDefault();
-                        Swal.fire({
+                         Swal.fire({
                             title: 'Ao cancelar, as informações do registro não serão salvas. Deseja continuar?',
                             icon: "question",
                             showCancelButton: true,
@@ -111,27 +124,17 @@
                                     route_previous = '{{$route_cancel}}';
                                 }
                                 @if ($is_creating)
-                                    const id_object = document.querySelector('.id_object') ? document.querySelector('.id_object').value : null;
-                                    var rotaDelete = "{{$route_destroy}}?forceDelete=1";
-
-                                    if (id_object > 0 && rotaDelete != '') {
-                                        e.preventDefault();
-                                        rotaDelete = rotaDelete.replace('#id#', id_object);
-                                        console.log(rotaDelete);
-
-                                        admin.ajax.post(rotaDelete, {
-                                            _token: '{{ csrf_token() }}',
-                                            _method: 'DELETE'
-                                        }, function(data){
-                                            console.log(data);
-                                            window.location = route_previous;
-                                        });
-                                    }
-                                @else
-                                    window.location = route_previous;
+                                    cancelDestroy();
                                 @endif
+                                window.location = route_previous;
                             }
                         });
+                    });
+
+                    window.addEventListener('beforeunload', (e) => {
+                        if (!destroy) {
+                            cancelDestroy();
+                        }
                     });
                 </script>
             @endif
