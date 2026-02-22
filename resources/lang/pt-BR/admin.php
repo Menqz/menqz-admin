@@ -26,6 +26,7 @@ return [
     'reset'                 => 'Cancelar',
     'export'                => 'Exportar',
     'batch_delete'          => 'Apagar vários',
+    'batch_edit'            => 'Editar vários',
     'save'                  => 'Salvar',
     'refresh'               => 'Atualizar',
     'order'                 => 'Ordenar',
@@ -105,5 +106,6 @@ return [
         'filter_clear'       => 'Mostrar tudo',
         'filter_placeholder' => 'Filtrar',
     ],
+    'grid_items_selected'    => '{n} item(s) selecionado(s)',
     'menu_titles'           => [],
 ];
