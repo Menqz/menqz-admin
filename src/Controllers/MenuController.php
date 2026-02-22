@@ -14,6 +14,8 @@ class MenuController extends Controller
 {
     use HasResourceActions;
 
+    protected $usePersistent = true;
+
     /**
      * Index interface.
      *

@@ -37,10 +37,22 @@ class AdminController extends Controller
     */
     protected $controll_id = 'controll';
 
+    /**
+     * Whether to use persistent models.
+     *
+     * @var bool|null
+     */
+    protected $usePersistent = null;
+
     public function __construct()
     {
         $this->hook("alterGrid", function ($scope, $grid) {
             // alter the grid here
+            $usePersistent = $this->usePersistent();
+
+            if ($usePersistent) {
+                $grid->model()->where('persistent', true);
+            }
             return $grid;
         });
 
@@ -51,6 +63,12 @@ class AdminController extends Controller
 
         $this->hook("alterForm", function ($scope, $form) {
             // alter the form here
+            $usePersistent = $this->usePersistent();
+
+            if ($usePersistent) {
+                $form->hidden('persistent');
+            }
+
             $previousSess = $scope->gerenateCustomPreview();
 
             $form->hidden('_custom_previous_')->value($previousSess);
@@ -191,5 +209,10 @@ class AdminController extends Controller
     public function getControllIDEdit()
     {
         return $this->controll_id.'_edit';
+    }
+
+    protected function usePersistent()
+    {
+        return $this->usePersistent === null ? config('admin.database.use_persistent', false) : $this->usePersistent;
     }
 }

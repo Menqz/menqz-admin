@@ -8,6 +8,9 @@ use MenqzAdmin\Admin\Grid;
 
 class LogController extends AdminController
 {
+
+    protected $usePersistent = false;
+
     /**
      * {@inheritdoc}
      */

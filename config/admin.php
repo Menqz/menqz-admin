@@ -176,6 +176,8 @@ return [
     |
     */
     'database' => [
+        // Whether to use persistent models.
+        'use_persistent' => false,
 
         // Database connection for following tables.
         'connection' => '',
