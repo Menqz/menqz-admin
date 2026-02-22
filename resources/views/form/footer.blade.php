@@ -132,9 +132,11 @@
                     });
 
                     window.addEventListener('beforeunload', (e) => {
-                        if (!destroy) {
-                            cancelDestroy();
-                        }
+                        @if ($is_creating)
+                            if (!destroy) {
+                                cancelDestroy();
+                            }
+                        @endif
                     });
                 </script>
             @endif
