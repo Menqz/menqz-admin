@@ -58,7 +58,8 @@ trait HasResourceActions
      */
     public function destroy($id)
     {
+        $forceDelete = request('forceDelete', false);
         $form = $this->getForm($id);
-        return $form->destroy($id);
+        return $form->destroy($id, $forceDelete);
     }
 }

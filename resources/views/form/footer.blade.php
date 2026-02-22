@@ -112,7 +112,7 @@
                                 }
                                 @if ($is_creating)
                                     const id_object = document.querySelector('.id_object') ? document.querySelector('.id_object').value : null;
-                                    var rotaDelete = "{{$route_destroy}}";
+                                    var rotaDelete = "{{$route_destroy}}?forceDelete=1";
 
                                     if (id_object > 0 && rotaDelete != '') {
                                         e.preventDefault();

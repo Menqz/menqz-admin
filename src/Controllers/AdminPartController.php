@@ -161,7 +161,7 @@ abstract class AdminPartController extends Controller
 
     public function edit($id)
     {
-        $form = $this->form();
+        $form = $this->form($id);
         if ($this->hasHooks('alterForm')) {
             $form = $this->callHooks('alterForm', $form);
         }
@@ -185,7 +185,7 @@ abstract class AdminPartController extends Controller
      *
      * @return Form
      */
-    abstract public function form();
+    abstract public function form($id = null);
 
     /**
      * Handle the request and return the response.

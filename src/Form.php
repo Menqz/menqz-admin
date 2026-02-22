@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
@@ -333,23 +334,23 @@ class Form implements Renderable
      *
      * @return mixed
      */
-    public function destroy($id)
+    public function destroy($id, $forceDelete = false)
     {
         try {
             if (($ret = $this->callDeleting($id)) instanceof Response) {
                 return $ret;
             }
 
-            collect(explode(',', $id))->filter()->each(function ($id) {
+            collect(explode(',', $id))->filter()->each(function ($id) use ($forceDelete) {
                 $builder = $this->model()->newQuery();
 
-                if ($this->isSoftDeletes) {
+                if ($this->isSoftDeletes && !$forceDelete) {
                     $builder = $builder->withTrashed();
                 }
 
                 $model = $builder->with($this->getRelations())->findOrFail($id);
 
-                if ($this->isSoftDeletes && $model->trashed()) {
+                if (($this->isSoftDeletes && $model->trashed()) || $forceDelete) {
                     $this->deleteFiles($model, true);
                     $model->forceDelete();
 
