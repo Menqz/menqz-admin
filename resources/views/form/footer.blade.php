@@ -1,7 +1,6 @@
 
 <footer class="navbar form-footer navbar-light bg-white py-3 px-4 @if (!empty($fixed_footer))shadow fixed-bottom @endif">
     <div class="row">
-    {{ csrf_field() }}
 
 
     <div class="col-9 d-flex align-items-center flex-row">
@@ -97,9 +96,22 @@
 
             @if($use_destroy_in_cancel)
                 <script>
+                    var destroy = false;
+                    function cancelDestroy(route_previous) {
+                        const id_object = document.querySelector('.id_object') ? document.querySelector('.id_object').value : null;
+                        var rotaDelete = "{{$route_destroy}}?forceDelete=1";
+                        destroy = true;
+                        if (id_object > 0 && rotaDelete != '') {
+                            rotaDelete = rotaDelete.replace('#id#', id_object);
+                            admin.ajax.post(rotaDelete, {
+                                _token: '{{ csrf_token() }}',
+                                _method: 'DELETE'
+                            });
+                        }
+                    }
                     document.getElementById('btn-cancel').addEventListener('click', function(e){
                         e.preventDefault();
-                        Swal.fire({
+                         Swal.fire({
                             title: 'Ao cancelar, as informações do registro não serão salvas. Deseja continuar?',
                             icon: "question",
                             showCancelButton: true,
@@ -107,32 +119,24 @@
                             cancelButtonText:  __('cancel'),
                         }).then(function (res){
                             if (res.isConfirmed){
-                                let route_previous = document.querySelector('._previous_') ? document.querySelector('._previous_').value : undefined;
+                                let route_previous = document.querySelector('._custom_previous_') ? document.querySelector('._custom_previous_').value : undefined;
                                 if (typeof route_previous == 'undefined') {
                                     route_previous = '{{$route_cancel}}';
                                 }
                                 @if ($is_creating)
-                                    const id_object = document.querySelector('.id_object') ? document.querySelector('.id_object').value : null;
-                                    var rotaDelete = "{{$route_destroy}}";
-
-                                    if (id_object > 0 && rotaDelete != '') {
-                                        e.preventDefault();
-                                        rotaDelete = rotaDelete.replace('#id#', id_object);
-                                        console.log(rotaDelete);
-
-                                        admin.ajax.post(rotaDelete, {
-                                            _token: '{{ csrf_token() }}',
-                                            _method: 'DELETE'
-                                        }, function(data){
-                                            console.log(data);
-                                            window.location = route_previous;
-                                        });
-                                    }
-                                @else
-                                    window.location = route_previous;
+                                    cancelDestroy();
                                 @endif
+                                window.location = route_previous;
                             }
                         });
+                    });
+
+                    window.addEventListener('beforeunload', (e) => {
+                        @if ($is_creating)
+                            if (!destroy) {
+                                cancelDestroy();
+                            }
+                        @endif
                     });
                 </script>
             @endif

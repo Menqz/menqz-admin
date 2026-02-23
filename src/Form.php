@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
@@ -22,6 +23,7 @@ use MenqzAdmin\Admin\Form\Concerns\HasFormAttributes;
 use MenqzAdmin\Admin\Form\Concerns\HasHooks;
 use MenqzAdmin\Admin\Form\Field;
 use MenqzAdmin\Admin\Form\Layout\Layout;
+use MenqzAdmin\Admin\Form\Part;
 use MenqzAdmin\Admin\Form\Row;
 use MenqzAdmin\Admin\Form\Tab;
 use MenqzAdmin\Admin\Grid\Tools\BatchEdit;
@@ -121,6 +123,11 @@ class Form implements Renderable
     protected $tab = null;
 
     /**
+     * @var Form\Part
+     */
+    protected $part = null;
+
+    /**
      * Field rows in form.
      *
      * @var array
@@ -132,6 +139,12 @@ class Form implements Renderable
      */
     protected $isSoftDeletes = false;
 
+
+    /**
+     * Whether the footer is fixed.
+     *
+     * @var bool
+     */
     public $fixedFooter = true;
 
     /**
@@ -140,7 +153,7 @@ class Form implements Renderable
      * @param $model
      * @param \Closure $callback
      */
-    public function __construct($model, Closure $callback = null)
+    public function __construct($model, ?Closure $callback = null)
     {
         $this->model = $model;
 
@@ -205,6 +218,16 @@ class Form implements Renderable
     }
 
     /**
+     * Whether the form has footer.
+     *
+     * @return bool
+     */
+    public function hasFooter($hasFooter = null): bool
+    {
+        return $this->builder()->hasFooter($hasFooter);
+    }
+
+    /**
      * Generate a edit form.
      *
      * @param $id
@@ -238,6 +261,25 @@ class Form implements Renderable
     }
 
     /**
+     * Use tab to split form.
+     *
+     * @param string  $title
+     * @param Closure $content
+     * @param bool    $active
+     *
+     * @return $this
+     */
+    public function part($title, $partController, bool $active = false): self
+    {
+        $class          = $partController;
+        $parentId       = $this->model->id;
+        $parentClass    = get_class($this->model);
+        $this->setPart()->append($title, $class, $parentClass, $parentId, $active);
+
+        return $this;
+    }
+
+    /**
      * Get Tab instance.
      *
      * @return Tab
@@ -261,6 +303,30 @@ class Form implements Renderable
         return $this->tab;
     }
 
+     /**
+     * Get Part instance.
+     *
+     * @return Part
+     */
+    public function getPart()
+    {
+        return $this->part;
+    }
+
+    /**
+     * Set Part instance.
+     *
+     * @return Part
+     */
+    public function setPart(): Part
+    {
+        if ($this->part === null) {
+            $this->part = new Part($this);
+        }
+
+        return $this->part;
+    }
+
     /**
      * Destroy data entity and remove files.
      *
@@ -268,23 +334,23 @@ class Form implements Renderable
      *
      * @return mixed
      */
-    public function destroy($id)
+    public function destroy($id, $forceDelete = false)
     {
         try {
             if (($ret = $this->callDeleting($id)) instanceof Response) {
                 return $ret;
             }
 
-            collect(explode(',', $id))->filter()->each(function ($id) {
+            collect(explode(',', $id))->filter()->each(function ($id) use ($forceDelete) {
                 $builder = $this->model()->newQuery();
 
-                if ($this->isSoftDeletes) {
+                if ($this->isSoftDeletes && !$forceDelete) {
                     $builder = $builder->withTrashed();
                 }
 
                 $model = $builder->with($this->getRelations())->findOrFail($id);
 
-                if ($this->isSoftDeletes && $model->trashed()) {
+                if (($this->isSoftDeletes && $model->trashed()) || $forceDelete) {
                     $this->deleteFiles($model, true);
                     $model->forceDelete();
 
@@ -345,8 +411,13 @@ class Form implements Renderable
     {
         $data = \request()->all();
 
+        $isFormParts = $this->isFormParts($data);
+
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
+            if ($isFormParts) {
+                return response()->json(['errors' => Arr::dot($validationMessages->getMessages())], 422);
+            }
             return $this->responseValidationError($validationMessages);
         }
 
@@ -544,6 +615,7 @@ class Form implements Renderable
         $data = ($data) ?: request()->all();
 
         $isEditable = $this->isEditable($data);
+        $isFormParts = $this->isFormParts($data);
 
         if (($data = $this->handleColumnUpdates($id, $data)) instanceof Response) {
             return $data;
@@ -562,7 +634,7 @@ class Form implements Renderable
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
-            if (!$isEditable) {
+            if (!$isEditable && !$isFormParts) {
                 return back()->withInput()->withErrors($validationMessages);
             }
 
@@ -668,6 +740,18 @@ class Form implements Renderable
     protected function isEditable(array $input = []): bool
     {
         return array_key_exists('_editable', $input) || array_key_exists('_edit_inline', $input);
+    }
+
+    /**
+     * Check if request is from editable.
+     *
+     * @param array $input
+     *
+     * @return bool
+     */
+    protected function isFormParts(array $input = []): bool
+    {
+        return array_key_exists('_form_parts', $input);
     }
 
     /**

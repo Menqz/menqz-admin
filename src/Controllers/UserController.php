@@ -9,6 +9,8 @@ use MenqzAdmin\Admin\Show;
 
 class UserController extends AdminController
 {
+    protected $usePersistent = false;
+
     /**
      * {@inheritdoc}
      */

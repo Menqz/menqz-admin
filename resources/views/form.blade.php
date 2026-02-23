@@ -1,6 +1,8 @@
 <div class="card box-info">
     <div class="card-header with-border">
-        <h3 class="card-title">{{ $form->title() }}</h3>
+        <h4 class="content-header clearfix">
+            {{ $form->title() }} <small>{{ $form->subTitle() }}</small>
+        </h4>
 
         <div class="card-tools">
             {!! $form->renderTools() !!}
@@ -36,13 +38,24 @@
     </div>
     <!-- /.box-body -->
 
-    {!! $form->renderFooter() !!}
+    @if($form->hasFooter())
+        {!! $form->renderFooter() !!}
+    @endif
 
     @foreach($form->getHiddenFields() as $field)
         {!! $field->render() !!}
     @endforeach
 
+    {{ csrf_field() }}
 <!-- /.box-footer -->
     {!! $form->close() !!}
 
 </div>
+
+@if(!$partObj->isEmpty())
+    <div class="row fields-group">
+        <div class="col-md-12">
+            @include('admin::form.parts', compact('partObj'))
+        </div>
+    </div>
+@endif

@@ -89,6 +89,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | menqz-admin html description
+    |--------------------------------------------------------------------------
+    |
+    | Html description for login page.
+    |
+    */
+    'description' => 'Sistema de Gestão de Projetos',
+
+    /*
+    |--------------------------------------------------------------------------
     | Access via `https`
     |--------------------------------------------------------------------------
     |
@@ -176,6 +186,8 @@ return [
     |
     */
     'database' => [
+        // Whether to use persistent models.
+        'use_persistent' => false,
 
         // Database connection for following tables.
         'connection' => '',

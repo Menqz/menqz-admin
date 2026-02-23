@@ -103,6 +103,13 @@ class Grid
     protected $variables = [];
 
     /**
+     * Query string for grid.
+     *
+     * @var string
+     */
+    protected $queryString = '';
+
+    /**
      * Resource path of the grid.
      *
      * @var
@@ -631,6 +638,32 @@ class Grid
     }
 
     /**
+     * Set query string for grid.
+     *
+     * @param string $queryString
+     *
+     * @return $this
+     */
+    public function queryString(string $queryString)
+    {
+        $this->queryString = $queryString;
+
+        return $this;
+    }
+
+    /**
+     * Set query string for grid.
+     *
+     * @param string $queryString
+     *
+     * @return $this
+     */
+    public function getQueryString()
+    {
+        return $this->queryString;
+    }
+
+    /**
      * Get create url.
      *
      * @return string
@@ -641,6 +674,10 @@ class Grid
 
         if ($constraints = $this->model()->getConstraints()) {
             $queryString = http_build_query($constraints);
+        }
+
+        if ($this->queryString && empty($queryString)) {
+            $queryString = $this->queryString;
         }
 
         return sprintf(

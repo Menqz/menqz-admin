@@ -40,6 +40,8 @@
                 </div>
                 {!! Admin::html() !!}
                 {!! Admin::script() !!}
+                <div id="container-modal">
+                </div>
             <!--end-pjax-container-->
             </div>
 

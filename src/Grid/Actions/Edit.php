@@ -8,6 +8,8 @@ class Edit extends RowAction
 {
     public $icon = 'icon-pen';
 
+    public $customClass = 'grid-edit-btn';
+
     /**
      * @return array|null|string
      */
@@ -21,6 +23,13 @@ class Edit extends RowAction
      */
     public function href()
     {
-        return "{$this->getResource()}/{$this->getKey()}/edit";
+        $queryString = $this->parent->getQueryString();
+        return sprintf(
+            '%s/%s/edit%s',
+            $this->getResource(),
+            $this->getKey(),
+            $queryString ? ('?'.$queryString) : ''
+        );
+        // return "{$this->getResource()}/{$this->getKey()}/edit";
     }
 }

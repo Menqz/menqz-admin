@@ -8,6 +8,8 @@ use MenqzAdmin\Admin\Show;
 
 class RoleController extends AdminController
 {
+    protected $usePersistent = false;
+
     /**
      * {@inheritdoc}
      */

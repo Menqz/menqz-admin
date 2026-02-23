@@ -15,6 +15,9 @@ trait HasResourceActions
         if (method_exists($this, 'hasHooks') && $this->hasHooks('alterForm')) {
             $form = $this->callHooks('alterForm', $form);
         }
+        if (method_exists($this, 'hasHooks') && $this->hasHooks('alterFormCustom')) {
+            $form = $this->callHooks('alterFormCustom', $form);
+        }
 
         return $form;
     }
@@ -29,7 +32,7 @@ trait HasResourceActions
     public function update($id)
     {
         $form = $this->getForm($id);
-        return $form->update($form->model()->id);
+        return $form->update($id);
     }
 
     /**
@@ -55,7 +58,8 @@ trait HasResourceActions
      */
     public function destroy($id)
     {
+        $forceDelete = request('forceDelete', false);
         $form = $this->getForm($id);
-        return $form->destroy($form->model()->id);
+        return $form->destroy($id, $forceDelete);
     }
 }

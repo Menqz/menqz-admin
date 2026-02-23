@@ -74,6 +74,14 @@ class Builder
     protected $footer;
 
     /**
+     * Whether the form has footer.
+     *
+     * @var bool
+     */
+    protected $hasFooter = true;
+
+
+    /**
      * Width for label and field.
      *
      * @var array
@@ -96,6 +104,13 @@ class Builder
      * @var string
      */
     protected $title;
+
+    /**
+     * Form subtitle.
+     *
+     * @var string
+     */
+    protected $subTitle;
 
     /**
      * @var string
@@ -197,6 +212,20 @@ class Builder
     public function isEditing(): bool
     {
         return $this->isMode(static::MODE_EDIT);
+    }
+
+    /**
+     * Whether the form has footer.
+     *
+     * @return bool
+     */
+    public function hasFooter($hasFooter = null): bool
+    {
+        if ($hasFooter !== null) {
+            $this->hasFooter = $hasFooter;
+        }
+
+        return $this->hasFooter;
     }
 
     /**
@@ -441,6 +470,29 @@ class Builder
         return '';
     }
 
+    public function subTitle(): string
+    {
+        return $this->getSubTitle();
+    }
+
+    /**
+     * Get form subtitle.
+     *
+     * @return string
+     */
+    public function getSubTitle(): string
+    {
+        if ($this->mode === static::MODE_CREATE) {
+            return trans('admin.create');
+        }
+
+        if ($this->mode === static::MODE_EDIT) {
+            return trans('admin.edit');
+        }
+
+        return '';
+    }
+
     /**
      * Determine if form fields has files.
      *
@@ -625,13 +677,16 @@ JS;
 
         $tabObj = $this->form->setTab();
 
+        $partObj = $this->form->setPart();
+
         $this->addCascadeScript();
 
         $data = [
-            'form'   => $this,
-            'tabObj' => $tabObj,
-            'width'  => $this->width,
-            'layout' => $this->form->getLayout(),
+            'form'      => $this,
+            'tabObj'    => $tabObj,
+            'partObj'   => $partObj,
+            'width'     => $this->width,
+            'layout'    => $this->form->getLayout(),
         ];
 
         return view($this->view, $data)->render();
