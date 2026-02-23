@@ -49,17 +49,18 @@
 						<form action="{{ admin_url('auth/login') }}" method="post" class="mt-3">
 							<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-							<div class="mb-3">
-								<label for="username" class="form-label small text-muted mb-1">{{ __('admin.username') }}</label>
+							<div class="form-floating mb-3">
 								<input type="text" class="form-control form-control-lg" name="username" id="username" placeholder="{{ __('admin.username') }}" value="{{ old('username') }}" required autofocus>
-								@if($errors->has('username'))
+								<label for="username" class="form-label mb-1">{{ __('admin.username') }}</label>
+
+                                @if($errors->has('username'))
 									<div class="text-danger small mt-1">{{$errors->first('username')}}</div>
 								@endif
 							</div>
 
-							<div class="mb-3">
-								<label for="password" class="form-label small text-muted mb-1">{{ __('admin.password') }}</label>
+							<div class="form-floating mb-3">
 								<input type="password" class="form-control form-control-lg" name="password" id="password" placeholder="{{ __('admin.password') }}" required>
+								<label for="password" class="form-label mb-1">{{ __('admin.password') }}</label>
 								@if($errors->has('password'))
 									<div class="text-danger small mt-1">{{$errors->first('password') }}</div>
 								@endif
