@@ -203,6 +203,24 @@
     margin-bottom: 64px;
 }
 
+#app {
+    padding-top: 56px;
+}
+
+#app:has(.form-fullscreen) {
+    margin: 0 !important;
+    padding: 20px !important;
+    padding-bottom: 50px !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    background: var(--main-bg) !important;
+    z-index: 1032 !important;
+    overflow-x: auto;
+}
+
 /*---------------------------------------------------------*/
 /* context menu */
 /*---------------------------------------------------------*/

@@ -1,7 +1,11 @@
+@if($form->isFullscreen())
+    <div class="form-fullscreen">
+@endif
+
 <div class="card box-info">
     <div class="card-header with-border">
         <h4 class="content-header clearfix">
-            {{ $form->title() }} <small>{{ $form->subTitle() }}</small>
+           <small>{{ $form->subTitle() }}</small>
         </h4>
 
         <div class="card-tools">
@@ -58,4 +62,8 @@
             @include('admin::form.parts', compact('partObj'))
         </div>
     </div>
+@endif
+
+@if($form->isFullscreen())
+</div>
 @endif
