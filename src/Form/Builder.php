@@ -667,6 +667,16 @@ JS;
     }
 
     /**
+     * Use fullscreen mode.
+     *
+     * @return bool
+     */
+    public function isFullscreen(): bool
+    {
+        return config('admin.form.fullscreen', false);
+    }
+
+    /**
      * Render form.
      *
      * @return string
@@ -687,6 +697,7 @@ JS;
             'partObj'   => $partObj,
             'width'     => $this->width,
             'layout'    => $this->form->getLayout(),
+            'fullscreen' => $this->isFullscreen(),
         ];
 
         return view($this->view, $data)->render();

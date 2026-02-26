@@ -1,4 +1,4 @@
-<div class="nav-tabs-custom no-border-radius px-2" >
+<div class="nav-tabs-custom no-border-radius" >
     <ul class="nav nav-tabs nav-parts">
 
         @foreach($partObj->getParts() as $part)

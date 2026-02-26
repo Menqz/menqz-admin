@@ -172,8 +172,14 @@
 aside#sidebar {
     float: left;
     min-height: calc(100% - 56px);
-    position: absolute;
+    position: fixed;
     transition: all 0.3s;
+    bottom: 0;
+    left: 0;
+    top: 56px;
+    min-height: 100vh;
+    max-height: 80vh;
+    z-index: 999 !important
 }
 
 main#main {

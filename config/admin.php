@@ -107,6 +107,19 @@ return [
     */
     'https' => env('ADMIN_HTTPS', false),
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | menqz-admin form fullscreen mode
+    |--------------------------------------------------------------------------
+    |
+    | Enable fullscreen mode for all admin forms.
+    |
+    */
+    'form' => [
+        'fullscreen' => env('ADMIN_FORM_FULLSCREEN', false),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | menqz-admin auth setting
