@@ -75,17 +75,6 @@
 
         @if(in_array('submit', $buttons))
             <div class="btn-group ms-2">
-                @foreach($submit_redirects as $value => $redirect)
-                    @if(in_array($redirect, $checkboxes))
-                        <div class="form-check form-check-inline">
-                            <input type="checkbox" class="form-check-input after-submit" id="after-save-{{$redirect}}" name="after-save" value="{{ $value }}" {{ ($default_check == $redirect) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="after-save-{{$redirect}}">{{ trans("admin.{$redirect}") }}</label>
-                        </div>
-                    @endif
-                @endforeach
-            </div>
-
-            <div class="btn-group ms-2">
                 <button type="submit" class="btn btn-primary">{{ trans('admin.submit') }}</button>
             </div>
         @endif
