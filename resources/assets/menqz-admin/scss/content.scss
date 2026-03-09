@@ -173,6 +173,14 @@
             text-align: left;
         }
     }
+
+    .side-menu-closed #menu-toggle {
+        margin-left: 0 !important;
+    }
+
+    .side-menu-open #menu-toggle {
+        margin-left: var(--menu-width);
+    }
 }
 
 .alert {
