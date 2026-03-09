@@ -31,7 +31,17 @@
                     @foreach($layout->columns() as $column)
                         <div class="col-md-{{ $column->width() }}">
                             @foreach($column->fields() as $field)
-                                {!! $field->render() !!}
+                                @php
+                                    $exibeField = true;
+                                    if(get_class($field) == 'MenqzAdmin\Admin\Form\Field\Button') {
+                                        if ($field->positionFooter()) {
+                                            $exibeField = false;
+                                        }
+                                    }
+                                @endphp
+                                @if($exibeField)
+                                    {!! $field->render() !!}
+                                @endif
                             @endforeach
                         </div>
                     @endforeach

@@ -184,4 +184,9 @@ trait HasFormAttributes
 
         return $this;
     }
+
+    public function getAttribute($key)
+    {
+        return $this->attributes[$key] ?? null;
+    }
 }

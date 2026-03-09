@@ -97,10 +97,16 @@ class Radio extends Field
     {
         //$this->script = "$('{$this->getElementClassSelector()}').iCheck({radioClass:'iradio_minimal-blue'});";
 
-        $this->addCascadeScript();
+        $script = $this->addCascadeScript(true);
 
         $this->addVariables(['options' => $this->options, 'checked' => $this->checked, 'stacked' => $this->stacked]);
 
-        return parent::render();
+        $render = parent::render();
+
+        if ($script) {
+            $render .= $script;
+        }
+
+        return $render;
     }
 }

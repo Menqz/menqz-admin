@@ -21,6 +21,7 @@ class File extends Field
         '/vendor/menqz-admin/fields/file-upload/file-upload.js',
     ];
 
+    protected $scriptInline = '';
     public $type     = 'file';
     public $readonly = false;
 
@@ -215,7 +216,7 @@ class File extends Field
         $this->attribute('id', $id);
         $this->options['storageUrl'] = $this->storageUrl();
         $json_options                = json_encode($this->options);
-        $this->script                = <<<JS
+        $this->scriptInline          = <<<JS
         var FileUpload_{$id} = new FileUpload(document.querySelector('#{$id}'),{$json_options});
         JS;
     }
@@ -249,6 +250,10 @@ class File extends Field
 
         $this->setupScripts();
 
-        return parent::render();
+        $render = parent::render();
+
+        $script = '<script>'.$this->scriptInline.'</script>';
+
+        return $render.$script;
     }
 }

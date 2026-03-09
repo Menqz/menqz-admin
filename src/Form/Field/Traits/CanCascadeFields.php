@@ -91,8 +91,8 @@ trait CanCascadeFields
         if (is_array($value)) {
             $value = implode('-', $value);
         }
-
-        return sprintf('cascade-%s-%s', $this->getElementClassString(), $value);
+        $formId = $this->form ? $this->form->getAttribute('id') : '';
+        return sprintf('cascade-%s-%s-%s',$formId, $this->getElementClassString(), $value);
     }
 
     /**
@@ -168,7 +168,7 @@ trait CanCascadeFields
      *
      * @return void
      */
-    protected function addCascadeScript()
+    protected function addCascadeScript($returnContentScript = false)
     {
         if (empty($this->conditions)) {
             return;
@@ -184,48 +184,19 @@ trait CanCascadeFields
 
         $script = <<<SCRIPT
 ;(function () {
-    var inArray = function (find,arr){
-        return arr.indexOf(find);
-    }
-    var operator_table = {
-        '=': function(a, b) {
-            if (Array.isArray(a) && Array.isArray(b)) {
-                a.sort();
-                b.sort();
-                return a.join() == b.join()
-            }
-            return a == b;
-        },
-        '>': function(a, b) { return a > b; },
-        '<': function(a, b) { return a < b; },
-        '>=': function(a, b) { return a >= b; },
-        '<=': function(a, b) { return a <= b; },
-        '!=': function(a, b) {
 
-            if (Array.isArray(a) && Array.isArray(b)) {
-                a.sort();
-                b.sort();
-                return !(a.join() == b.join())
-            }
-
-             return a != b;
-        },
-        'in': function(a, b) { return inArray(a, b) != -1; },
-        'notIn': function(a, b) { return inArray(a, b) == -1; },
-        'has': function(a, b) { return inArray(b, a) != -1; },
-        'oneIn': function(a, b) { return a.filter(v => b.includes(v)).length >= 1; },
-        'oneNotIn': function(a, b) { return a.filter(v => b.includes(v)).length == 0; },
-    };
     var cascade_groups = {$cascadeGroups};
-
-    cascade_groups.forEach(function (event) {
-        var default_value = '{$this->getValueByJs()}' + '';
-        var class_name = event.class;
-        if( operator_table[event.operator](default_value, event.value) ) {
-            document.querySelector('.'+class_name+'').classList.remove('d-none');
-        }else{
-            document.querySelector('.'+class_name+'').classList.add('d-none');
-        }
+    var first_event = cascade_groups[0];
+    waitForElement('.'+first_event.class, function (el) {
+        cascade_groups.forEach(function (event) {
+            var default_value = '{$this->getValueByJs()}' + '';
+            var class_name = event.class;
+            if( operator_table[event.operator](default_value, event.value) ) {
+                document.querySelector('.'+class_name+'').classList.remove('d-none');
+            }else{
+                document.querySelector('.'+class_name+'').classList.add('d-none');
+            }
+        });
     });
 
     document.querySelectorAll('{$this->getElementClassSelector()}').forEach( el =>{
@@ -241,15 +212,13 @@ trait CanCascadeFields
             });
         });
     })
-    function getValuesFrom(selector){
-        var arr = []
-        document.querySelectorAll(selector).forEach(el=>{
-            arr.push(el.value);
-        });
-        return arr;
-    }
+
 })();
 SCRIPT;
+
+        if ($returnContentScript) {
+            return '<script>'.$script.'</script>';
+        }
 
         Admin::script($script);
     }
