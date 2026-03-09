@@ -101,4 +101,59 @@ class Menu extends Model
             $model->roles()->detach();
         });
     }
+
+    /**
+     * Detach models from the relationship.
+     *
+     * @return void
+     */
+    protected static function createWithPermission($dados = [], $slug = null, $withHttpPath = true, $resetOrder = false)
+    {
+        if ($resetOrder) {
+            $maxOrder = 0;
+        } else {
+            $maxOrder = Menu::max('order');
+        }
+        $dados['order'] = $maxOrder+1;
+
+        if (!$slug) {
+            $slug = str_replace('/', '.',$dados['uri']);
+        }
+
+        $titlePermission = $dados['title'];
+        $menuParent = Menu::find($dados['parent_id']);
+        if ($menuParent) {
+            $titlePermission = $menuParent->title . ' - ' . $titlePermission;
+        }
+
+        $http_path = '';
+        if($withHttpPath) {
+            $http_path = '/'.$dados['uri'].'*';
+        }
+        Permission::updateOrCreate(
+            ['name'=> $titlePermission],
+            [
+                'name'        => $titlePermission,
+                'slug'        => $slug,
+                'http_method' => '',
+                'http_path'   => $http_path,
+            ]);
+
+        $dados['permission'] = $slug;
+
+        if ($withHttpPath) {
+            $menu = Menu::updateOrCreate(
+                ['uri' => $dados['uri']],
+                $dados
+            );
+        } else {
+            $menu = Menu::updateOrCreate(
+                ['title' => $dados['title']],
+                $dados
+            );
+        }
+
+        $menu->refresh();
+        return $menu;
+    }
 }
