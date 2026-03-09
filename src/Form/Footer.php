@@ -260,10 +260,11 @@ class Footer implements Renderable
             'view'              => 'view',
             //'exit' => 'exit', // can be exit as well when doing ajax request
         ];
-
+        $buttonsFooter = $this->builder->getButtonsFooter();
         $data = [
             'width'            => $this->builder->getWidth(),
             'buttons'          => $this->buttons,
+            'buttons_footer'   => $buttonsFooter,
             'checkboxes'       => $this->checkboxes,
             'submit_redirects' => $submitRedirects,
             'default_check'    => $this->defaultCheck,
