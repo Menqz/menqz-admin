@@ -198,6 +198,9 @@ class Form implements Renderable
      */
     public function model(): Model
     {
+        if ($this->model instanceof Actions\Interactor\Form) {
+            return $this->model->getRow();
+        }
         return $this->model;
     }
 
