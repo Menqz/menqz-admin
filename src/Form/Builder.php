@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use MenqzAdmin\Admin\Admin;
 use MenqzAdmin\Admin\Form;
+use MenqzAdmin\Admin\Form\Field\Button;
 use MenqzAdmin\Admin\Form\Field\Hidden;
 
 /**
@@ -674,6 +675,23 @@ JS;
     public function isFullscreen(): bool
     {
         return config('admin.form.fullscreen', false);
+    }
+
+    /**
+     * Get buttons footer.
+     *
+     * @return array
+     */
+    public function getButtonsFooter(): array
+    {
+        $buttons = [];
+        foreach ($this->fields() as $field) {
+            if ($field instanceof Button && $field->positionFooter()) {
+                $buttons[] = $field;
+            }
+        }
+
+        return $buttons;
     }
 
     /**

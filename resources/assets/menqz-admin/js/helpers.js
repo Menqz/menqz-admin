@@ -135,3 +135,71 @@
 		template.innerHTML = html;
 		return template.content.childNodes;
 	}
+
+
+/*--------------------------------------------------*/
+/* Can Cascade Fields Functions */
+/*--------------------------------------------------*/
+
+function getValuesFrom(selector){
+    var arr = []
+    document.querySelectorAll(selector).forEach(el=>{
+        arr.push(el.value);
+    });
+    return arr;
+}
+
+var inArray = function (find,arr){
+    return arr.indexOf(find);
+}
+var operator_table = {
+    '=': function(a, b) {
+        if (Array.isArray(a) && Array.isArray(b)) {
+            a.sort();
+            b.sort();
+            return a.join() == b.join()
+        }
+        return a == b;
+    },
+    '>': function(a, b) { return a > b; },
+    '<': function(a, b) { return a < b; },
+    '>=': function(a, b) { return a >= b; },
+    '<=': function(a, b) { return a <= b; },
+    '!=': function(a, b) {
+
+        if (Array.isArray(a) && Array.isArray(b)) {
+            a.sort();
+            b.sort();
+            return !(a.join() == b.join())
+        }
+
+            return a != b;
+    },
+    'in': function(a, b) { return inArray(a, b) != -1; },
+    'notIn': function(a, b) { return inArray(a, b) == -1; },
+    'has': function(a, b) { return inArray(b, a) != -1; },
+    'oneIn': function(a, b) { return a.filter(v => b.includes(v)).length >= 1; },
+    'oneNotIn': function(a, b) { return a.filter(v => b.includes(v)).length == 0; },
+};
+
+function waitForElement(selector, callback) {
+    const el = document.querySelector(selector);
+
+    if (el) {
+        callback(el);
+        return;
+    }
+
+    const observer = new MutationObserver(() => {
+        const el = document.querySelector(selector);
+        if (el) {
+            observer.disconnect();
+            callback(el);
+        }
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+}

@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 admin.init = function () {
     admin.menu.init();
-    admin.ajax.init();
+    // admin.ajax.init();
     admin.pages.init();
 };
 

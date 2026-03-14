@@ -184,13 +184,14 @@ JS;
         $this->config = array_merge([
             'removeItems'        => true,
             'removeItemButton'   => true,
-            'placeholder'        => $this->label,
+            'placeholder'        => $this->label ?? '',
         ], $this->config);
 
+        $unique = uniqid('elm');
         $this->additional_script = <<<JS
-            let elm = document.querySelector(".{$this->getElementClass()}");
+            let {$unique} = document.querySelector(".{$this->getElementClass()}");
             var lookupTimeout;
-            elm.addEventListener('search', function(event) {
+            {$unique}.addEventListener('search', function(event) {
                 clearTimeout(lookupTimeout);
                 lookupTimeout = setTimeout(function(){
                     var query = {$this->choicesObjName()}.input.value;
@@ -200,7 +201,7 @@ JS;
                 }, 250);
             });
 
-            elm.addEventListener('choice', function(event) {
+            {$unique}.addEventListener('choice', function(event) {
                 {$this->choicesObjName()}.setChoices([], '{$idField}', '{$textField}', true);
             });
         JS;

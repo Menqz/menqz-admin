@@ -117,13 +117,13 @@ class Select extends Field
 
         $this->additional_script .= <<<JS
 
-            let elm = document.querySelector("{$this->getElementClassSelector()}");
+            var elm = document.querySelector("{$this->getElementClassSelector()}");
             var lookupTimeout;
             elm.addEventListener('change', function(event) {
                 var query = {$this->choicesObjName()}.getValue().value;
                 var current_value = {$this->choicesObjName($field)}.getValue().value;
                 admin.ajax.post("{$url}",{query:query},function(data){
-                    let found = false;
+                    var found = false;
                     for (i in data.data){
                         if (data.data[i].id == current_value){
                             data.data[i].selected = true;
@@ -226,11 +226,11 @@ JS;
             'allowHTML'          => true,
             'placeholder'        => $this->label,
         ], $this->config);
-
+        $unique = uniqid('elm');
         $this->additional_script = <<<JS
-            let elm = document.querySelector("{$this->getElementClassSelector()}");
+            var {$unique} = document.querySelector("{$this->getElementClassSelector()}");
             var lookupTimeout;
-            elm.addEventListener('search', function(event) {
+            {$unique}.addEventListener('search', function(event) {
                 clearTimeout(lookupTimeout);
                 lookupTimeout = setTimeout(function(){
                     var query = {$this->choicesObjName()}.input.value;
@@ -240,8 +240,55 @@ JS;
                 }, 250);
             });
 
+            {$unique}.addEventListener('choice', function(event) {
+                {$this->choicesObjName()}.setChoices([], '{$idField}', '{$textField}', true);
+            });
+        JS;
+
+        return $this;
+    }
+
+    /**
+     * Load options from ajax results.
+     *
+     * @param string $url
+     * @param $idField
+     * @param $textField
+     *
+     * @return $this
+     */
+    public function ajaxWithMoreParams($url, $idField = 'id', $textField = 'text', $paramId = '')
+    {
+        $this->config = array_merge([
+            'removeItems'        => true,
+            'removeItemButton'   => true,
+            'allowHTML'          => true,
+            'placeholder'        => $this->label,
+        ], $this->config);
+
+        $this->additional_script = <<<JS
+            var elm = document.querySelector("{$this->getElementClassSelector()}");
+            var elmParam = document.querySelector(".{$paramId}");
+            var lookupTimeout;
+            elm.addEventListener('search', function(event) {
+                clearTimeout(lookupTimeout);
+                lookupTimeout = setTimeout(function(){
+                    var query = {$this->choicesObjName()}.input.value;
+
+                    var paramId = choices_{$paramId}.getValue(true);
+                    admin.ajax.post("{$url}",{query:query, paramId:paramId},function(data){
+                        {$this->choicesObjName()}.setChoices(data.data, '{$idField}', '{$textField}', true);
+                    })
+                }, 250);
+            });
+
             elm.addEventListener('choice', function(event) {
                 {$this->choicesObjName()}.setChoices([], '{$idField}', '{$textField}', true);
+            });
+
+            elmParam.addEventListener('choice', function(event) {
+                {$this->choicesObjName()}.clearStore();
+                {$this->choicesObjName()}.clearInput();
             });
         JS;
 
@@ -347,10 +394,14 @@ JS;
         ], $this->config);
         $configs = json_encode($configs);
 
-        if (!$this->native && $this->allowedChoicesJs()) {
-            $this->script .= 'var '.$this->choicesObjName()." = new Choices('{$this->getElementClassSelector()}',{$configs});";
-            $this->script .= $this->additional_script;
-        }
+        $myScript = '';
+        $this->script = '';
+        $myScript = <<<HTML
+            <script>
+                var {$this->choicesObjName()} = new Choices('{$this->getElementClassSelector()}',{$configs});
+                {$this->additional_script}
+            </script>
+        HTML;
 
         if ($this->options instanceof \Closure) {
             if ($this->form) {
@@ -370,6 +421,7 @@ JS;
 
         $this->attribute('data-value', implode(',', (array) $this->value()));
 
-        return parent::render();
+        $render = parent::render();
+        return $render.$myScript;
     }
 }

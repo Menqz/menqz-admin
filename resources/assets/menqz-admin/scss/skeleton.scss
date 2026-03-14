@@ -3,8 +3,11 @@
 /*-----------------------------------------------------*/
 
 .custom-navbar {
-    position: relative;
-    z-index: 10;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 11;
     box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
 
     .nav {
@@ -52,6 +55,12 @@
         }
         :hover{
             background: var(--menu-darker-bg);
+        }
+    }
+
+    @media (max-width: 576px) {
+        .navbar-brand {
+            display: none !important;
         }
     }
 

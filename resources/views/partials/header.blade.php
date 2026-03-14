@@ -1,6 +1,6 @@
 <!-- Main Header -->
 <header class="custom-navbar navbar navbar-light bg-white p-0 align-items-stretch">
-    <a class="navbar-brand menu-width container-md bg-semi-dark text-center" href="{{ admin_url('/') }}">
+    <a class="navbar-header navbar-brand menu-width container-md bg-semi-dark text-center" href="{{ admin_url('/') }}">
         <span class="short">{!! config('admin.logo-mini', config('admin.name')) !!}</span><span class="long">{!! config('admin.logo', config('admin.name')) !!}</span>
     </a>
     <div class="d-flex flex-fill flex-wrap header-items">
@@ -22,7 +22,7 @@
             {!! Admin::getNavbar()->render() !!}
 
             <li class="nav-item">
-                <div class="dropdown user-menu d-flex align-items-center px-3" href="#" role="button" id="user-menu-link" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="dropdown user-menu d-flex align-items-center p3-3" href="#" role="button" id="user-menu-link" data-bs-toggle="dropdown" aria-expanded="false">
                     <span class="bg-light inline rounded-circle user-image">
                         <img src="{{ Admin::user()->avatar }}" alt="User Image">
                     </span>
@@ -30,7 +30,7 @@
                 </div>
                 <ul class="dropdown-menu dropdown-menu-end user-menu" aria-labelledby="user-menu-link">
                     <!-- The user image in the menu -->
-                    <li class="user-header text-center bg-semi-dark p-3">
+                    <li class="user-header text-center bg-semi-dark px-3">
                         <span class="bg-light inline rounded-circle user-image medium">
                             <img src="{{ Admin::user()->avatar }}" alt="User Image">
                         </span>
