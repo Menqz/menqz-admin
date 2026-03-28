@@ -21,10 +21,13 @@ class Throttle
      */
     public function handle($request, Closure $next)
     {
+        $login = strtolower($request->input(config('admin.auth.login_type', 'username')));
+        $rate_limit_key = 'login-tries-' . $login . '-' . $request->ip();
+
         // throttle this
         if (Admin::guard()->guest() && config('admin.auth.throttle_logins')) {
             $throttle_attempts = config('admin.auth.throttle_attempts', 5);
-            if (RateLimiter::tooManyAttempts('login-tries-'.Admin::guardName(), $throttle_attempts)) {
+            if (RateLimiter::tooManyAttempts($rate_limit_key, $throttle_attempts)) {
                 $errors = new \Illuminate\Support\MessageBag();
                 $errors->add('attempts', $this->getToManyAttemptsMessage());
 
