@@ -13,11 +13,55 @@
 		<link rel="stylesheet" href="{{ Admin::asset("menqz-admin/css/styles.css")}}">
 		<script src="{{ Admin::asset("bootstrap5/bootstrap.bundle.min.js")}}"></script>
 
+		<style>
+			/* Fade inicial da página */
+			body {
+				opacity: 0;
+				transition: opacity 0.5s ease;
+			}
+
+			body.animate-in {
+				opacity: 1;
+			}
+
+			/* Estado inicial das colunas */
+			.left-panel {
+				transform: translateX(-120px) scale(0.98);
+				opacity: 0;
+			}
+
+			.right-panel {
+				transform: translateX(120px) scale(0.98);
+				opacity: 0;
+			}
+
+			/* Animação ativa */
+			.animate-in .left-panel {
+				transform: translateX(0) scale(1);
+				opacity: 1;
+				transition: all 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+			}
+
+			.animate-in .right-panel {
+				transform: translateX(0) scale(1);
+				opacity: 1;
+				transition: all 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+				transition-delay: 0.2s;
+			}
+		</style>
 	</head>
 	<body class="bg-light" @if(config('admin.login_background_image'))style="background: url({{config('admin.login_background_image')}}) no-repeat center center;background-size: cover;"@endif>
+		@php
+			$loginType = config('admin.auth.login_type', 'username');
+			$isEmailLogin = $loginType === 'email';
+			$loginLabel = $isEmailLogin ? __('admin.email') : __('admin.username');
+			$socialEnabled = config('admin.auth.social.enabled', false);
+			$googleEnabled = config('admin.auth.social.providers.google.enabled', false);
+			$facebookEnabled = config('admin.auth.social.providers.facebook.enabled', false);
+		@endphp
 		<div class="position-relative min-vh-100 d-flex align-items-center justify-content-center px-3">
 			<div class="row w-100 justify-content-center" style="max-width: 960px;">
-				<div class="col-lg-6 mb-4 mb-lg-0">
+				<div class="col-lg-6 mb-4 mb-lg-0 left-panel">
 					<div class="h-100 rounded-4 text-white bg-semi-dark p-4 p-lg-5" style="box-shadow: 0 1.5rem 3rem rgba(15,23,42,.4);">
 						<div class="d-flex flex-column h-100">
 							<div class="mb-4">
@@ -34,8 +78,7 @@
 						</div>
 					</div>
 				</div>
-
-				<div class="col-lg-5">
+				<div class="col-lg-5 right-panel">
 					<div class="bg-white rounded-4 shadow-lg p-4 p-lg-5">
 						<div class="mb-4 text-center">
 							<h2 class="h4 fw-semibold mb-2">{{ __('admin.login') }}</h2>
@@ -46,21 +89,30 @@
 							<div class="alert alert-danger text-center mb-0">{{$errors->first('attempts')}}</div>
 						@else
 
+						@if($errors->has('social'))
+							<div class="alert alert-danger text-center mb-3">{{$errors->first('social')}}</div>
+						@endif
+
+                        @if($errors->has('login'))
+							<div class="alert alert-danger text-center mb-3">{{$errors->first('login')}}</div>
+						@endif
+
 						<form action="{{ admin_url('auth/login') }}" method="post" class="mt-3">
 							<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 							<div class="form-floating mb-3">
-								<input type="text" class="form-control form-control-lg" name="username" id="username" placeholder="{{ __('admin.username') }}" value="{{ old('username') }}" required autofocus>
-								<label for="username" class="form-label mb-1">{{ __('admin.username') }}</label>
+								<input type="{{ $isEmailLogin ? 'email' : 'text' }}" class="form-control form-control-lg" name="{{ $loginType }}" id="{{ $loginType }}" placeholder="{{ $loginLabel }}" value="{{ old($loginType) }}" required autofocus>
+								<label for="{{ $loginType }}" class="form-label mb-1">{{ $loginLabel }}</label>
 
-                                @if($errors->has('username'))
-									<div class="text-danger small mt-1">{{$errors->first('username')}}</div>
+								@if($errors->has($loginType))
+									<div class="text-danger small mt-1">{{$errors->first($loginType)}}</div>
 								@endif
 							</div>
 
 							<div class="form-floating mb-3">
 								<input type="password" class="form-control form-control-lg" name="password" id="password" placeholder="{{ __('admin.password') }}" required>
 								<label for="password" class="form-label mb-1">{{ __('admin.password') }}</label>
+
 								@if($errors->has('password'))
 									<div class="text-danger small mt-1">{{$errors->first('password') }}</div>
 								@endif
@@ -79,10 +131,30 @@
 								{{ __('admin.login') }}
 							</button>
 						</form>
+
+						@if($socialEnabled && ($googleEnabled || $facebookEnabled))
+							<div class="text-center text-muted small my-3">ou</div>
+							<div class="d-grid gap-2">
+								@if($googleEnabled)
+									<a class="btn btn-outline-danger btn-lg" href="{{ admin_url('auth/social/google/redirect') }}">Google</a>
+								@endif
+								@if($facebookEnabled)
+									<a class="btn btn-outline-info btn-lg" href="{{ admin_url('auth/social/facebook/redirect') }}">Facebook</a>
+								@endif
+							</div>
+						@endif
 						@endif
 					</div>
 				</div>
+
 			</div>
 		</div>
+
+		<script>
+			window.addEventListener('load', function () {
+				document.body.classList.add('animate-in');
+			});
+		</script>
+
 	</body>
 </html>

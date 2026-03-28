@@ -135,6 +135,27 @@ return [
 
         'controller' => App\Admin\Controllers\AuthController::class,
 
+        'login_type' => env('ADMIN_LOGIN_TYPE', 'username'),
+
+        'social' => [
+            'enabled' => env('ADMIN_SOCIAL_LOGIN', false),
+            'providers' => [
+                'google' => [
+                    'enabled' => env('ADMIN_SOCIAL_GOOGLE', false),
+                    'client_id' => env('ADMIN_GOOGLE_CLIENT_ID'),
+                    'client_secret' => env('ADMIN_GOOGLE_CLIENT_SECRET'),
+                    'scopes' => ['openid', 'profile', 'email'],
+                ],
+                'facebook' => [
+                    'enabled' => env('ADMIN_SOCIAL_FACEBOOK', false),
+                    'client_id' => env('ADMIN_FACEBOOK_CLIENT_ID'),
+                    'client_secret' => env('ADMIN_FACEBOOK_CLIENT_SECRET'),
+                    'scopes' => ['email'],
+                    'fields' => ['name', 'email'],
+                ],
+            ],
+        ],
+
         'guard' => 'admin',
 
         'guards' => [
@@ -166,6 +187,7 @@ return [
         'excepts' => [
             'auth/login',
             'auth/logout',
+            'auth/social/*',
         ],
     ],
 

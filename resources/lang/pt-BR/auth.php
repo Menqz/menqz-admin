@@ -13,8 +13,9 @@ return [
     |
     */
 
-    'failed' => 'Usuário ou senha incorretos.',
-    'password' => 'Usuário ou senha incorretos.',
-    'throttle' => 'Muitas tentativas de login. Por favor, tente novamente em :seconds segundos.',
+    'failed' => 'Credenciais incorretas.',
+    'password' => 'Credenciais incorretas.',
+    'throttle' => 'Muitas tentativas de login. Por favor, aguarde para tentar novamente.',
+    'to_many_attempts' => 'Muitas tentativas de login. Por favor, aguarde para tentar novamente.',
 
 ];
