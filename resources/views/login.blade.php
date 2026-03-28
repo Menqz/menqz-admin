@@ -55,6 +55,9 @@
 			$loginType = config('admin.auth.login_type', 'username');
 			$isEmailLogin = $loginType === 'email';
 			$loginLabel = $isEmailLogin ? __('admin.email') : __('admin.username');
+			$socialEnabled = config('admin.auth.social.enabled', false);
+			$googleEnabled = config('admin.auth.social.providers.google.enabled', false);
+			$facebookEnabled = config('admin.auth.social.providers.facebook.enabled', false);
 		@endphp
 		<div class="position-relative min-vh-100 d-flex align-items-center justify-content-center px-3">
 			<div class="row w-100 justify-content-center" style="max-width: 960px;">
@@ -85,6 +88,14 @@
 						@if($errors->has('attempts'))
 							<div class="alert alert-danger text-center mb-0">{{$errors->first('attempts')}}</div>
 						@else
+
+						@if($errors->has('social'))
+							<div class="alert alert-danger text-center mb-3">{{$errors->first('social')}}</div>
+						@endif
+
+                        @if($errors->has('login'))
+							<div class="alert alert-danger text-center mb-3">{{$errors->first('login')}}</div>
+						@endif
 
 						<form action="{{ admin_url('auth/login') }}" method="post" class="mt-3">
 							<input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -120,6 +131,18 @@
 								{{ __('admin.login') }}
 							</button>
 						</form>
+
+						@if($socialEnabled && ($googleEnabled || $facebookEnabled))
+							<div class="text-center text-muted small my-3">ou</div>
+							<div class="d-grid gap-2">
+								@if($googleEnabled)
+									<a class="btn btn-outline-danger btn-lg" href="{{ admin_url('auth/social/google/redirect') }}">Google</a>
+								@endif
+								@if($facebookEnabled)
+									<a class="btn btn-outline-info btn-lg" href="{{ admin_url('auth/social/facebook/redirect') }}">Facebook</a>
+								@endif
+							</div>
+						@endif
 						@endif
 					</div>
 				</div>

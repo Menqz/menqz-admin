@@ -17,7 +17,7 @@
             <input class="form-control" type="text" placeholder="Search" aria-label="Search">
         </div>
 
-        <ul class="nav order-2 ms-auto d-flex align-items-center">
+        <ul class="nav order-2 ms-auto d-flex align-items-center me-2">
 
             {!! Admin::getNavbar()->render() !!}
 
