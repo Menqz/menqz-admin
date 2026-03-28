@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Socialite\Facades\Socialite;
 use MenqzAdmin\Admin\Facades\Admin;
 use MenqzAdmin\Admin\Form;
 use MenqzAdmin\Admin\Layout\Content;
@@ -37,21 +38,26 @@ class AuthController extends Controller
     /**
      * Handle a login request.
      *
-     * @param Request $request
-     *
      * @return mixed
      */
     public function postLogin(Request $request)
     {
-        $rate_limit_key = 'login-tries-'.Admin::guardName();
+        $this->normalizeLoginField($request);
+
+        $login = strtolower($request->input($this->username()));
+        $rate_limit_key = 'login-tries-'.$login.'-'.$request->ip();
+
+        session(['login_throttle_key' => $rate_limit_key]);
 
         $this->loginValidator($request->all())->validate();
 
         $credentials = $request->only([$this->username(), 'password']);
-        $remember    = $request->get('remember', false);
+
+        $remember = $request->get('remember', false);
 
         if ($this->guard()->attempt($credentials, $remember)) {
             RateLimiter::clear($rate_limit_key);
+            session()->forget('login_throttle_key');
 
             return $this->sendLoginResponse($request);
         }
@@ -62,22 +68,82 @@ class AuthController extends Controller
         }
 
         return back()->withInput()->withErrors([
-            $this->username() => $this->getFailedLoginMessage(),
+            'login' => $this->getFailedLoginMessage(),
         ]);
+    }
+
+    public function getSocialRedirect(string $provider)
+    {
+        if ($this->guard()->check()) {
+            return redirect($this->redirectPath());
+        }
+
+        $provider = strtolower($provider);
+
+        $this->ensureSocialProviderEnabled($provider);
+
+        return $this->socialiteDriver($provider)->redirect();
+    }
+
+    public function getSocialCallback(Request $request, string $provider)
+    {
+        $provider = strtolower($provider);
+
+        $this->ensureSocialProviderEnabled($provider);
+
+        try {
+            $socialUser = $this->socialiteDriver($provider)->user();
+        } catch (\Throwable $e) {
+            return redirect(admin_url('auth/login'))->withErrors([
+                'social' => $this->getFailedLoginMessage(),
+            ]);
+        }
+
+        $email = $socialUser->getEmail();
+
+        if (! $email) {
+            return redirect(admin_url('auth/login'))->withErrors([
+                'social' => $this->getFailedLoginMessage(),
+            ]);
+        }
+
+        $userModel = config('admin.database.users_model');
+        $user = (new $userModel)->newQuery()->where('email', $email)->first();
+
+        if (! $user) {
+            return redirect(admin_url('auth/login'))->withErrors([
+                'social' => $this->getFailedLoginMessage(),
+            ]);
+        }
+
+        $socialId = $socialUser->getId();
+
+        if ($socialId) {
+            $user->forceFill([
+                'social_id' => $socialId,
+                'social_type' => $provider,
+            ])->save();
+        }
+
+        $rate_limit_key = 'login-tries-'.strtolower($email).'-'.$request->ip();
+        RateLimiter::clear($rate_limit_key);
+        session()->forget('login_throttle_key');
+
+        $this->guard()->login($user);
+
+        return $this->sendLoginResponse($request);
     }
 
     /**
      * Get a validator for an incoming login request.
-     *
-     * @param array $data
      *
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function loginValidator(array $data)
     {
         return Validator::make($data, [
-            $this->username() => 'required',
-            'password'        => 'required',
+            $this->username() => $this->username() === 'email' ? 'required|email' : 'required',
+            'password' => 'required',
         ]);
     }
 
@@ -97,8 +163,6 @@ class AuthController extends Controller
 
     /**
      * User setting page.
-     *
-     * @param Content $content
      *
      * @return Content
      */
@@ -137,10 +201,11 @@ class AuthController extends Controller
     {
         $class = config('admin.database.users_model');
 
-        $form = new Form(new $class());
+        $form = new Form(new $class);
 
         $form->display('username', trans('admin.username'));
         $form->text('name', trans('admin.name'))->rules('required');
+        $form->email('email', trans('admin.email'))->rules('email');
         $form->image('avatar', trans('admin.avatar'));
         $form->password('password', trans('admin.password'))->rules('confirmed|required');
         $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
@@ -194,8 +259,6 @@ class AuthController extends Controller
     /**
      * Send the response after the user was authenticated.
      *
-     * @param \Illuminate\Http\Request $request
-     *
      * @return \Illuminate\Http\Response
      */
     protected function sendLoginResponse(Request $request)
@@ -214,7 +277,82 @@ class AuthController extends Controller
      */
     protected function username()
     {
-        return 'username';
+        $loginType = config('admin.auth.login_type', 'username');
+
+        return in_array($loginType, ['username', 'email'], true) ? $loginType : 'username';
+    }
+
+    protected function normalizeLoginField(Request $request): void
+    {
+        $loginType = $this->username();
+
+        if ($request->has($loginType)) {
+            return;
+        }
+
+        $fallback = $loginType === 'email' ? 'username' : 'email';
+
+        if ($request->has($fallback)) {
+            $request->merge([$loginType => $request->input($fallback)]);
+        }
+    }
+
+    protected function socialiteDriver(string $provider)
+    {
+        $providerConfig = $this->socialProviderConfig($provider);
+
+        config(["services.{$provider}" => $providerConfig]);
+
+        $driver = Socialite::driver($provider);
+
+        if (! empty($providerConfig['scopes']) && is_array($providerConfig['scopes'])) {
+            $driver->scopes($providerConfig['scopes']);
+        }
+
+        if ($provider === 'facebook' && ! empty($providerConfig['fields']) && is_array($providerConfig['fields'])) {
+            $driver->fields($providerConfig['fields']);
+        }
+
+        return $driver;
+    }
+
+    protected function ensureSocialProviderEnabled(string $provider): void
+    {
+        if (! config('admin.auth.social.enabled', false)) {
+            abort(404);
+        }
+
+        if (! class_exists(Socialite::class)) {
+            abort(500);
+        }
+
+        if (! in_array($provider, ['google', 'facebook'], true)) {
+            abort(404);
+        }
+
+        if (! config("admin.auth.social.providers.{$provider}.enabled", false)) {
+            abort(404);
+        }
+    }
+
+    protected function socialProviderConfig(string $provider): array
+    {
+        $providerConfig = (array) config("admin.auth.social.providers.{$provider}", []);
+
+        $clientId = $providerConfig['client_id'] ?? null;
+        $clientSecret = $providerConfig['client_secret'] ?? null;
+
+        if (! $clientId || ! $clientSecret) {
+            abort(500);
+        }
+
+        return [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'redirect' => admin_url("auth/social/{$provider}/callback"),
+            'scopes' => $providerConfig['scopes'] ?? [],
+            'fields' => $providerConfig['fields'] ?? [],
+        ];
     }
 
     /**

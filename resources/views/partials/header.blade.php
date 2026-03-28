@@ -17,14 +17,14 @@
             <input class="form-control" type="text" placeholder="Search" aria-label="Search">
         </div>
 
-        <ul class="nav order-2 ms-auto d-flex align-items-center">
+        <ul class="nav order-2 ms-auto d-flex align-items-center me-2">
 
             {!! Admin::getNavbar()->render() !!}
 
             <li class="nav-item">
                 <div class="dropdown user-menu d-flex align-items-center p3-3" href="#" role="button" id="user-menu-link" data-bs-toggle="dropdown" aria-expanded="false">
                     <span class="bg-light inline rounded-circle user-image">
-                        <img src="{{ Admin::user()->avatar }}" alt="User Image">
+                        <img src="{{ Admin::user()->getUrlAvatar() }}" alt="User Image">
                     </span>
                     <span class="hidden-xs">{{ Admin::user()->name }}</span>
                 </div>
@@ -32,7 +32,7 @@
                     <!-- The user image in the menu -->
                     <li class="user-header text-center bg-semi-dark px-3">
                         <span class="bg-light inline rounded-circle user-image medium">
-                            <img src="{{ Admin::user()->avatar }}" alt="User Image">
+                            <img src="{{ Admin::user()->getUrlAvatar() }}" alt="User Image">
                         </span>
                         <p>
                             <h2>{{ Admin::user()->name }}</h2>
