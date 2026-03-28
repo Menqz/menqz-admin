@@ -205,6 +205,7 @@ class AuthController extends Controller
 
         $form->display('username', trans('admin.username'));
         $form->text('name', trans('admin.name'))->rules('required');
+        $form->email('email', trans('admin.email'))->rules('email');
         $form->image('avatar', trans('admin.avatar'));
         $form->password('password', trans('admin.password'))->rules('confirmed|required');
         $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')

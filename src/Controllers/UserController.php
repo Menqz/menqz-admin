@@ -32,6 +32,7 @@ class UserController extends AdminController
 
         $grid->column('id', 'ID')->sortable();
         $grid->column('username', trans('admin.username'));
+        $grid->column('email', trans('admin.email'));
         $grid->column('name', trans('admin.name'));
         $grid->column('roles', trans('admin.roles'))->pluck('name')->label();
         $grid->column('created_at', trans('admin.created_at'));
@@ -67,6 +68,7 @@ class UserController extends AdminController
 
         $show->field('id', 'ID');
         $show->field('username', trans('admin.username'));
+        $show->field('email', trans('admin.email'));
         $show->field('name', trans('admin.name'));
         $show->field('roles', trans('admin.roles'))->as(function ($roles) {
             return $roles->pluck('name');
@@ -100,6 +102,8 @@ class UserController extends AdminController
         $form->text('username', trans('admin.username'))
             ->creationRules(['required', "unique:{$connection}.{$userTable}"])
             ->updateRules(['required', "unique:{$connection}.{$userTable},username,{{id}}"]);
+
+        $form->email('email', trans('admin.email'))->rules('email');
 
         $form->text('name', trans('admin.name'))->rules('required');
         $form->image('avatar', trans('admin.avatar'));
