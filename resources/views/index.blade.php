@@ -16,6 +16,9 @@
     {!! Admin::headerJs() !!}
     {!! Admin::js() !!}
     {!! Admin::js_trans() !!}
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "{{ admin_asset('vendor/menqz-admin/pdf.js/pdf.worker.min.js')}}";
+    </script>
 
 </head>
 

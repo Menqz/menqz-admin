@@ -86,6 +86,7 @@ trait HasAssets
         'vendor/menqz-admin/flatpickr/flatpickr.min.js',
         'vendor/menqz-admin/choicesjs/scripts/choices.min.js',
         'vendor/menqz-admin/sortablejs/Sortable.min.js',
+        'vendor/menqz-admin/pdf.js/pdf.min.js',
 
         'vendor/menqz-admin/menqz-admin/js/polyfills.js',
         'vendor/menqz-admin/menqz-admin/js/helpers.js',
@@ -96,6 +97,7 @@ trait HasAssets
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-form.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-form-part.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-modal.js',
+        'vendor/menqz-admin/menqz-admin/js/menqz-admin-document.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-toastr.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-resource.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-tree.js',
