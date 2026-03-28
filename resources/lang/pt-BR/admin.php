@@ -7,6 +7,7 @@ return [
     'setting'               => 'Configurações',
     'name'                  => 'Nome',
     'username'              => 'Usuário',
+    'email'                 => 'E-mail',
     'password'              => 'Senha',
     'password_confirmation' => 'Confirmação da Senha',
     'remember_me'           => 'Lembrar-me',

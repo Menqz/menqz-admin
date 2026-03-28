@@ -51,6 +51,11 @@
 		</style>
 	</head>
 	<body class="bg-light" @if(config('admin.login_background_image'))style="background: url({{config('admin.login_background_image')}}) no-repeat center center;background-size: cover;"@endif>
+		@php
+			$loginType = config('admin.auth.login_type', 'username');
+			$isEmailLogin = $loginType === 'email';
+			$loginLabel = $isEmailLogin ? __('admin.email') : __('admin.username');
+		@endphp
 		<div class="position-relative min-vh-100 d-flex align-items-center justify-content-center px-3">
 			<div class="row w-100 justify-content-center" style="max-width: 960px;">
 				<div class="col-lg-6 mb-4 mb-lg-0 left-panel">
@@ -85,11 +90,11 @@
 							<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 							<div class="form-floating mb-3">
-								<input type="text" class="form-control form-control-lg" name="username" id="username" placeholder="{{ __('admin.username') }}" value="{{ old('username') }}" required autofocus>
-								<label for="username" class="form-label mb-1">{{ __('admin.username') }}</label>
+								<input type="{{ $isEmailLogin ? 'email' : 'text' }}" class="form-control form-control-lg" name="{{ $loginType }}" id="{{ $loginType }}" placeholder="{{ $loginLabel }}" value="{{ old($loginType) }}" required autofocus>
+								<label for="{{ $loginType }}" class="form-label mb-1">{{ $loginLabel }}</label>
 
-								@if($errors->has('username'))
-									<div class="text-danger small mt-1">{{$errors->first('username')}}</div>
+								@if($errors->has($loginType))
+									<div class="text-danger small mt-1">{{$errors->first($loginType)}}</div>
 								@endif
 							</div>
 

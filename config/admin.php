@@ -135,6 +135,8 @@ return [
 
         'controller' => App\Admin\Controllers\AuthController::class,
 
+        'login_type' => env('ADMIN_LOGIN_TYPE', 'username'),
+
         'guard' => 'admin',
 
         'guards' => [
