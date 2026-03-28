@@ -21,8 +21,7 @@ class Throttle
      */
     public function handle($request, Closure $next)
     {
-        $login = strtolower($request->input(config('admin.auth.login_type', 'username')));
-        $rate_limit_key = 'login-tries-' . $login . '-' . $request->ip();
+        $rate_limit_key = session('login_throttle_key');
 
         // throttle this
         if (Admin::guard()->guest() && config('admin.auth.throttle_logins')) {

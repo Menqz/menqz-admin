@@ -46,6 +46,8 @@ class AuthController extends Controller
         $login = strtolower($request->input($this->username()));
         $rate_limit_key = 'login-tries-' . $login . '-' . $request->ip();
 
+        session(['login_throttle_key' => $rate_limit_key]);
+
         $this->loginValidator($request->all())->validate();
 
         $credentials = $request->only([$this->username(), 'password']);
@@ -54,6 +56,7 @@ class AuthController extends Controller
 
         if ($this->guard()->attempt($credentials, $remember)) {
             RateLimiter::clear($rate_limit_key);
+            session()->forget('login_throttle_key');
 
             return $this->sendLoginResponse($request);
         }
