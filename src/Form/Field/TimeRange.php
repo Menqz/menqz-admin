@@ -2,6 +2,7 @@
 
 namespace MenqzAdmin\Admin\Form\Field;
 
+use MenqzAdmin\Admin\Form;
 use MenqzAdmin\Admin\Form\Field;
 
 class TimeRange extends Field
@@ -62,8 +63,18 @@ class TimeRange extends Field
         return $value;
     }
 
+    public function getAlternativeFormat()
+    {
+        return Form::getAlternativeTimeFormat() ?? null;
+    }
+
     public function render()
     {
+        if ($this->getAlternativeFormat() !== null) {
+            $this->options['altInput'] = true;
+            $this->options['altFormat'] = $this->getAlternativeFormat();
+        }
+
         $this->options = array_merge($this->defaults, $this->options);
         $this->options['format'] = $this->format;
         $this->options['locale'] = array_key_exists('locale', $this->options) ? $this->options['locale'] : config('app.locale');

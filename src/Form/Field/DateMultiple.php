@@ -2,9 +2,11 @@
 
 namespace MenqzAdmin\Admin\Form\Field;
 
+use MenqzAdmin\Admin\Form;
+
 class DateMultiple extends Text
 {
-    protected $format = 'YYYY-MM-DD';
+    protected $format = 'Y-m-d';
 
     public function format($format)
     {
@@ -25,10 +27,14 @@ class DateMultiple extends Text
 
     public function render()
     {
-        $this->options['format'] = $this->format;
+        if (Form::getAlternativeDateFormat() !== null) {
+            $this->options['altInput'] = true;
+            $this->options['altFormat'] = Form::getAlternativeDateFormat();
+        }
+
+        $this->options['dateFormat'] = $this->format;
         $this->options['locale'] = array_key_exists('locale', $this->options) ? $this->options['locale'] : config('app.locale');
         $this->options['allowInputToggle'] = true;
-        $this->options['dateFormat'] = 'Y-m-d';
         $this->options['mode'] = 'multiple';
         $this->options['plugins'] = "[
             ShortcutButtonsPlugin({
@@ -42,11 +48,12 @@ class DateMultiple extends Text
             })
           ]";
 
-        $this->script = "flatpickr('{$this->getElementClassSelector()}',".json_encode($this->options).');';
+        $script = "flatpickr('{$this->getElementClassSelector()}',".json_encode($this->options).');';
 
         $this->prepend('<i class="icon-calendar"></i>')
             ->defaultAttribute('style', 'width: 100%');
 
-        return parent::render();
+        $render = parent::render();
+        return $render.$script;
     }
 }

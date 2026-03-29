@@ -2,6 +2,7 @@
 
 namespace MenqzAdmin\Admin\Form\Field;
 
+use MenqzAdmin\Admin\Form;
 use MenqzAdmin\Admin\Form\Field;
 
 class DateRange extends Field
@@ -38,7 +39,7 @@ class DateRange extends Field
         $this->label = $this->formatLabel($arguments);
         $this->id = $this->formatId($this->column);
 
-        $this->options(['format' => $this->format]);
+        $this->options(['dateFormat' => $this->format]);
     }
 
     public function check_format_options()
@@ -65,8 +66,17 @@ class DateRange extends Field
         return $value;
     }
 
+    public function getAlternativeFormat()
+    {
+        return Form::getAlternativeDateFormat() ?? null;
+    }
+
     public function render()
     {
+        if ($this->getAlternativeFormat() !== null) {
+            $this->options['altInput'] = true;
+            $this->options['altFormat'] = $this->getAlternativeFormat();
+        }
         $this->options = array_merge($this->defaults, $this->options);
         $this->options['dateFormat'] = $this->format;
         $this->options['locale'] = array_key_exists('locale', $this->options) ? $this->options['locale'] : config('app.locale');
@@ -80,7 +90,7 @@ class DateRange extends Field
         $options_start = str_replace('"__replace_me__"', '[new rangePlugin({ input: "'.$this->getElementClassSelector()['end'].'"})]', $options_start);
 
         //$options_end = json_encode($this->options);
-        $varPickr = $this->id . '_pickr';
+        $varPickr = implode('_', $this->id) . '_pickr';
         $this->script = '';
         $script = <<<HTML
             <script>

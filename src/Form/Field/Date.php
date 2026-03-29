@@ -2,9 +2,12 @@
 
 namespace MenqzAdmin\Admin\Form\Field;
 
+use MenqzAdmin\Admin\Form;
+
 class Date extends Text
 {
     protected $format = 'Y-m-d';
+    protected $formatCustomized = false;
 
     protected $defaults = [
         'weekNumbers'   => true,
@@ -20,6 +23,11 @@ class Date extends Text
         $this->format = $format;
 
         return $this;
+    }
+
+    public function getAlternativeFormat()
+    {
+        return Form::getAlternativeDateFormat() ?? null;
     }
 
     public function prepare($value)
@@ -52,6 +60,11 @@ class Date extends Text
 
     public function render()
     {
+        if ($this->getAlternativeFormat() !== null) {
+            $this->options['altInput'] = true;
+            $this->options['altFormat'] = $this->getAlternativeFormat();
+        }
+
         $this->options = array_merge($this->defaults, $this->options);
         $this->options['dateFormat'] = $this->format;
         $this->options['locale'] = array_key_exists('locale', $this->options) ? $this->options['locale'] : config('app.locale');
