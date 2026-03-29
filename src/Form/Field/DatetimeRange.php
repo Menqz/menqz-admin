@@ -4,6 +4,6 @@ namespace MenqzAdmin\Admin\Form\Field;
 
 class DatetimeRange extends DateRange
 {
-    protected $format = 'YYYY-MM-DD HH:mm:ss';
+    protected $format = 'Y-m-d H:i:s';
     protected $view = 'admin::form.daterange';
 }

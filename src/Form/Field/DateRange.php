@@ -6,7 +6,7 @@ use MenqzAdmin\Admin\Form\Field;
 
 class DateRange extends Field
 {
-    protected $format = 'YYYY-MM-DD';
+    protected $format = 'Y-m-d';
 
     protected $defaults = [
         'weekNumbers'   => true,
@@ -43,8 +43,8 @@ class DateRange extends Field
 
     public function check_format_options()
     {
-        $format = $this->options['format'];
-        if (substr($format, -2) != 'ss') {
+        $format = $this->options['dateFormat'];
+        if (substr($format, -1) != 'S') {
             $this->options['enableSeconds'] = false;
         }
         if (strpos($format, 'H') !== false) {
@@ -68,10 +68,11 @@ class DateRange extends Field
     public function render()
     {
         $this->options = array_merge($this->defaults, $this->options);
-        $this->options['format'] = $this->format;
+        $this->options['dateFormat'] = $this->format;
         $this->options['locale'] = array_key_exists('locale', $this->options) ? $this->options['locale'] : config('app.locale');
         $this->options['allowInputToggle'] = true;
         $this->options['plugins'] = '__replace_me__';
+        $this->options['clickOpens'] = isset($this->attributes['readonly']) ? !$this->attributes['readonly'] : true;
 
         $this->check_format_options();
 
@@ -79,12 +80,15 @@ class DateRange extends Field
         $options_start = str_replace('"__replace_me__"', '[new rangePlugin({ input: "'.$this->getElementClassSelector()['end'].'"})]', $options_start);
 
         //$options_end = json_encode($this->options);
+        $varPickr = $this->id . '_pickr';
+        $this->script = '';
+        $script = <<<HTML
+            <script>
+                var {$varPickr} = flatpickr('{$this->getElementClassSelector()['start']}',{$options_start});
+            </script>
+        HTML;
 
-        $this->script = <<<EOT
-            flatpickr('{$this->getElementClassSelector()['start']}',{$options_start});
-
-        EOT;
-
-        return parent::render();
+        $render = parent::render();
+        return $render.$script;
     }
 }

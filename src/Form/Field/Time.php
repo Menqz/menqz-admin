@@ -4,7 +4,7 @@ namespace MenqzAdmin\Admin\Form\Field;
 
 class Time extends Date
 {
-    protected $format = 'HH:mm:ss';
+    protected $format = 'H:i:S';
 
     public function render()
     {

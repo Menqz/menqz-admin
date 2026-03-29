@@ -4,7 +4,7 @@ namespace MenqzAdmin\Admin\Form\Field;
 
 class Date extends Text
 {
-    protected $format = 'YYYY-MM-DD';
+    protected $format = 'Y-m-d';
 
     protected $defaults = [
         'weekNumbers'   => true,
@@ -41,8 +41,8 @@ class Date extends Text
 
     public function check_format_options()
     {
-        $format = $this->options['format'];
-        if (substr($format, -2) != 'ss') {
+        $format = $this->options['dateFormat'];
+        if (substr($format, -1) != 'S') {
             $this->options['enableSeconds'] = false;
         }
         if (strpos($format, 'H') !== false) {
@@ -53,16 +53,28 @@ class Date extends Text
     public function render()
     {
         $this->options = array_merge($this->defaults, $this->options);
-        $this->options['format'] = $this->format;
+        $this->options['dateFormat'] = $this->format;
         $this->options['locale'] = array_key_exists('locale', $this->options) ? $this->options['locale'] : config('app.locale');
         $this->options['allowInputToggle'] = true;
+        $this->options['clickOpens'] = isset($this->attributes['readonly']) ? !$this->attributes['readonly'] : true;
+
         $this->check_format_options();
 
-        $this->script = "flatpickr('{$this->getElementClassSelector()}',".json_encode($this->options).');';
+        $varPickr = $this->id . '_pickr';
+
+        // dd($this->options);
+        $configs = json_encode($this->options);
+        $this->script = '';
+        $script = <<<HTML
+            <script>
+                var {$varPickr} = flatpickr('{$this->getElementClassSelector()}',{$configs});
+            </script>
+        HTML;
 
         $this->prepend('<i class="icon-calendar fa-fw"></i>');
         $this->style('max-width', '160px');
 
-        return parent::render();
+        $render = parent::render();
+        return $render.$script;
     }
 }

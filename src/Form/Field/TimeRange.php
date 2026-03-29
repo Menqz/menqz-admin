@@ -6,7 +6,7 @@ use MenqzAdmin\Admin\Form\Field;
 
 class TimeRange extends Field
 {
-    protected $format = 'HH:mm:ss';
+    protected $format = 'H:i:S';
 
     protected $defaults = [
         'time_24hr'     => true,
@@ -41,7 +41,7 @@ class TimeRange extends Field
     public function check_format_options()
     {
         $format = $this->options['format'];
-        if (substr($format, -2) != 'ss') {
+        if (substr($format, -1) != 'S') {
             $this->options['enableSeconds'] = false;
         }
         if (strpos($format, 'H') !== false) {
@@ -93,11 +93,12 @@ class TimeRange extends Field
 
         $str_options = str_replace('"__replace_me__"', $func, $options);
 
-        $this->script = <<<JS
+        $script = <<<JS
             var {$this->column['start']}_fp_inst = flatpickr('{$this->getElementClassSelector()['start']}',{$str_options});
             var {$this->column['end']}_fp_inst = flatpickr('{$this->getElementClassSelector()['end']}',{$str_options});
         JS;
 
-        return parent::render();
+        $render = parent::render();
+        return $render.$script;
     }
 }
