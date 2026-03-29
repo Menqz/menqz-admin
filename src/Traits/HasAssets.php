@@ -84,6 +84,7 @@ trait HasAssets
         'vendor/menqz-admin/sweetalert2/sweetalert2.min.js',
         'vendor/menqz-admin/toastify-js/toastify.js',
         'vendor/menqz-admin/flatpickr/flatpickr.min.js',
+        'vendor/menqz-admin/flatpickr/l10n/pt.js',
         'vendor/menqz-admin/choicesjs/scripts/choices.min.js',
         'vendor/menqz-admin/sortablejs/Sortable.min.js',
         'vendor/menqz-admin/pdf.js/pdf.min.js',
