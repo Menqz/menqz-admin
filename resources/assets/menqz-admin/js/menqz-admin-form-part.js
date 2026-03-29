@@ -115,7 +115,19 @@ admin.form.part = {
             return;
         }
 
-        admin.form.part.showAction(url, partObj);
+        Swal.fire({
+            title: trans('submiting'),
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+        admin.form.submit(mainForm, function(data) {
+            admin.form.enableSubmitButton(mainForm);
+            Swal.close();
+            admin.form.part.showAction(url, partObj);
+        }, function (error) {
+            console.log(error);
+            Swal.close();
+        });
     },
 
     showAction: function (url, partObj) {
