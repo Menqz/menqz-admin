@@ -15,6 +15,7 @@ admin.form.part = {
         main_class = null,
         parent_id = null,
         parent_class = null,
+        form_id = null,
         active = false,
     }) {
         if(id_part == null){
@@ -31,6 +32,7 @@ admin.form.part = {
             parent_class: parent_class,
             active: active,
             container: container,
+            form_id: form_id,
         };
         this.parts.push(part);
         this.setEvents(part);
@@ -63,13 +65,13 @@ admin.form.part = {
             let target = e.target.closest('.grid-create-btn');
             if (target) {
                 let url = target.getAttribute('href');
-                admin.form.part.showAction(url, partObj);
+                admin.form.part.openActionWithMainSave(url, partObj);
             }
 
             target = e.target.closest('.grid-edit-btn');
             if (target) {
                 let url = target.getAttribute('href');
-                admin.form.part.showAction(url, partObj);
+                admin.form.part.openActionWithMainSave(url, partObj);
             }
 
             target = e.target.closest('.grid-show-btn');
@@ -78,7 +80,7 @@ admin.form.part = {
                 admin.modal.open({
                     title: '',
                     ajaxUrl: url,
-                    actionText: 'Salvar',
+                    actionText: 'Fechar',
                     showSpinOnActionButton: true,
                     closeOnlyActionResultTrue: true,
                 });
@@ -95,6 +97,36 @@ admin.form.part = {
                 let url = target.getAttribute('href');
                 admin.form.part.loadPart(url, partObj.container);
             }
+        });
+    },
+
+    openActionWithMainSave: function (url, partObj) {
+        if (!partObj || !url) {
+            return;
+        }
+
+        const mainForm = this.getMainForm(partObj);
+        if (!mainForm) {
+            this.showAction(url, partObj);
+            return;
+        }
+
+        if (!admin.form.validate(mainForm)) {
+            return;
+        }
+
+        Swal.fire({
+            title: trans('submiting'),
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+        admin.form.submit(mainForm, function(data) {
+            admin.form.enableSubmitButton(mainForm);
+            Swal.close();
+            admin.form.part.showAction(url, partObj);
+        }, function (error) {
+            console.log(error);
+            Swal.close();
         });
     },
 
@@ -176,6 +208,15 @@ admin.form.part = {
 
     getPartById: function (id_part) {
         return this.parts.find((p) => p.id_part == id_part);
+    },
+
+    getMainForm: function (partObj) {
+        if (!partObj || !partObj.form_id) {
+            return null;
+        }
+        const form = document.getElementById(partObj.form_id);
+
+        return form || null;
     },
 
     sendForm: async function (form, callback) {

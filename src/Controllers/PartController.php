@@ -32,7 +32,7 @@ class PartController extends Controller
             $part = new $class($parentModel);
             return $part->handle($request, $id, $modo);
         } catch (\Exception $e) {
-             return "<div class='alert alert-danger'>Error loading part: " . $e->getMessage() . "</div>";
+             return response()->json(['success'=> false, 'message'=>$e->getMessage()], 500);
         }
     }
 
@@ -55,7 +55,7 @@ class PartController extends Controller
             $part = new $class($parentModel);
             return $part->store();
         } catch (\Exception $e) {
-            return "<div class='alert alert-danger'>Error loading part: " . $e->getMessage() . "</div>";
+            return response()->json(['success'=> false, 'message'=>$e->getMessage()], 500);
         }
     }
 
@@ -78,7 +78,7 @@ class PartController extends Controller
             $part = new $class($parentModel);
             return $part->update($id);
         } catch (\Exception $e) {
-            return "<div class='alert alert-danger'>Error loading part: " . $e->getMessage() . "</div>";
+            return response()->json(['success'=> false, 'message'=>$e->getMessage()], 500);
         }
     }
 
@@ -101,7 +101,7 @@ class PartController extends Controller
             $part = new $class($parentModel);
             return $part->destroy($id);
         } catch (\Exception $e) {
-            return "<div class='alert alert-danger'>Error loading part: " . $e->getMessage() . "</div>";
+            return response()->json(['success'=> false, 'message'=>$e->getMessage()], 500);
         }
     }
 }

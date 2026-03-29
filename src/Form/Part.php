@@ -47,8 +47,9 @@ class Part
     {
 
         $id = 'form-'.($this->parts->count() + 1);
+        $formId = $this->form->getAttribute('id');
 
-        $this->parts->push(compact('id', 'title', 'class', 'parentClass', 'parentId', 'active'));
+        $this->parts->push(compact('id', 'title', 'class', 'parentClass', 'parentId', 'active', 'formId'));
 
         return $this;
     }
