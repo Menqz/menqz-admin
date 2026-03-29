@@ -36,6 +36,7 @@
 
     @foreach($partObj->getParts() as $part)
         admin.form.part.add({
+            title: '{{ $part['title'] }}',
             url: '{{ route('admin.handle-part') }}',
             id_part: '{{ $part['id'] }}',
             main_class: '{{ urlencode($part['class']) }}',

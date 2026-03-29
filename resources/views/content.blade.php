@@ -9,14 +9,13 @@
         <style type="text/css">{{ $css }}</style>
     @endisset
 
-    <section class="content-header clearfix">
+    <section class="content-header clearfix py-2">
         <h1>
             {!! $header ?: trans('admin.title') !!}
             <small>{!! $description ?: trans('admin.description') !!}</small>
         </h1>
 
         @include('admin::partials.breadcrumb')
-
     </section>
 
     <section class="content">

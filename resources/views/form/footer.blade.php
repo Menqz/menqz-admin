@@ -1,5 +1,5 @@
 
-<footer class="navbar form-footer navbar-light bg-white py-3 px-4 @if (!empty($fixed_footer))shadow fixed-bottom @endif">
+<footer class="navbar form-footer navbar-light bg-white py-2 px-4 @if (!empty($fixed_footer))shadow fixed-bottom @endif">
     <div class="row">
         <div class="col-9 d-flex align-items-center flex-row">
             @if (isset($buttons_footer) && count($buttons_footer) > 0)

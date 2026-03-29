@@ -10,6 +10,7 @@ admin.form.part = {
     },
 
     add: function ({
+        title = '',
         id_part = null,
         url = null,
         main_class = null,
@@ -24,6 +25,7 @@ admin.form.part = {
         const container = document.querySelector(`#tab-part-${id_part}`);
         const urlIndex = url + '?class='+main_class+'&parent_id='+parent_id+'&parent_class='+parent_class;
         const part = {
+            title: title,
             url: url,
             url_index: urlIndex,
             id_part: id_part,
@@ -65,22 +67,23 @@ admin.form.part = {
             let target = e.target.closest('.grid-create-btn');
             if (target) {
                 let url = target.getAttribute('href');
-                admin.form.part.openActionWithMainSave(url, partObj);
+                admin.form.part.openActionWithMainSave(url, partObj, trans('create'));
             }
 
             target = e.target.closest('.grid-edit-btn');
             if (target) {
                 let url = target.getAttribute('href');
-                admin.form.part.openActionWithMainSave(url, partObj);
+                admin.form.part.openActionWithMainSave(url, partObj, trans('edit'));
             }
 
             target = e.target.closest('.grid-show-btn');
             if (target) {
                 let url = target.getAttribute('href');
                 admin.modal.open({
-                    title: '',
+                    title: partObj.title,
+                    subTitle: trans('show'),
                     ajaxUrl: url,
-                    actionText: 'Fechar',
+                    actionText: trans('close'),
                     showSpinOnActionButton: true,
                     closeOnlyActionResultTrue: true,
                 });
@@ -100,7 +103,7 @@ admin.form.part = {
         });
     },
 
-    openActionWithMainSave: function (url, partObj) {
+    openActionWithMainSave: function (url, partObj, subTitle) {
         if (!partObj || !url) {
             return;
         }
@@ -123,18 +126,19 @@ admin.form.part = {
         admin.form.submit(mainForm, function(data) {
             admin.form.enableSubmitButton(mainForm);
             Swal.close();
-            admin.form.part.showAction(url, partObj);
+            admin.form.part.showAction(url, partObj, subTitle);
         }, function (error) {
             console.log(error);
             Swal.close();
         });
     },
 
-    showAction: function (url, partObj) {
+    showAction: function (url, partObj, subTitle) {
         admin.modal.open({
-            title: '',
+            title: partObj.title,
+            subTitle: subTitle,
             ajaxUrl: url,
-            actionText: 'Salvar',
+            actionText: trans('submit'),
             showSpinOnActionButton: false,
             closeOnlyActionResultTrue: true,
             onAction: async function () {

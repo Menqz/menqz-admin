@@ -54,6 +54,7 @@ admin.modal = {
      */
     open: function ({
         title,
+        subTitle = '',
         body = '',
         ajaxUrl = null,
         actionText = 'OK',
@@ -70,6 +71,9 @@ admin.modal = {
 
         // Configura o título
         this.titleElement.textContent = title;
+        if(subTitle){
+            this.titleElement.innerHTML += ' <small>'+subTitle+'</small>';
+        }
 
         this.ajaxUrl = ajaxUrl;
         this.body = body;
