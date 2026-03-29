@@ -54,6 +54,14 @@
       },
       rangeSeparator: " até ",
       time_24hr: true,
+      weekAbbreviation: "WK",
+      scrollTitle: "Scroll para incrementar",
+      toggleTitle: "Clique para alternar",
+      amPM: ["AM", "PM"],
+      yearAriaLabel: "Ano",
+      monthAriaLabel: "Mês",
+      hourAriaLabel: "Hora",
+      minuteAriaLabel: "Minuto",
   };
   fp.l10ns.pt_BR = Portuguese;
   var pt_BR = fp.l10ns;
