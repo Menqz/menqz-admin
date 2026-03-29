@@ -2,9 +2,16 @@
 
 namespace MenqzAdmin\Admin\Form\Field;
 
+use MenqzAdmin\Admin\Form;
+
 class Datetime extends Date
 {
-    protected $format = 'YYYY-MM-DD HH:mm:ss';
+    protected $format = 'Y-m-d H:i:S';
+
+    public function getAlternativeFormat()
+    {
+        return Form::getAlternativeDatetimeFormat() ?? null;
+    }
 
     public function render()
     {

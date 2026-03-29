@@ -1,5 +1,5 @@
 <!-- breadcrumb start -->
-<nav aria-label="breadcrumb" class="breadcrumb-nav align-middle">
+<nav aria-label="breadcrumb" class="breadcrumb-nav mt-2">
 @if ($breadcrumb)
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ admin_url('/') }}"><i class="icon-home"></i> {{__('Home')}}</a></li>

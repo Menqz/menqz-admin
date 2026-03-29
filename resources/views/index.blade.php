@@ -33,7 +33,7 @@
 
         @include('admin::partials.header')
         @include('admin::partials.sidebar')
-        <main id="main" class="p-2">
+        <main id="main" class="px-2">
 
             <div id="pjax-container">
             <!--start-pjax-container-->
