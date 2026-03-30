@@ -15,6 +15,7 @@ use MenqzAdmin\Admin\Grid\Displayers;
 use MenqzAdmin\Admin\Grid\Model;
 use MenqzAdmin\Admin\Grid\Row;
 use MenqzAdmin\Admin\Grid\Tools;
+use MenqzAdmin\Admin\Traits\HasAlternativeFormat;
 use MenqzAdmin\Admin\Traits\ShouldSnakeAttributes;
 
 class Grid
@@ -35,6 +36,7 @@ class Grid
         Concerns\CanExportGrid,
         Concerns\CanDoubleClick,
         ShouldSnakeAttributes,
+        HasAlternativeFormat,
         Macroable {
             __call as macroCall;
         }
