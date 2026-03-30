@@ -27,6 +27,7 @@ use MenqzAdmin\Admin\Form\Part;
 use MenqzAdmin\Admin\Form\Row;
 use MenqzAdmin\Admin\Form\Tab;
 use MenqzAdmin\Admin\Grid\Tools\BatchEdit;
+use MenqzAdmin\Admin\Traits\HasAlternativeFormat;
 use MenqzAdmin\Admin\Traits\ShouldSnakeAttributes;
 use Spatie\EloquentSortable\Sortable;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,6 +42,7 @@ class Form implements Renderable
     use HasFormAttributes;
     use HandleCascadeFields;
     use ShouldSnakeAttributes;
+    use HasAlternativeFormat;
     /**
      * Remove flag in `has many` form.
      */
@@ -117,12 +119,6 @@ class Form implements Renderable
      */
     protected static $collectedAssets = [];
 
-    protected static $alternativeDateFormat = null;
-
-    protected static $alternativeDatetimeFormat = null;
-
-    protected static $alternativeTimeFormat = null;
-
     /**
      * @var Form\Tab
      */
@@ -175,57 +171,6 @@ class Form implements Renderable
 
         $this->initFormAttributes();
         $this->callInitCallbacks();
-    }
-
-    public static function setAlternativeDateFormat(?string $format): void
-    {
-        static::$alternativeDateFormat = $format;
-    }
-
-    public static function setAlternativeDatetimeFormat(?string $format): void
-    {
-        static::$alternativeDatetimeFormat = $format;
-    }
-
-    public static function setAlternativeTimeFormat(?string $format): void
-    {
-        static::$alternativeTimeFormat = $format;
-    }
-
-    public static function getAlternativeDateFormat(): string
-    {
-        return static::$alternativeDateFormat;
-    }
-
-    public static function getAlternativeDatetimeFormat(): string
-    {
-        return static::$alternativeDatetimeFormat;
-    }
-
-    public static function getAlternativeTimeFormat(): string
-    {
-        return static::$alternativeTimeFormat;
-    }
-
-    public function alternativeDateFormat(string $format): self
-    {
-        static::setAlternativeDateFormat($format);
-
-        return $this;
-    }
-
-    public function alternativeDatetimeFormat(string $format): self
-    {
-        static::setAlternativeDatetimeFormat($format);
-
-        return $this;
-    }
-
-    public function alternativeTimeFormat(string $format): self
-    {
-        static::setAlternativeTimeFormat($format);
-
-        return $this;
     }
 
     /**

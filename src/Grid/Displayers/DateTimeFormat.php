@@ -5,7 +5,7 @@ namespace MenqzAdmin\Admin\Grid\Displayers;
 use Carbon\Carbon;
 use MenqzAdmin\Admin\Grid;
 
-class DateFormat extends AbstractDisplayer
+class DateTimeFormat extends AbstractDisplayer
 {
     public function display($format = null)
     {
@@ -14,10 +14,10 @@ class DateFormat extends AbstractDisplayer
         }
 
         if ($format == null) {
-            if (Grid::getAlternativeDateFormat()) {
-                $format = Grid::getAlternativeDateFormat();
+            if (Grid::getAlternativeDateTimeFormat()) {
+                $format = Grid::getAlternativeDateTimeFormat();
             } else {
-                $format = 'Y-m-d';
+                $format = 'Y-m-d H:i:s';
             }
         }
 

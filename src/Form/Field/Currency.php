@@ -2,12 +2,14 @@
 
 namespace MenqzAdmin\Admin\Form\Field;
 
+use MenqzAdmin\Admin\Helpers\Helper;
+
 class Currency extends Text
 {
     /**
      * @var string
      */
-    protected $symbol = '$';
+    protected $symbol = 'R$';
 
     /**
      * @var array
@@ -23,9 +25,13 @@ class Currency extends Text
      */
     protected $options = [
         'alias'              => 'currency',
-        'radixPoint'         => '.',
         'prefix'             => '',
-        'removeMaskOnSubmit' => true,
+        'groupSeparator'     => '',
+        'radixPoint'         => ',',
+        'autoGroup'          => true,
+        'digits'             => 2,
+        'digitsOptional'     => false,
+        'rightAlign'         => true,
     ];
 
     /**
@@ -61,7 +67,7 @@ class Currency extends Text
     {
         $value = parent::prepare($value);
 
-        return (float) $value;
+        return (float) Helper::currencyToFloat($value);
     }
 
     /**
@@ -69,6 +75,7 @@ class Currency extends Text
      */
     public function render()
     {
+        $this->value(Helper::formatCurrency($this->value));
         $this->inputmask($this->options);
 
         $this->prepend($this->symbol);
