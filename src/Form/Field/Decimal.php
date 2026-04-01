@@ -4,10 +4,6 @@ namespace MenqzAdmin\Admin\Form\Field;
 
 class Decimal extends Text
 {
-    protected static $js = [
-        '/vendor/menqz-admin/inputmask/inputmask.min.js',
-    ];
-
     /**
      * @see https://github.com/RobinHerbots/Inputmask#options
      *
@@ -22,9 +18,13 @@ class Decimal extends Text
     {
         $this->inputmask($this->options);
 
+        $script = '<script>' . $this->script . '</script>';
+        $this->script = '';
+
         $this->prepend('<i class="'.$this->icon.'"></i>');
         $this->style('max-width', '160px');
 
-        return parent::render();
+        $render = parent::render();
+        return $render . $script;
     }
 }
