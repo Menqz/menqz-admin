@@ -104,6 +104,7 @@ trait HasAssets
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-tree.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-selectable.js',
         'vendor/menqz-admin/inputmask/inputmask.min.js',
+        'vendor/menqz-admin/fields/number-input.js',
 
     ];
 
