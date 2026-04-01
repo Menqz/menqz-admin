@@ -104,7 +104,9 @@ admin.document = {
 
             this.currentPdfBlob = blob;
             this.currentDocumentName = name;
-            this.currentFileName = fileName ?? name;
+            this.currentFileName = (fileName ?? name).endsWith('.pdf')
+                    ? (fileName ?? name)
+                    : `${fileName ?? name}.pdf`;
             this.currentRoute = route;
 
             const pdfUrl = URL.createObjectURL(blob);
@@ -121,24 +123,35 @@ admin.document = {
 
             const downloadUrl = this.buildDownloadUrl(route);
 
+            let footerButtons = `
+                <div class="d-flex gap-2">
+                    <a href="${downloadUrl}" target="_blank" class="btn btn-primary" download><i class="icon-download"></i></a>
+                `;
+
             if (this.signatureEnabled) {
-                admin.modal.addFooterContent(
-                    `<div class="d-flex gap-2">
-                        <a href="${downloadUrl}" target="_blank" class="btn btn-primary" download>Baixar Documento</a>
-                        <button type="button" id="document-emitter-send-signature" class="btn btn-success">Enviar para Assinatura</button>
-                    </div>`
-                );
-            } else {
-                admin.modal.addFooterContent(
-                    `<div class="d-flex gap-2">
-                        <a href="${downloadUrl}" target="_blank" class="btn btn-primary" download>Baixar Documento</a>
-                    </div>`
-                );
+                footerButtons += `<button type="button" id="document-emitter-send-signature" class="btn btn-success">Enviar para Assinatura</button>`;
             }
+
+             if (isMobile() || navigator.canShare) {
+                footerButtons += `
+                    <button type="button" id="document-emitter-share-native" class="btn btn-info">
+                        <i class="icon-share-alt"></i>
+                    </button>
+                `;
+            }
+
+            footerButtons += `</div>`;
+
+            admin.modal.addFooterContent(footerButtons);
 
             const sendBtn = document.getElementById('document-emitter-send-signature');
             if (sendBtn) {
                 sendBtn.addEventListener('click', () => admin.document.openSignatureModal());
+            }
+
+            const shareBtn = document.getElementById('document-emitter-share-native');
+            if (shareBtn) {
+                shareBtn.addEventListener('click', () => admin.document.compartilharPDF());
             }
 
             await this.renderPdf(pdfUrl);
@@ -490,6 +503,29 @@ admin.document = {
         }
 
         return signers;
+    },
+
+    compartilharPDF: async function() {
+        if (!this.currentPdfBlob) {
+            alert('Nenhum PDF carregado para compartilhar.');
+            return;
+        }
+
+        const fileName = this.currentFileName || 'documento.pdf';
+
+        const file = new File([this.currentPdfBlob], fileName, {
+            type: 'application/pdf'
+        });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                title: fileName,
+                text: 'Segue o documento',
+                files: [file]
+            });
+        } else {
+            alert('Compartilhamento de arquivo não suportado neste navegador/dispositivo.');
+        }
     },
 
     blobToBase64: function (blob) {
