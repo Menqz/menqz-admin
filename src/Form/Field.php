@@ -288,6 +288,8 @@ class Field implements Renderable
         if (method_exists($this, 'init')) {
             $this->init();
         }
+
+        $this->setElementClass($column.'_'.mt_rand());
     }
 
     /**

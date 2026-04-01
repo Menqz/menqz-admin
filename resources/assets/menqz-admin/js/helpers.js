@@ -211,3 +211,24 @@ function waitForElement(selector, callback) {
 function isMobile() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
+
+/**
+ * Executa os scripts encontrados no conteúdo HTML.
+ * @param {HTMLElement} element - O elemento onde procurar scripts.
+ */
+function executeScripts (element) {
+    const scripts = element.querySelectorAll('script');
+    scripts.forEach((script) => {
+        const newScript = document.createElement('script');
+        newScript.type = script.type || 'text/javascript';
+        if (script.src) {
+            // Para scripts externos
+            newScript.src = script.src;
+            document.head.appendChild(newScript);
+        } else {
+            // Para scripts inline
+            newScript.textContent = script.textContent;
+            document.body.appendChild(newScript);
+        }
+    });
+}

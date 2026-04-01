@@ -488,7 +488,9 @@ class HasMany extends Field
     {
         $method = 'setupScriptFor'.ucfirst($this->viewMode).'View';
 
-        call_user_func([$this, $method], $script);
+        $script = call_user_func([$this, $method], $script);
+
+        return $script;
     }
 
     /**
@@ -525,6 +527,8 @@ document.querySelector('#has-many-{$this->column} .add').addEventListener("click
         addHasManyTab{$this->column}(index);
     }
 
+    executeScripts(clone);
+
     {$templateScript}
     return false;
 
@@ -550,7 +554,7 @@ function addRemoveHasManyListener{$this->column}(remove){
 
 JS;
 
-        Admin::script($script);
+        return $script;
     }
 
     /**
@@ -565,9 +569,9 @@ JS;
         $removeClass = NestedForm::REMOVE_FLAG_CLASS;
         $defaultKey = NestedForm::DEFAULT_KEY_NAME;
 
-        $this->setupScriptForDefaultView($templateScript);
+        $script = $this->setupScriptForDefaultView($templateScript);
 
-        $script = <<<EOT
+        $script .= <<<EOT
         function removeHasManyTab{$this->column}(){
             document.querySelector('#has-many-{$this->column} .nav-link.active').parentNode.remove();
             let trigger = document.querySelector('#has-many-{$this->column} .nav-link:first-child');
@@ -587,7 +591,7 @@ JS;
 
 EOT;
 
-        Admin::script($script);
+        return $script;
     }
 
     /**
@@ -602,8 +606,9 @@ EOT;
         $removeClass = NestedForm::REMOVE_FLAG_CLASS;
         $defaultKey = NestedForm::DEFAULT_KEY_NAME;
 
-        $this->setupScriptForDefaultView($templateScript);
+        $script = $this->setupScriptForDefaultView($templateScript);
 
+        return $script;
         // can use the same as the default
         // no extra's needed
     }
@@ -656,15 +661,17 @@ EOT;
         list($template, $script) = $this->buildNestedForm($this->column, $this->builder)
             ->getTemplateHtmlAndScript();
 
-        $this->setupScript($script);
+        $scriptRender =  '<script>'.$this->setupScript($script).'</script>';
 
-        return parent::fieldRender([
+        $render = parent::fieldRender([
             'forms'         => $this->buildRelatedForms(),
             'template'      => $template,
             'relationName'  => $this->relationName,
             'verticalAlign' => $this->verticalAlign,
             'options'       => $this->options,
         ]);
+
+        return $render.$scriptRender;
     }
 
     /**
@@ -713,12 +720,12 @@ EOT;
         /* Build cell with hidden elements */
         $template .= '<td class="hidden">'.implode('', $hidden).'</td>';
 
-        $this->setupScript(implode("\r\n", $scripts));
+        $scriptRender =  '<script>'.$this->setupScript(implode("\r\n", $scripts)).'</script>';
 
         // specify a view to render.
         $this->view = $this->views[$this->viewMode];
 
-        return parent::fieldRender([
+        $render = parent::fieldRender([
             'headers'       => $headers,
             'forms'         => $this->buildRelatedForms(),
             'template'      => $template,
@@ -726,5 +733,7 @@ EOT;
             'verticalAlign' => $this->verticalAlign,
             'options'       => $this->options,
         ]);
+
+        return $render.$scriptRender;
     }
 }
