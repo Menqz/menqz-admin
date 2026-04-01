@@ -186,7 +186,7 @@ function waitForElement(selector, callback) {
     const el = document.querySelector(selector);
 
     if (el) {
-        callback(el);
+        setTimeout(() => callback(el), 100);
         return;
     }
 
@@ -194,7 +194,7 @@ function waitForElement(selector, callback) {
         const el = document.querySelector(selector);
         if (el) {
             observer.disconnect();
-            callback(el);
+            setTimeout(() => callback(el), 100);
         }
     });
 
@@ -202,4 +202,12 @@ function waitForElement(selector, callback) {
         childList: true,
         subtree: true
     });
+}
+
+/**
+ * Detecta se o usuário está em dispositivo móvel
+ * @returns {boolean}
+ */
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
