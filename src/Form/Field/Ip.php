@@ -6,10 +6,6 @@ class Ip extends Text
 {
     protected $rules = 'nullable|ip';
 
-    protected static $js = [
-        '/vendor/menqz-admin/inputmask/inputmask.min.js',
-    ];
-
     /**
      * @see https://github.com/RobinHerbots/Inputmask#options
      *
@@ -23,9 +19,13 @@ class Ip extends Text
     {
         $this->inputmask($this->options);
 
+        $script = '<script>' . $this->script . '</script>';
+        $this->script = '';
+
         $this->prepend('<i class="icon-laptop fa-fw"></i>');
         $this->style('max-width', '160px');
 
-        return parent::render();
+        $render = parent::render();
+        return $render . $script;
     }
 }

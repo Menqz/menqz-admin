@@ -154,7 +154,7 @@ admin.modal = {
                 })
                 .then(html => {
                     this.bodyElement.innerHTML = html;
-                    this.executeScripts(this.bodyElement);
+                    executeScripts(this.bodyElement);
                 })
                 .catch(error => {
                     this.bodyElement.innerHTML = `
@@ -165,7 +165,7 @@ admin.modal = {
                 });
         } else {
             this.bodyElement.innerHTML = this.body;
-            this.executeScripts(this.bodyElement);
+            executeScripts(this.bodyElement);
         }
     },
 
@@ -222,27 +222,6 @@ admin.modal = {
 
     clearModalHTML: function () {
         this.modalContainer.innerHTML = '';
-    },
-
-    /**
-     * Executa os scripts encontrados no conteúdo HTML.
-     * @param {HTMLElement} element - O elemento onde procurar scripts.
-     */
-    executeScripts: function (element) {
-        const scripts = element.querySelectorAll('script');
-        scripts.forEach((script) => {
-            const newScript = document.createElement('script');
-            newScript.type = script.type || 'text/javascript';
-            if (script.src) {
-                // Para scripts externos
-                newScript.src = script.src;
-                document.head.appendChild(newScript);
-            } else {
-                // Para scripts inline
-                newScript.textContent = script.textContent;
-                document.body.appendChild(newScript);
-            }
-        });
     },
 
     /**

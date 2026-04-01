@@ -7,10 +7,9 @@ use MenqzAdmin\Admin\Form;
 class Date extends Text
 {
     protected $format = 'Y-m-d';
-    protected $formatCustomized = false;
 
     protected $defaults = [
-        'weekNumbers'   => true,
+        'weekNumbers'   => false,
         'time_24hr'     => true,
         'enableSeconds' => true,
         'enableTime'    => false,
@@ -70,6 +69,7 @@ class Date extends Text
         $this->options['locale'] = array_key_exists('locale', $this->options) ? $this->options['locale'] : config('app.locale');
         $this->options['allowInputToggle'] = true;
         $this->options['clickOpens'] = isset($this->attributes['readonly']) ? !$this->attributes['readonly'] : true;
+        $this->options['allowInput'] = isset($this->attributes['readonly']) ? !$this->attributes['readonly'] : true;
 
         $this->check_format_options();
 

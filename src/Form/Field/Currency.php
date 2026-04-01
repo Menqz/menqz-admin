@@ -12,13 +12,6 @@ class Currency extends Text
     protected $symbol = 'R$';
 
     /**
-     * @var array
-     */
-    protected static $js = [
-        '/vendor/menqz-admin/inputmask/inputmask.min.js',
-    ];
-
-    /**
      * @see https://github.com/RobinHerbots/Inputmask#options
      *
      * @var array
@@ -28,9 +21,9 @@ class Currency extends Text
         'prefix'             => '',
         'groupSeparator'     => '',
         'radixPoint'         => ',',
-        'autoGroup'          => true,
+        'autoGroup'          => false,
         'digits'             => 2,
-        'digitsOptional'     => false,
+        'digitsOptional'     => true,
         'rightAlign'         => true,
     ];
 
@@ -78,9 +71,13 @@ class Currency extends Text
         $this->value(Helper::formatCurrency($this->value));
         $this->inputmask($this->options);
 
+        $script = '<script>' . $this->script . '</script>';
+        $this->script = '';
+
         $this->prepend($this->symbol);
         $this->style('max-width', '160px');
 
-        return parent::render();
+        $render = parent::render();
+        return $render . $script;
     }
 }
