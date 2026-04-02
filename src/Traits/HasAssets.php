@@ -216,6 +216,13 @@ trait HasAssets
             return static::$baseJs = $js;
         }
 
+        if (config('admin.notifications.enabled')) {
+            if (config('admin.notifications.pusher.enabled')) {
+                static::$baseJs[] = 'https://js.pusher.com/8.2.0/pusher.min.js';
+            }
+            static::$baseJs[] = 'vendor/menqz-admin/menqz-admin/js/menqz-admin-notification.js';
+        }
+
         return static::$baseJs;
     }
 

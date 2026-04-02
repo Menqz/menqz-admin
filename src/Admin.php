@@ -305,6 +305,13 @@ class Admin
                 $router->resource('auth/menu', 'MenuController', ['except' => ['create']])->names('admin.auth.menu');
                 $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']])->names('admin.auth.logs');
 
+                if (config('admin.notifications.enabled')) {
+                    $router->get('notifications', 'NotificationController@index')->name('admin.notifications.index');
+                    $router->get('notifications/unread', 'NotificationController@unread')->name('admin.notifications.unread');
+                    $router->post('notifications/{id}/read', 'NotificationController@read')->name('admin.notifications.read');
+                    $router->post('notifications/read-all', 'NotificationController@readAll')->name('admin.notifications.read-all');
+                }
+
                 $router->post('_handle_form_', 'HandleController@handleForm')->name('admin.handle-form');
                 $router->post('_handle_action_', 'HandleController@handleAction')->name('admin.handle-action');
                 $router->get('_handle_selectable_', 'HandleController@handleSelectable')->name('admin.handle-selectable');

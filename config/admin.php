@@ -249,6 +249,21 @@ return [
         'role_users_table'       => 'admin_role_users',
         'role_permissions_table' => 'admin_role_permissions',
         'role_menu_table'        => 'admin_role_menu',
+
+        'notifications_table'    => 'admin_notifications',
+    ],
+
+    'notifications' => [
+        'enabled' => env('ADMIN_NOTIFICATIONS_ENABLED', false),
+
+        'pusher' => [
+            'enabled' => env('ADMIN_NOTIFICATIONS_PUSHER_ENABLED', false),
+            'key' => env('PUSHER_APP_KEY'),
+            'cluster' => env('PUSHER_APP_CLUSTER'),
+            'force_tls' => env('PUSHER_APP_USE_TLS', true),
+        ],
+
+        'dropdown_limit' => env('ADMIN_NOTIFICATIONS_DROPDOWN_LIMIT', 10),
     ],
 
     /*

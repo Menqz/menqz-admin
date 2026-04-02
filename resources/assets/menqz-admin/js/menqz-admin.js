@@ -397,6 +397,9 @@ admin.pages = {
         admin.grid.init();
         admin.grid.inline_edit.init();
         admin.form.init();
+        if (admin.notification) {
+            admin.notification.init();
+        }
         this.initBootstrap();
     },
 

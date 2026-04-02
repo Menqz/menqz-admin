@@ -4,6 +4,7 @@ namespace MenqzAdmin\Admin;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use MenqzAdmin\Admin\Layout\Content;
@@ -78,6 +79,7 @@ class AdminServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'admin');
 
         $this->ensureHttps();
+        $this->registerNotificationBroadcasting();
 
         if (file_exists($routes = admin_path('routes.php'))) {
             $this->loadRoutesFrom($routes);
@@ -86,6 +88,40 @@ class AdminServiceProvider extends ServiceProvider
         $this->registerPublishing();
         $this->compatibleBlade();
         $this->bladeDirectives();
+    }
+
+    protected function registerNotificationBroadcasting(): void
+    {
+        if (!config('admin.notifications.enabled')) {
+            return;
+        }
+
+        if (!config('admin.notifications.pusher.enabled')) {
+            return;
+        }
+
+        if (!class_exists(\Pusher\Pusher::class)) {
+            return;
+        }
+
+        Broadcast::routes([
+            'prefix' => config('admin.route.prefix'),
+            'middleware' => config('admin.route.middleware'),
+        ]);
+
+        $guard = config('admin.auth.guard') ?: 'admin';
+
+        Broadcast::channel('menqz-admin.notifications.user.{userId}', function ($user, $userId) {
+            return (int) $user->getAuthIdentifier() === (int) $userId;
+        }, ['guards' => [$guard]]);
+
+        Broadcast::channel('menqz-admin.notifications.role.{roleId}', function ($user, $roleId) {
+            if (!method_exists($user, 'roles')) {
+                return false;
+            }
+
+            return $user->roles()->whereKey($roleId)->exists();
+        }, ['guards' => [$guard]]);
     }
 
     /**
