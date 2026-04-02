@@ -113,6 +113,7 @@ class AdminServiceProvider extends ServiceProvider
             $this->publishes([__DIR__.'/../resources/lang' => resource_path('lang')], 'menqz-admin-lang');
             $this->publishes([__DIR__.'/../database/migrations' => database_path('migrations')], 'menqz-admin-migrations');
             $this->publishes([__DIR__.'/../resources/assets' => public_path('vendor/menqz-admin')], 'menqz-admin-assets');
+            $this->publishes([__DIR__.'/../resources/assets/menqz-admin/js' => public_path('vendor/menqz-admin/menqz-admin/js')], 'menqz-admin-assets-menqz-js');
             $this->publishes([__DIR__.'/../resources/assets/test' => public_path('vendor/menqz-admin-test')], 'menqz-admin-test');
         }
     }
