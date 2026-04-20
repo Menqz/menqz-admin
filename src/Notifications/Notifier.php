@@ -6,22 +6,22 @@ use MenqzAdmin\Admin\Notifications\Database\Notification;
 
 class Notifier
 {
-    public static function notifyUser(int $userId, string $title, ?string $description = null): Notification
+    public static function notifyUser(int $userId, string $title, ?string $description = null, array $options = []): Notification
     {
-        return static::notify([
+        return static::notify(array_merge([
             'user_id' => $userId,
             'title' => $title,
             'description' => $description,
-        ]);
+        ], $options));
     }
 
-    public static function notifyRole(int $roleId, string $title, ?string $description = null): Notification
+    public static function notifyRole(int $roleId, string $title, ?string $description = null, array $options = []): Notification
     {
-        return static::notify([
+        return static::notify(array_merge([
             'role_id' => $roleId,
             'title' => $title,
             'description' => $description,
-        ]);
+        ], $options));
     }
 
     public static function notify(array $attributes): Notification
@@ -40,4 +40,3 @@ class Notifier
         return $notification;
     }
 }
-

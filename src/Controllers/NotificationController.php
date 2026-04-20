@@ -5,11 +5,13 @@ namespace MenqzAdmin\Admin\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use MenqzAdmin\Admin\Facades\Admin;
+use MenqzAdmin\Admin\Form;
 use MenqzAdmin\Admin\Layout\Content;
 use MenqzAdmin\Admin\Notifications\Database\Notification;
 use MenqzAdmin\Admin\Grid;
+use MenqzAdmin\Admin\Show;
 use MenqzAdmin\Admin\Grid\Actions\OpenNotification;
-use MenqzAdmin\Admin\Grid\Actions\Show;
+use MenqzAdmin\Admin\Grid\Actions\Show as ActionsShow;
 
 class NotificationController extends AdminController
 {
@@ -30,6 +32,7 @@ class NotificationController extends AdminController
     {
         $grid = new Grid(new Notification());
 
+        $grid->disableCreateButton();
         $grid->column('created_at', trans('admin.created_at'))->dateTimeFormat();
         $grid->column('title', trans('admin.title'));
         $grid->column('description', trans('admin.description'));
@@ -49,7 +52,7 @@ class NotificationController extends AdminController
                 $actions->disableEdit();
 
                 $actions->add(new OpenNotification());
-                $actions->add(new Show());
+                $actions->add(new ActionsShow());
             });
             return $grid;
         });
@@ -58,6 +61,23 @@ class NotificationController extends AdminController
         $grid->model()->visibleTo($user)->orderBy('created_at', 'DESC');
 
         return $grid;
+    }
+
+    protected function detail($id = null)
+    {
+        $show = new Show(Notification::findOrFail($id));
+
+        $show->field('id', 'ID');
+        $show->field('title', trans('admin.title'));
+        $show->field('description', trans('admin.description'));
+        $show->field('icon', trans('admin.icon'));
+        $show->field('url_redirect', 'URL de redirecionamento');
+        $show->field('title_redirect', 'Texto da acao');
+        $show->field('created_at', trans('admin.created_at'))->dateTimeFormat();
+        $show->field('updated_at', trans('admin.updated_at'))->dateTimeFormat();
+        $show->field('viewed_at', trans('admin.viewed_at'))->dateTimeFormat();
+
+        return $show;
     }
 
     public function unread(Request $request)
@@ -74,7 +94,7 @@ class NotificationController extends AdminController
 
         $items = $query
             ->limit($limit)
-            ->get(['id', 'title', 'description', 'created_at']);
+            ->get(['id', 'title', 'description', 'icon', 'url_redirect', 'title_redirect', 'created_at']);
 
         return response()->json([
             'count' => $count,
@@ -83,6 +103,9 @@ class NotificationController extends AdminController
                     'id' => $n->id,
                     'title' => $n->title,
                     'description' => $n->description,
+                    'icon' => $n->icon ?: 'icon-bell',
+                    'redirect_url' => $n->url_redirect ?: admin_url('notifications/'.$n->id),
+                    'redirect_title' => $n->title_redirect ?: 'Visualizar',
                     'created_at' => optional($n->created_at)->toISOString(),
                 ];
             })->values(),
@@ -126,4 +149,3 @@ class NotificationController extends AdminController
         ]);
     }
 }
-

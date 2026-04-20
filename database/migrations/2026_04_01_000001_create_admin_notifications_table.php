@@ -19,6 +19,9 @@ class CreateAdminNotificationsTable extends Migration
             $table->integer('role_id')->nullable()->index();
             $table->string('title', 190);
             $table->text('description')->nullable();
+            $table->string('icon', 100)->default('icon-bell');
+            $table->text('url_redirect')->nullable();
+            $table->string('title_redirect', 100)->nullable();
             $table->timestamp('viewed_at')->nullable()->index();
             $table->timestamps();
 

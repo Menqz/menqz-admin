@@ -136,9 +136,40 @@
     padding: 0;
 }
 
+div.user-menu {
+    padding: 0 30px 0 20px;
+    &:after {
+        content: "";
+        position: absolute;
+        border-right: 1px solid var(--menu-bg);
+        border-bottom: 1px solid var(--menu-bg);
+        transform: rotate(45deg);
+        width: 8px;
+        height: 8px;
+        right: 8px;
+        top: 23px;
+    }
+}
+
+@media (max-width: 576px) {
+    div.user-menu {
+        padding: 0 20px;
+        &:after {
+            content: "";
+            border-right: 0px solid var(--menu-bg);
+            border-bottom: 0px solid var(--menu-bg);
+        }
+    }
+}
+
+ul.user-menu {
+    margin: 0 1rem;
+}
+
 .user-menu .user-header {
     background: var(--menu-bg);
     color: var(--menu-text);
+    padding: 0;
 }
 
 /*---------------------------------------------------------*/

@@ -17,6 +17,9 @@ class Notification extends Model
         'role_id',
         'title',
         'description',
+        'icon',
+        'url_redirect',
+        'title_redirect',
         'viewed_at',
     ];
 
@@ -69,4 +72,3 @@ class Notification extends Model
         });
     }
 }
-

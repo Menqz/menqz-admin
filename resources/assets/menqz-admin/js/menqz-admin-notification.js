@@ -41,7 +41,10 @@ admin.notification = {
         }
 
         this._badge = document.getElementById('menqz-admin-notification-badge');
+        this._panel = document.getElementById('menqz-admin-notification-panel');
         this._items = document.getElementById('menqz-admin-notification-items');
+        this._summary = document.getElementById('menqz-admin-notification-summary');
+        this._count = document.getElementById('menqz-admin-notification-count');
         this._readAllHeader = document.getElementById('menqz-admin-notification-read-all-header');
 
         this.bindEvents();
@@ -60,7 +63,22 @@ admin.notification = {
             });
         }
 
+        if (this._panel) {
+            this._panel.addEventListener('show.bs.offcanvas', function () {
+                self.refresh();
+            });
+        }
+
         document.addEventListener('click', function (event) {
+            const dismissBtn = event.target.closest('.menqz-admin-notification-dismiss');
+            if (dismissBtn) {
+                event.preventDefault();
+                const id = dismissBtn.dataset.id;
+                const readUrl = dismissBtn.dataset.readUrl || self.getReadUrl(id);
+                self.readByUrl(readUrl);
+                return;
+            }
+
             const readBtn = event.target.closest('.menqz-admin-notification-read');
             if (readBtn) {
                 event.preventDefault();
@@ -78,11 +96,21 @@ admin.notification = {
                 return;
             }
 
+            const actionLink = event.target.closest('.menqz-admin-notification-action');
+            if (actionLink) {
+                event.preventDefault();
+                const item = actionLink.closest('[data-menqz-admin-notification-id]');
+                if (item) {
+                    self.readAndRedirect(item.dataset.menqzAdminNotificationId, item.dataset.redirectUrl);
+                }
+                return;
+            }
+
             const item = event.target.closest('[data-menqz-admin-notification-id]');
             if (item) {
                 event.preventDefault();
                 const id = item.dataset.menqzAdminNotificationId;
-                self.read(id);
+                self.readAndRedirect(id, item.dataset.redirectUrl);
                 return;
             }
         });
@@ -229,6 +257,14 @@ admin.notification = {
             }
         }
 
+        if (this._count) {
+            this._count.textContent = count > 99 ? '99+' : String(count);
+        }
+
+        if (this._readAllHeader) {
+            this._readAllHeader.disabled = count === 0;
+        }
+
         if (!this._items) {
             return;
         }
@@ -237,34 +273,135 @@ admin.notification = {
 
         if (!notifications.length) {
             const empty = document.createElement('div');
-            empty.className = 'px-2 py-2 text-center text-muted';
-            empty.textContent = 'Sem notificações';
+            empty.className = 'menqz-admin-notification-empty';
+            empty.innerHTML = '<i class="icon-bell"></i><div class="fw-semibold mb-1">Sem notificacoes</div><div class="small">Quando houver novidades, elas aparecerao aqui.</div>';
             this._items.appendChild(empty);
             return;
         }
 
         notifications.forEach((n) => {
-            const a = document.createElement('a');
-            a.href = '#';
-            a.className = 'dropdown-item d-block rounded';
-            a.dataset.menqzAdminNotificationId = n.id;
+            const item = document.createElement('div');
+            item.className = 'menqz-admin-notification-item';
+            item.dataset.menqzAdminNotificationId = n.id;
+            item.dataset.redirectUrl = this.getRedirectUrl(n);
+
+            const icon = document.createElement('div');
+            icon.className = 'menqz-admin-notification-icon';
+            icon.innerHTML = '<i class="' + this.resolveIconClass(n.icon) + '"></i>';
+
+            const body = document.createElement('div');
+            body.className = 'menqz-admin-notification-body';
+
+            const titleRow = document.createElement('div');
+            titleRow.className = 'menqz-admin-notification-title-row';
 
             const title = document.createElement('div');
-            title.className = 'fw-semibold';
+            title.className = 'menqz-admin-notification-title';
             title.textContent = n.title || '';
 
-            const desc = document.createElement('div');
-            desc.className = 'small text-muted';
+            const dismiss = document.createElement('button');
+            dismiss.type = 'button';
+            dismiss.className = 'menqz-admin-notification-dismiss';
+            dismiss.dataset.id = n.id;
+            dismiss.dataset.readUrl = this.getReadUrl(n.id);
+            dismiss.setAttribute('aria-label', 'Marcar como lida');
+            dismiss.innerHTML = '<i class="icon-times"></i>';
+
+            const meta = document.createElement('div');
+            meta.className = 'menqz-admin-notification-meta';
+
+            const time = document.createElement('span');
+            time.className = 'menqz-admin-notification-time';
+            time.textContent = this.formatRelativeDate(n.created_at);
+
+            const desc = document.createElement('p');
+            desc.className = 'menqz-admin-notification-description';
             desc.textContent = n.description || '';
 
-            a.appendChild(title);
-            a.appendChild(desc);
-            this._items.appendChild(a);
+            const action = document.createElement('a');
+            action.href = this.getRedirectUrl(n);
+            action.className = 'menqz-admin-notification-action';
+            action.textContent = n.redirect_title || 'Visualizar';
+
+            titleRow.appendChild(title);
+            titleRow.appendChild(dismiss);
+            meta.appendChild(time);
+            body.appendChild(titleRow);
+            body.appendChild(meta);
+            body.appendChild(desc);
+            body.appendChild(action);
+            item.appendChild(icon);
+            item.appendChild(body);
+            this._items.appendChild(item);
         });
+    },
+
+    formatRelativeDate: function (value) {
+        if (!value) {
+            return '';
+        }
+
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+            return '';
+        }
+
+        const diffInSeconds = Math.round((date.getTime() - Date.now()) / 1000);
+        const units = [
+            { size: 60, name: 'second' },
+            { size: 60, name: 'minute' },
+            { size: 24, name: 'hour' },
+            { size: 7, name: 'day' },
+            { size: 4.34524, name: 'week' },
+            { size: 12, name: 'month' },
+            { size: Number.POSITIVE_INFINITY, name: 'year' },
+        ];
+
+        let valueToFormat = diffInSeconds;
+        let unitName = 'second';
+
+        for (let i = 0; i < units.length; i++) {
+            const unit = units[i];
+
+            if (Math.abs(valueToFormat) < unit.size) {
+                unitName = unit.name;
+                break;
+            }
+
+            valueToFormat /= unit.size;
+        }
+
+        return new Intl.RelativeTimeFormat('pt-BR', { numeric: 'auto' }).format(Math.round(valueToFormat), unitName);
+    },
+
+    resolveIconClass: function (icon) {
+        if (!icon) {
+            return 'icon-bell';
+        }
+
+        if (icon.indexOf('icon-') === 0 || icon.indexOf('fa') === 0) {
+            return icon;
+        }
+
+        return 'icon-' + icon;
+    },
+
+    getRedirectUrl: function (notification) {
+        if (notification && notification.redirect_url) {
+            return notification.redirect_url;
+        }
+
+        return this.getNotificationUrl(notification ? notification.id : null);
     },
 
     getReadUrl: function (id) {
         return (this._config.readUrlTemplate || '').replace('__ID__', String(id));
+    },
+
+    getNotificationUrl: function (id) {
+        const indexUrl = (this._config.indexUrl || '').replace(/\/$/, '');
+
+        return id ? indexUrl + '/' + id : indexUrl;
     },
 
     read: function (id) {
@@ -272,20 +409,39 @@ admin.notification = {
         return this.readByUrl(url);
     },
 
-    readByUrl: function (url) {
+    readAndRedirect: function (id, targetUrl) {
         const self = this;
-        if (!url) {
-            return;
+        const redirectUrl = targetUrl || this.getNotificationUrl(id);
+
+        if (!redirectUrl) {
+            return this.read(id);
         }
 
-        axios({
+        return this.readByUrl(this.getReadUrl(id), false)
+            .then(function () {
+                window.location.href = redirectUrl;
+            })
+            .catch(function () {
+                window.location.href = redirectUrl;
+            });
+    },
+
+    readByUrl: function (url, shouldRefresh = true) {
+        const self = this;
+        if (!url) {
+            return Promise.resolve();
+        }
+
+        return axios({
             method: 'post',
             url: url,
             data: { _token: LA.token },
             headers: { Accept: 'application/json' },
         })
         .then(function () {
-            self.refresh();
+            if (shouldRefresh) {
+                self.refresh();
+            }
         })
         .catch(function () {});
     },

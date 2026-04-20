@@ -308,10 +308,10 @@ class Admin
                 $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']])->names('admin.auth.logs');
 
                 if (config('admin.notifications.enabled')) {
-                    $router->get('notifications', 'NotificationController@index')->name('admin.notifications.index');
                     $router->get('notifications/unread', 'NotificationController@unread')->name('admin.notifications.unread');
                     $router->post('notifications/{id}/read', 'NotificationController@read')->name('admin.notifications.read');
                     $router->post('notifications/read-all', 'NotificationController@readAll')->name('admin.notifications.read-all');
+                    $router->resource('notifications', 'NotificationController')->names('admin.notifications');
                 }
 
                 $router->post('_handle_form_', 'HandleController@handleForm')->name('admin.handle-form');

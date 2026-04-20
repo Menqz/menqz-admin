@@ -46,8 +46,10 @@ class NotificationCreated implements ShouldBroadcastNow
             'id' => $this->notification->id,
             'title' => $this->notification->title,
             'description' => $this->notification->description,
+            'icon' => $this->notification->icon ?: 'icon-bell',
+            'redirect_url' => $this->notification->url_redirect ?: admin_url('notifications/'.$this->notification->id.'/edit'),
+            'redirect_title' => $this->notification->title_redirect ?: 'Visualizar',
             'created_at' => optional($this->notification->created_at)->toISOString(),
         ];
     }
 }
-
