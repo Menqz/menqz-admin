@@ -23,13 +23,15 @@ class Administrator extends Model implements AuthenticatableContract
     protected $fillable = [
         'username',
         'password',
+        'is_temporary_password',
         'email',
         'email_verified_at',
         'social_id',
         'social_type',
         'name',
         'avatar',
-        'remember_token'
+        'remember_token',
+        'password_changed_at',
     ];
 
     /**

@@ -137,6 +137,27 @@ return [
 
         'login_type' => env('ADMIN_LOGIN_TYPE', 'username'),
 
+        'password_policy' => [
+            'force_renewal' => [
+                'enabled' => env('ADMIN_PASSWORD_RENEWAL_ENABLED', false),
+                'days' => (int) env('ADMIN_PASSWORD_RENEWAL_DAYS', 90),
+            ],
+
+            'temporary_password' => [
+                'enabled' => env('ADMIN_TEMPORARY_PASSWORD_ENABLED', true),
+            ],
+
+            'strength' => [
+                'min' => (int) env('ADMIN_PASSWORD_MIN_LENGTH', 8),
+                'require' => [
+                    'letter' => env('ADMIN_PASSWORD_REQUIRE_LETTER', true),
+                    'uppercase' => env('ADMIN_PASSWORD_REQUIRE_UPPERCASE', false),
+                    'number' => env('ADMIN_PASSWORD_REQUIRE_NUMBER', false),
+                    'symbol' => env('ADMIN_PASSWORD_REQUIRE_SYMBOL', false),
+                ],
+            ],
+        ],
+
         'social' => [
             'enabled' => env('ADMIN_SOCIAL_LOGIN', false),
             'providers' => [
