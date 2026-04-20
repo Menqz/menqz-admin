@@ -3,10 +3,15 @@
 namespace MenqzAdmin\Admin\Grid\Displayers;
 
 use Carbon\Carbon;
-use MenqzAdmin\Admin\Grid;
+use MenqzAdmin\Admin\Admin;
 
 class DateFormat extends AbstractDisplayer
 {
+    public function getAlternativeFormat()
+    {
+        return Admin::getAlternativeDateFormat() ?? null;
+    }
+
     public function display($format = null)
     {
         if (!$this->getValue()) {
@@ -14,8 +19,8 @@ class DateFormat extends AbstractDisplayer
         }
 
         if ($format == null) {
-            if (Grid::getAlternativeDateFormat()) {
-                $format = Grid::getAlternativeDateFormat();
+            if ($this->getAlternativeFormat() !== null) {
+                $format = $this->getAlternativeFormat();
             } else {
                 $format = 'Y-m-d';
             }

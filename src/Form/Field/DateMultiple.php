@@ -2,7 +2,7 @@
 
 namespace MenqzAdmin\Admin\Form\Field;
 
-use MenqzAdmin\Admin\Form;
+use MenqzAdmin\Admin\Admin;
 
 class DateMultiple extends Text
 {
@@ -13,6 +13,11 @@ class DateMultiple extends Text
         $this->format = $format;
 
         return $this;
+    }
+
+    public function getAlternativeFormat()
+    {
+        return Admin::getAlternativeDateFormat() ?? null;
     }
 
     public function prepare($value)
@@ -27,9 +32,9 @@ class DateMultiple extends Text
 
     public function render()
     {
-        if (Form::getAlternativeDateFormat() !== null) {
+        if ($this->getAlternativeFormat() !== null) {
             $this->options['altInput'] = true;
-            $this->options['altFormat'] = Form::getAlternativeDateFormat();
+            $this->options['altFormat'] = $this->getAlternativeFormat();
         }
 
         $this->options['dateFormat'] = $this->format;

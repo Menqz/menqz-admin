@@ -2,7 +2,7 @@
 
 namespace MenqzAdmin\Admin\Form\Field;
 
-use MenqzAdmin\Admin\Form;
+use MenqzAdmin\Admin\Admin;
 
 class Date extends Text
 {
@@ -26,7 +26,7 @@ class Date extends Text
 
     public function getAlternativeFormat()
     {
-        return Form::getAlternativeDateFormat() ?? null;
+        return Admin::getAlternativeDateFormat() ?? null;
     }
 
     public function prepare($value)

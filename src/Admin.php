@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use MenqzAdmin\Admin\Auth\Database\Menu;
 use MenqzAdmin\Admin\Controllers\AuthController;
 use MenqzAdmin\Admin\Layout\Content;
+use MenqzAdmin\Admin\Traits\HasAlternativeFormat;
 use MenqzAdmin\Admin\Traits\HasAssets;
 use MenqzAdmin\Admin\Widgets\Navbar;
 
@@ -19,6 +20,7 @@ use MenqzAdmin\Admin\Widgets\Navbar;
 class Admin
 {
     use HasAssets;
+    use HasAlternativeFormat;
 
     /**
      * The menqz-admin version.

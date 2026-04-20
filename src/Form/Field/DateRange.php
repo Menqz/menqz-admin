@@ -2,7 +2,7 @@
 
 namespace MenqzAdmin\Admin\Form\Field;
 
-use MenqzAdmin\Admin\Form;
+use MenqzAdmin\Admin\Admin;
 use MenqzAdmin\Admin\Form\Field;
 
 class DateRange extends Field
@@ -68,7 +68,7 @@ class DateRange extends Field
 
     public function getAlternativeFormat()
     {
-        return Form::getAlternativeDateFormat() ?? null;
+        return Admin::getAlternativeDateFormat() ?? null;
     }
 
     public function render()

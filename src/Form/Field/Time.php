@@ -2,7 +2,7 @@
 
 namespace MenqzAdmin\Admin\Form\Field;
 
-use MenqzAdmin\Admin\Form;
+use MenqzAdmin\Admin\Admin;
 
 class Time extends Date
 {
@@ -10,7 +10,7 @@ class Time extends Date
 
     public function getAlternativeFormat()
     {
-        return Form::getAlternativeTimeFormat() ?? null;
+        return Admin::getAlternativeTimeFormat() ?? null;
     }
 
     public function render()

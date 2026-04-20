@@ -2,7 +2,7 @@
 
 namespace MenqzAdmin\Admin\Form\Field;
 
-use MenqzAdmin\Admin\Form;
+use MenqzAdmin\Admin\Admin;
 use MenqzAdmin\Admin\Form\Field;
 
 class TimeRange extends Field
@@ -65,7 +65,7 @@ class TimeRange extends Field
 
     public function getAlternativeFormat()
     {
-        return Form::getAlternativeTimeFormat() ?? null;
+        return Admin::getAlternativeTimeFormat() ?? null;
     }
 
     public function render()
