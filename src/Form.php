@@ -42,7 +42,6 @@ class Form implements Renderable
     use HasFormAttributes;
     use HandleCascadeFields;
     use ShouldSnakeAttributes;
-    use HasAlternativeFormat;
     /**
      * Remove flag in `has many` form.
      */

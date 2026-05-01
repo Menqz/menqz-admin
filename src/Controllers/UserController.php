@@ -3,6 +3,7 @@
 namespace MenqzAdmin\Admin\Controllers;
 
 use Illuminate\Support\Facades\Hash;
+use MenqzAdmin\Admin\Auth\PasswordPolicy;
 use MenqzAdmin\Admin\Form;
 use MenqzAdmin\Admin\Grid;
 use MenqzAdmin\Admin\Show;
@@ -107,11 +108,14 @@ class UserController extends AdminController
 
         $form->text('name', trans('admin.name'))->rules('required');
         $form->image('avatar', trans('admin.avatar'));
-        $form->password('password', trans('admin.password'))->rules('required|confirmed');
+        $form->password('password', trans('admin.password'))->rules(PasswordPolicy::passwordRules(true));
         $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
             ->default(function ($form) {
                 return $form->model()->password;
             });
+        $form->switch('is_temporary_password', trans('admin.is_temporary_password'))
+            ->default(0)
+            ->help(trans('admin.is_temporary_password_help'));
 
         $form->ignore(['password_confirmation']);
 
@@ -122,8 +126,17 @@ class UserController extends AdminController
         $form->display('updated_at', trans('admin.updated_at'));
 
         $form->saving(function (Form $form) {
+            $form->is_temporary_password = (bool) $form->is_temporary_password;
+
             if ($form->password && $form->model()->password != $form->password) {
                 $form->password = Hash::make($form->password);
+
+                if ($form->is_temporary_password) {
+                    $form->password_changed_at = null;
+                } else {
+                    $form->password_changed_at = now();
+                    $form->is_temporary_password = false;
+                }
             }
         });
 

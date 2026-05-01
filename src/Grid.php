@@ -36,7 +36,6 @@ class Grid
         Concerns\CanExportGrid,
         Concerns\CanDoubleClick,
         ShouldSnakeAttributes,
-        HasAlternativeFormat,
         Macroable {
             __call as macroCall;
         }

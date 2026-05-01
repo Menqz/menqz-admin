@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
+use MenqzAdmin\Admin\Auth\PasswordPolicy;
 use MenqzAdmin\Admin\Facades\Admin;
 use MenqzAdmin\Admin\Form;
 use MenqzAdmin\Admin\Layout\Content;
@@ -207,11 +209,13 @@ class AuthController extends Controller
         $form->text('name', trans('admin.name'))->rules('required');
         $form->email('email', trans('admin.email'))->rules('email');
         $form->image('avatar', trans('admin.avatar'));
-        $form->password('password', trans('admin.password'))->rules('confirmed|required');
+        $form->password('password', trans('admin.password'))->rules(PasswordPolicy::passwordRules(true));
         $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
             ->default(function ($form) {
                 return $form->model()->password;
             });
+        $form->hidden('is_temporary_password');
+        $form->hidden('password_changed_at');
 
         $form->setAction(admin_url('auth/setting'));
 
@@ -220,13 +224,15 @@ class AuthController extends Controller
         $form->saving(function (Form $form) {
             if ($form->password && $form->model()->password != $form->password) {
                 $form->password = Hash::make($form->password);
+                $form->is_temporary_password = 0;
+                $form->password_changed_at = now();
             }
         });
 
-        $form->saved(function () {
+        $form->saved(function (Form $form) {
             admin_toastr(trans('admin.update_succeeded'));
 
-            return redirect(admin_url('auth/setting'));
+            return redirect(admin_url('/'));
         });
 
         return $form;
@@ -263,9 +269,15 @@ class AuthController extends Controller
      */
     protected function sendLoginResponse(Request $request)
     {
-        admin_toastr(trans('admin.login_successful'));
-
         $request->session()->regenerate();
+
+        if (PasswordPolicy::shouldForceChange(Admin::user())) {
+            admin_toastr(trans('admin.password_change_required'), 'warning');
+
+            return redirect()->to(admin_url('auth/setting'));
+        }
+
+        admin_toastr(trans('admin.login_successful'));
 
         return redirect()->intended($this->redirectPath());
     }

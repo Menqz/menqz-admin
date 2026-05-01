@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use MenqzAdmin\Admin\Auth\Database\Menu;
 use MenqzAdmin\Admin\Controllers\AuthController;
 use MenqzAdmin\Admin\Layout\Content;
+use MenqzAdmin\Admin\Traits\HasAlternativeFormat;
 use MenqzAdmin\Admin\Traits\HasAssets;
 use MenqzAdmin\Admin\Widgets\Navbar;
 
@@ -19,6 +20,7 @@ use MenqzAdmin\Admin\Widgets\Navbar;
 class Admin
 {
     use HasAssets;
+    use HasAlternativeFormat;
 
     /**
      * The menqz-admin version.
@@ -304,6 +306,13 @@ class Admin
                 $router->resource('auth/permissions', 'PermissionController')->names('admin.auth.permissions');
                 $router->resource('auth/menu', 'MenuController', ['except' => ['create']])->names('admin.auth.menu');
                 $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']])->names('admin.auth.logs');
+
+                if (config('admin.notifications.enabled')) {
+                    $router->get('notifications/unread', 'NotificationController@unread')->name('admin.notifications.unread');
+                    $router->post('notifications/{id}/read', 'NotificationController@read')->name('admin.notifications.read');
+                    $router->post('notifications/read-all', 'NotificationController@readAll')->name('admin.notifications.read-all');
+                    $router->resource('notifications', 'NotificationController')->names('admin.notifications');
+                }
 
                 $router->post('_handle_form_', 'HandleController@handleForm')->name('admin.handle-form');
                 $router->post('_handle_action_', 'HandleController@handleAction')->name('admin.handle-action');

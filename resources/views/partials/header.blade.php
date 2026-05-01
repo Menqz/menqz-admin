@@ -21,6 +21,10 @@
 
             {!! Admin::getNavbar()->render() !!}
 
+            @if(config('admin.notifications.enabled'))
+                @include('admin::partials.notifications')
+            @endif
+
             <li class="nav-item">
                 <div class="dropdown user-menu d-flex align-items-center p3-3" href="#" role="button" id="user-menu-link" data-bs-toggle="dropdown" aria-expanded="false">
                     <span class="bg-light inline rounded-circle user-image">
@@ -36,7 +40,7 @@
                         </span>
                         <p>
                             <h2>{{ Admin::user()->name }}</h2>
-                            <small>Member since admin {{ Admin::user()->created_at }}</small>
+                            <small>{{ trans('admin.created_at') }} {{ Admin::user()->created_at->format('d/m/Y H:i:s') }}</small>
                         </p>
                     </li>
                     <li class="user-footer p-2 clearfix">

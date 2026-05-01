@@ -3,10 +3,15 @@
 namespace MenqzAdmin\Admin\Grid\Displayers;
 
 use Carbon\Carbon;
-use MenqzAdmin\Admin\Grid;
+use MenqzAdmin\Admin\Admin;
 
 class TimeFormat extends AbstractDisplayer
 {
+    public function getAlternativeFormat()
+    {
+        return Admin::getAlternativeTimeFormat() ?? null;
+    }
+
     public function display($format = null)
     {
         if (!$this->getValue()) {
@@ -14,8 +19,8 @@ class TimeFormat extends AbstractDisplayer
         }
 
         if ($format == null) {
-            if (Grid::getAlternativeTimeFormat()) {
-                $format = Grid::getAlternativeTimeFormat();
+            if ($this->getAlternativeFormat() !== null) {
+                $format = $this->getAlternativeFormat();
             } else {
                 $format = 'H:i:s';
             }

@@ -62,7 +62,11 @@ admin.menu = {
                 function () {
                     admin.menu.close();
                     removeActiveClass();
-                    this.parentNode.classList.add('active');
+                    if (this.classList.contains('collapsed')) {
+                        this.parentNode.classList.remove('active');
+                    } else {
+                        this.parentNode.classList.add('active');
+                    }
                 },
                 false
             );
@@ -397,6 +401,9 @@ admin.pages = {
         admin.grid.init();
         admin.grid.inline_edit.init();
         admin.form.init();
+        if (admin.notification) {
+            admin.notification.init();
+        }
         this.initBootstrap();
     },
 

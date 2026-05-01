@@ -95,6 +95,213 @@
     }
 }
 
+.menqz-admin-notification-trigger {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+
+    &:hover,
+    &:focus {
+        color: inherit;
+    }
+
+    .icon-bell {
+        font-size: 1.4rem;
+    }
+}
+
+.menqz-admin-notification-badge {
+    min-width: 1.2rem;
+    min-height: 1.2rem;
+    font-size: 0.68rem;
+    line-height: 1;
+    box-shadow: 0 0 0 0.18rem rgba(255, 255, 255, 0.92);
+    font-style: normal;
+
+}
+
+.menqz-admin-notification-canvas {
+    width: min(400px, 100vw);
+    background: #fff;
+    border-left: 1px solid rgba(15, 23, 42, 0.08);
+    line-height: normal;
+}
+
+.menqz-admin-notification-canvas .offcanvas-header {
+    padding: 1.35rem 1.5rem 1rem;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.07);
+}
+
+.menqz-admin-notification-canvas .offcanvas-backdrop {
+    z-index: 1000 !important;
+}
+
+.menqz-admin-notification-heading {
+    min-width: 0;
+}
+
+.menqz-admin-notification-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.4rem;
+    height: 1.4rem;
+    padding: 0 0.35rem;
+    border-radius: 999px;
+    background: rgba(58, 150, 255, 0.1);
+    color: $primary;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.menqz-admin-notification-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.95rem 1.5rem 1rem;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.07);
+
+    .btn-link {
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: $primary;
+
+        &:hover,
+        &:focus {
+            color: darken($primary, 8%);
+        }
+
+        &:disabled {
+            color: $secondary;
+            opacity: 0.65;
+        }
+    }
+}
+
+.menqz-admin-notification-list {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.menqz-admin-notification-item {
+    display: flex;
+    gap: 0.9rem;
+    padding: 1.15rem 1.5rem;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.07);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background: #f8fbff;
+    }
+}
+
+.menqz-admin-notification-icon {
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 1.25rem;
+    color: #64748b;
+    font-size: 1rem;
+    padding-top: 0.15rem;
+}
+
+.menqz-admin-notification-body {
+    min-width: 0;
+    flex: 1;
+}
+
+.menqz-admin-notification-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.menqz-admin-notification-title {
+    font-size: 1rem;
+    line-height: 1.35;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.menqz-admin-notification-dismiss {
+    border: 0;
+    background: transparent;
+    color: #94a3b8;
+    padding: 0;
+    line-height: 1;
+    flex-shrink: 0;
+
+    &:hover,
+    &:focus {
+        color: #475569;
+    }
+}
+
+.menqz-admin-notification-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.2rem;
+}
+
+.menqz-admin-notification-time {
+    color: #64748b;
+    font-size: 0.84rem;
+}
+
+.menqz-admin-notification-description {
+    margin: 0.7rem 0 0;
+    color: #475569;
+    font-size: 0.93rem;
+    line-height: 1.55;
+}
+
+.menqz-admin-notification-action {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 0.8rem;
+    color: $primary;
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+        color: darken($primary, 8%);
+        text-decoration: underline;
+    }
+}
+
+.menqz-admin-notification-empty {
+    padding: 3rem 1.5rem;
+    text-align: center;
+    color: #64748b;
+
+    i {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        margin-bottom: 0.85rem;
+        border-radius: 999px;
+        background: #f1f5f9;
+        color: #64748b;
+    }
+}
+
+.menqz-admin-notification-footer {
+    padding: 1rem 1.5rem 1.35rem;
+    border-top: 1px solid rgba(15, 23, 42, 0.07);
+    background: #fff;
+}
+
 @media (min-width: 576px) {
     .side-menu-closed {
         .custom-navbar .navbar-brand {
@@ -207,6 +414,7 @@ main#main {
 main#main footer.fixed-bottom {
     margin-left: var(--menu-width);
     transition: all 0.3s;
+    z-index: 10;
 }
 
 .side-menu-closed {
@@ -455,6 +663,8 @@ main#main footer.fixed-bottom {
         }
 
         button {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
             border-top-right-radius: 14px;
             border-bottom-right-radius: 14px;
             background: var(--menu-active-bg);
