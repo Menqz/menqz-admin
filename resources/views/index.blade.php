@@ -57,6 +57,12 @@
 
     <button id="totop" title="Go to top" style="display: none;"><i class="icon-chevron-up"></i></button>
 
+    @php($adminVite = Admin::vite())
+
+    @if($adminVite)
+        @vite($adminVite)
+    @endif
+
     <script>
         function LA() {}
         LA.token = "{{ csrf_token() }}";

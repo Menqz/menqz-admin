@@ -29,6 +29,11 @@ trait HasAssets
      */
     public static $js = [];
 
+     /**
+     * @var array
+     */
+    public static $vite = [];
+
     /**
      * @var array
      */
@@ -184,6 +189,24 @@ trait HasAssets
         $js = array_filter(array_unique($js));
 
         return view('admin::partials.js', compact('js'));
+    }
+
+    /**
+     * Add js or get all js.
+     *
+     * @param null $vitePath
+     *
+     * @return array
+     */
+    public static function vite($vitePath = null)
+    {
+        if (!is_null($vitePath)) {
+            return self::$vite = array_merge(self::$vite, (array) $vitePath);
+        }
+
+        $vite = array_filter(array_unique(static::$vite));
+
+        return $vite;
     }
 
     /**
