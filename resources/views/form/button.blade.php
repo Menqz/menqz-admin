@@ -10,8 +10,8 @@
         </button>
         @if($useUnlockButton)
             <button type="button"
-                    class="unlock-{{ $id }} btn btn-primary py-3  py-md-2"
-                    data-ref="{{ $id }}"
+                    class="unlock-{{ $id }} btn btn-primary py-3 py-md-2"
+                    data-ref="{{ $class }}"
                     style="margin-left: -3px">
                 <i class="icon-lock"></i>
             </button>
@@ -21,7 +21,7 @@
     <div class="{{$viewClass['form-group']}}">
         <label class="{{$viewClass['label']}} form-label"></label>
         <div class="{{$viewClass['field']}}">
-            <input type='button' value='{{$label}}' class="btn {{ $class }}" {!! $attributes !!} />
+            <input type='button' value='{{$label}}' class="btn {{ $id }} {{ $class }}" {!! $attributes !!} />
         </div>
     </div>
 @endif

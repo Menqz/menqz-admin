@@ -56,6 +56,7 @@ class Button extends Field
                 e.preventDefault();
                 let icon = this.getElementsByTagName('i')[0];
                 let button = this;
+                let ref = this.dataset.ref;
                 Swal.fire({
                     title: '$message',
                     icon: 'warning',
@@ -65,7 +66,7 @@ class Button extends Field
                 }).then(
                     function (result) {
                         if (result.value == true) {
-                            document.querySelectorAll('.{$this->id}').forEach(button=>{button.disabled = false});
+                            document.querySelectorAll('.'+ref).forEach(button=>{button.disabled = false});
                             icon.classList.remove('icon-lock');
                             icon.classList.add('icon-lock-open');
                             button.disabled = true;
