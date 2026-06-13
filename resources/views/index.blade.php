@@ -12,6 +12,12 @@
     <link rel="shortcut icon" href="{{$favicon}}">
     @endif
 
+    <script>
+        function LA() {}
+        LA.token = "{{ csrf_token() }}";
+        LA.user = @json($_user_);
+    </script>
+
     {!! Admin::css() !!}
     {!! Admin::headerJs() !!}
     {!! Admin::js() !!}

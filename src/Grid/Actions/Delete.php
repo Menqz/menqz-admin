@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use MenqzAdmin\Admin\Actions\Response;
 use MenqzAdmin\Admin\Actions\RowAction;
+use MenqzAdmin\Admin\Auth\CrudGate;
+use MenqzAdmin\Admin\Auth\Database\CrudPermission;
+use MenqzAdmin\Admin\Auth\PermissionMode;
 
 class Delete extends RowAction
 {
@@ -19,6 +22,17 @@ class Delete extends RowAction
     public function name()
     {
         return __('admin.delete');
+    }
+
+    public function authorize($user, $model = null): bool
+    {
+        if (!PermissionMode::isCrud()) {
+            return true;
+        }
+
+        $resource = CrudGate::resourceFromUrl($this->getResource());
+
+        return $resource ? $user->crudCan($resource, CrudPermission::ACTION_DELETE) : true;
     }
 
     public function addScript()

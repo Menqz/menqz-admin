@@ -128,6 +128,20 @@ class Content implements Renderable
     }
 
     /**
+     * Set breadcrumb of content.
+     *
+     * @param bool $breadcrumb
+     *
+     * @return $this
+     */
+    public function withoutBreadcrumb()
+    {
+        $this->breadcrumb = [];
+
+        return $this;
+    }
+
+    /**
      * Validate content breadcrumb.
      *
      * @param array $breadcrumb

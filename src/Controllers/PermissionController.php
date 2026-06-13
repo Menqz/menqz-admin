@@ -2,7 +2,12 @@
 
 namespace MenqzAdmin\Admin\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use MenqzAdmin\Admin\Auth\Database\CrudPermission;
+use MenqzAdmin\Admin\Auth\Permission as Checker;
+use MenqzAdmin\Admin\Auth\PermissionMode;
+use MenqzAdmin\Admin\Facades\Admin;
 use MenqzAdmin\Admin\Form;
 use MenqzAdmin\Admin\Grid;
 use MenqzAdmin\Admin\Show;
@@ -29,6 +34,25 @@ class PermissionController extends AdminController
         $permissionModel = config('admin.database.permissions_model');
 
         $grid = new Grid(new $permissionModel());
+
+        $grid->tools(function (Grid\Tools $tools) {
+            $current = PermissionMode::current();
+            $action = admin_url('auth/permission-mode');
+            $csrf = csrf_token();
+            $routeSelected = $current === PermissionMode::MODE_ROUTE ? 'selected' : '';
+            $crudSelected = $current === PermissionMode::MODE_CRUD ? 'selected' : '';
+
+            $tools->prepend(<<<HTML
+            <form method="POST" action="{$action}" class="d-inline-flex align-items-center me-2">
+                <input type="hidden" name="_token" value="{$csrf}">
+                <select name="mode" class="form-select form-select-sm me-2" style="width: 160px;">
+                    <option value="route" {$routeSelected}>Permissões: Rotas</option>
+                    <option value="crud" {$crudSelected}>Permissões: CRUD</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-outline-primary">Aplicar</button>
+            </form>
+            HTML);
+        });
 
         $grid->column('id', 'ID')->sortable();
         $grid->column('slug', trans('admin.slug'));
@@ -140,6 +164,25 @@ class PermissionController extends AdminController
         $form->display('updated_at', trans('admin.updated_at'));
 
         return $form;
+    }
+
+    public function setMode(Request $request)
+    {
+        if (PermissionMode::isCrud()) {
+            if (!Admin::user()->crudCan('auth.permissions', CrudPermission::ACTION_EDIT)) {
+                Checker::error();
+            }
+        } else {
+            Checker::check('auth/permissions');
+        }
+
+        $mode = (string) $request->input('mode', PermissionMode::MODE_ROUTE);
+
+        PermissionMode::set($mode);
+
+        admin_toastr('Modo de permissões atualizado.');
+
+        return redirect()->back();
     }
 
     /**

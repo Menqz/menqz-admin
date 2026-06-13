@@ -4,7 +4,10 @@ namespace MenqzAdmin\Admin\Middleware;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use MenqzAdmin\Admin\Auth\CrudGate;
+use MenqzAdmin\Admin\Auth\Database\CrudPermission;
 use MenqzAdmin\Admin\Auth\Permission as Checker;
+use MenqzAdmin\Admin\Auth\PermissionMode;
 use MenqzAdmin\Admin\Facades\Admin;
 
 class Permission
@@ -30,6 +33,41 @@ class Permission
         }
 
         if (!Admin::user() || !empty($args) || $this->shouldPassThrough($request)) {
+            return $next($request);
+        }
+
+        if (PermissionMode::isCrud()) {
+            if ($request->is(trim(admin_base_path('auth/permission-mode'), '/'))) {
+                $resource = CrudPermission::normalizeResource('auth.permissions');
+                $action = CrudPermission::ACTION_EDIT;
+
+                CrudPermission::ensure($resource, $action);
+
+                if (!Admin::user()->crudCan($resource, $action)) {
+                    Checker::error();
+                }
+
+                return $next($request);
+            }
+
+            if ($this->checkRoutePermission($request)) {
+                return $next($request);
+            }
+
+            $resource = CrudGate::resourceFromPath($request->path())
+                ?: CrudGate::resourceFromRouteName(optional($request->route())->getName());
+            if (!$resource) {
+                return $next($request);
+            }
+
+            $action = CrudGate::actionFromRequest($request);
+
+            CrudPermission::ensure($resource, $action);
+
+            if (!Admin::user()->crudCan($resource, $action)) {
+                Checker::error();
+            }
+
             return $next($request);
         }
 

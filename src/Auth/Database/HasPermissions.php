@@ -3,6 +3,7 @@
 namespace MenqzAdmin\Admin\Auth\Database;
 
 use Illuminate\Support\Collection;
+use MenqzAdmin\Admin\Auth\Database\CrudPermission;
 
 trait HasPermissions
 {
@@ -14,6 +15,11 @@ trait HasPermissions
     public function allPermissions(): Collection
     {
         return $this->roles()->with('permissions')->get()->pluck('permissions')->flatten()->merge($this->permissions);
+    }
+
+    public function allCrudPermissions(): Collection
+    {
+        return $this->roles()->with('crudPermissions')->get()->pluck('crudPermissions')->flatten()->merge($this->crudPermissions);
     }
 
     /**
@@ -51,6 +57,41 @@ trait HasPermissions
     public function cannot(string $permission): bool
     {
         return !$this->can($permission);
+    }
+
+    public function crudCan(string $resource, string $action): bool
+    {
+        $resource = CrudPermission::normalizeResource($resource);
+        $action = CrudPermission::normalizeAction($action);
+
+        if (empty($resource) || empty($action)) {
+            return true;
+        }
+
+        if ($this->isAdministrator()) {
+            return true;
+        }
+
+        $slugs = [
+            CrudPermission::slugFor($resource, $action),
+            CrudPermission::slugFor($resource, '*'),
+            CrudPermission::slugFor('*', $action),
+            CrudPermission::slugFor('*', '*'),
+        ];
+
+        try {
+            $allSlugs = $this->allCrudPermissions()->pluck('slug');
+        } catch (\Throwable $e) {
+            return false;
+        }
+
+        foreach ($slugs as $slug) {
+            if ($allSlugs->contains($slug)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -116,6 +157,8 @@ trait HasPermissions
             $model->roles()->detach();
 
             $model->permissions()->detach();
+
+            $model->crudPermissions()->detach();
         });
     }
 }

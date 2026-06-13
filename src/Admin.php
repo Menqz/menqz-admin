@@ -304,6 +304,8 @@ class Admin
                 $router->resource('auth/users', 'UserController')->names('admin.auth.users');
                 $router->resource('auth/roles', 'RoleController')->names('admin.auth.roles');
                 $router->resource('auth/permissions', 'PermissionController')->names('admin.auth.permissions');
+                $router->post('auth/permission-mode', 'PermissionController@setMode')
+                    ->name('admin.auth.permission-mode');
                 $router->resource('auth/menu', 'MenuController', ['except' => ['create']])->names('admin.auth.menu');
                 $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']])->names('admin.auth.logs');
 

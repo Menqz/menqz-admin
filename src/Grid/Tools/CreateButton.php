@@ -3,6 +3,10 @@
 namespace MenqzAdmin\Admin\Grid\Tools;
 
 use MenqzAdmin\Admin\Grid;
+use MenqzAdmin\Admin\Auth\CrudGate;
+use MenqzAdmin\Admin\Auth\PermissionMode;
+use MenqzAdmin\Admin\Auth\Database\CrudPermission;
+use MenqzAdmin\Admin\Facades\Admin;
 
 class CreateButton extends AbstractTool
 {
@@ -30,6 +34,13 @@ class CreateButton extends AbstractTool
     {
         if (!$this->grid->showCreateBtn()) {
             return '';
+        }
+
+        if (PermissionMode::isCrud()) {
+            $resource = CrudGate::resourceFromUrl($this->grid->resource());
+            if ($resource && !Admin::user()->crudCan($resource, CrudPermission::ACTION_CREATE)) {
+                return '';
+            }
         }
 
         $new = trans('admin.new');
