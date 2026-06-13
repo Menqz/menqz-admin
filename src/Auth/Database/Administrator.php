@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
 use MenqzAdmin\Admin\Traits\DefaultDatetimeFormat;
+use MenqzAdmin\Admin\Auth\Database\CrudPermission;
 
 /**
  * Class Administrator.
@@ -114,5 +115,14 @@ class Administrator extends Model implements AuthenticatableContract
         $relatedModel = config('admin.database.permissions_model');
 
         return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'permission_id');
+    }
+
+    public function crudPermissions(): BelongsToMany
+    {
+        $pivotTable = config('admin.database.user_crud_permissions_table', 'admin_user_crud_permissions');
+
+        $relatedModel = config('admin.database.crud_permissions_model', CrudPermission::class);
+
+        return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'crud_permission_id');
     }
 }

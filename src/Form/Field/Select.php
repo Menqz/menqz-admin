@@ -422,6 +422,10 @@ JS;
         $this->attribute('data-value', implode(',', (array) $this->value()));
 
         $render = parent::render();
+
+        if ($this->native) {
+            return $render;
+        }
         return $render.$myScript;
     }
 }

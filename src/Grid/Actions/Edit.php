@@ -2,6 +2,9 @@
 
 namespace MenqzAdmin\Admin\Grid\Actions;
 
+use MenqzAdmin\Admin\Auth\CrudGate;
+use MenqzAdmin\Admin\Auth\Database\CrudPermission;
+use MenqzAdmin\Admin\Auth\PermissionMode;
 use MenqzAdmin\Admin\Actions\RowAction;
 
 class Edit extends RowAction
@@ -16,6 +19,17 @@ class Edit extends RowAction
     public function name()
     {
         return __('admin.edit');
+    }
+
+    public function authorize($user, $model = null): bool
+    {
+        if (!PermissionMode::isCrud()) {
+            return true;
+        }
+
+        $resource = CrudGate::resourceFromUrl($this->getResource());
+
+        return $resource ? $user->crudCan($resource, CrudPermission::ACTION_EDIT) : true;
     }
 
     /**

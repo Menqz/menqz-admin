@@ -250,11 +250,9 @@ admin.form.part = {
 
     loadPart: function (url, container) {
         container.innerHTML = this.getLoadingHtml();
-        fetch(url)
-            .then(response => response.text())
-            .then(data => {
-                container.innerHTML = data;
-            });
+        admin.ajax.get(url, {},function(data){
+            container.innerHTML = data.data;
+        });
     },
 
     getLoadingHtml: function () {

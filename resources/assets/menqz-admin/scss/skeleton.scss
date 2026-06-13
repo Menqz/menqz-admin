@@ -399,7 +399,7 @@ aside#sidebar {
 }
 
 main#main {
-    width: calc(100% - var(--menu-width));
+    width: calc(100% - var(--menu-width) - 4px);
     margin-left: var(--menu-width);
     transition: all 0.3s;
     position: relative;

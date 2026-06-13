@@ -1,4 +1,15 @@
-@if(Admin::user()->visible(\Illuminate\Support\Arr::get($item, 'roles', [])) && Admin::user()->can(\Illuminate\Support\Arr::get($item, 'permission')))
+@php
+    $menuPermission = \Illuminate\Support\Arr::get($item, 'permission');
+    $menuUri = \Illuminate\Support\Arr::get($item, 'uri');
+    $menuCan = true;
+    if (\MenqzAdmin\Admin\Auth\PermissionMode::isCrud()) {
+        $resource = $menuPermission ?: \MenqzAdmin\Admin\Auth\CrudGate::resourceFromUrl((string) $menuUri);
+        $menuCan = $resource ? Admin::user()->crudCan($resource, \MenqzAdmin\Admin\Auth\Database\CrudPermission::ACTION_LIST) : true;
+    } else {
+        $menuCan = Admin::user()->can($menuPermission);
+    }
+@endphp
+@if(Admin::user()->visible(\Illuminate\Support\Arr::get($item, 'roles', [])) && $menuCan)
     @if(!isset($item['children']))
         <li>
             @if(url()->isValidUrl($item['uri']))

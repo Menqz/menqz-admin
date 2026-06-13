@@ -134,6 +134,10 @@ abstract class RowAction extends GridAction
      */
     public function render()
     {
+        if (!$this->passesAuthorization($this->row)) {
+            return '';
+        }
+
         $linkClass = ($this->parent->getActionClass() != "MenqzAdmin\Admin\Grid\Displayers\Actions\Actions") ? 'dropdown-item' : '';
         $icon = $this->getIcon();
 

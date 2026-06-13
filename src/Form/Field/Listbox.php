@@ -55,13 +55,15 @@ class Listbox extends MultipleSelect
         $settings = json_encode($settings);
 
         $this->script .= <<<SCRIPT
-        let dualListbox = new DualListbox("{$this->getElementClassSelector()}",$settings);
+            let dualListbox = new DualListbox("{$this->getElementClassSelector()}",$settings);
+        SCRIPT;
 
-
-SCRIPT;
+        $myScript = '<script>'.$this->script.'</script>';
+        $this->script = '';
 
         //$this->attribute('data-value', implode(',', (array) $this->value()));
-
-        return parent::render();
+        $this->useNative();
+        $render = parent::render();
+        return $render.$myScript;
     }
 }
