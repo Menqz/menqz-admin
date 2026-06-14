@@ -56,8 +56,8 @@
                 @if($use_destroy_in_cancel)
                     <script>
                         var destroy = false;
-                        function cancelDestroy(route_previous) {
-                            const id_object = document.querySelector('.id_object') ? document.querySelector('.id_object').value : null;
+                        function cancelDestroy() {
+                            const id_object = document.querySelector('input[name="id_object"]') ? document.querySelector('input[name="id_object"]').value : null;
                             var rotaDelete = "{{$route_destroy}}?forceDelete=1";
                             destroy = true;
                             if (id_object > 0 && rotaDelete != '') {
