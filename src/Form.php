@@ -347,6 +347,10 @@ class Form implements Renderable
 
             collect(explode(',', $id))->filter()->each(function ($id) use ($forceDelete) {
                 $builder = $this->model()->newQuery();
+                $usePersistent = config('admin.database.use_persistent', false);
+                if ($usePersistent) {
+                    $builder = $this->model()->newQuery()->withoutGlobalScope('persistent');
+                }
 
                 if ($this->isSoftDeletes && !$forceDelete) {
                     $builder = $builder->withTrashed();
