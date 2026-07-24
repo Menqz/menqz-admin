@@ -426,7 +426,7 @@ class Admin
     /**
      * Add js or get all js.
      *
-     * @param null $vitePath
+     * @param null $isPart
      *
      * @return array
      */
