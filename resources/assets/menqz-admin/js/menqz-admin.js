@@ -431,6 +431,21 @@ admin.pages = {
     },
 };
 
+admin.event = {
+    emit: function (eventName, data = {}) {
+        const detail = Object.assign(data);
+
+        document.dispatchEvent(
+            new CustomEvent(eventName, {
+                detail: detail,
+            })
+        );
+    },
+    on: function (eventName, callback) {
+        document.addEventListener(eventName, callback);
+    },
+};
+
 admin.collectGarbage = function () {
     document.querySelectorAll('.flatpickr-calendar').forEach((cal) => {
         cal.remove();
