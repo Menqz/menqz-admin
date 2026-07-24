@@ -101,6 +101,22 @@ admin.form.part = {
                 admin.form.part.loadPart(url, partObj.container);
             }
         });
+
+        part.container.addEventListener('dblclick', function (e) {
+            e.preventDefault();
+
+            const partId = this.getAttribute('data-part-id');
+            const partObj = admin.form.part.getPartById(partId);
+
+            let target = e.target.closest('tr');
+            if (target && target.dataset.key) {
+                let btnEdit = target.querySelector('.grid-edit-btn');
+                if (btnEdit) {
+                    let url = btnEdit.getAttribute('href');
+                    admin.form.part.openActionWithMainSave(url, partObj, trans('edit'));
+                }
+            }
+        });
     },
 
     openActionWithMainSave: function (url, partObj, subTitle) {
