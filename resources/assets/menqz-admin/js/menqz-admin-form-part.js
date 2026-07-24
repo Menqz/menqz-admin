@@ -146,6 +146,11 @@ admin.form.part = {
         }, function (error) {
             console.log(error);
             Swal.close();
+            admin.event.emit('admin.form.part.error_saving_parent', {
+                part: partObj,
+                error: error,
+                url: url,
+            });
         });
     },
 
@@ -198,6 +203,14 @@ admin.form.part = {
                         admin.form.part.loadPart(partObj.url_index, partObj.container);
                         admin.modal.setLoading(false);
                         admin.modal.close();
+
+                        admin.event.emit('admin.form.part.saved', {
+                            part: partObj,
+                            response: response.data,
+                            method: method,
+                            url: url,
+                        });
+
                         return true;
                     }
                     admin.modal.setLoading(false);
@@ -217,7 +230,17 @@ admin.form.part = {
                     admin.modal.setLoading(false);
                     return false;
                 }
-            }
+            },
+            onCancel: async function () {
+                admin.event.emit('admin.form.part.canceled', {
+                    part: partObj,
+                });
+            },
+            onAfterLoad: function (modal) {
+                admin.event.emit('admin.form.part.opened', {
+                    part: partObj
+                });
+            },
         });
     },
 
@@ -258,6 +281,13 @@ admin.form.part = {
                     admin.ajax.post(url,data,function(data){
                         resolve(data);
                         admin.form.part.loadPart(partObj.url_index, partObj.container);
+
+                        admin.event.emit('admin.form.part.deleted', {
+                            part: partObj,
+                            response: data,
+                            method: 'delete',
+                            url: url,
+                        });
                     });
                 });
             }
