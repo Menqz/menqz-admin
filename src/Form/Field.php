@@ -289,6 +289,8 @@ class Field implements Renderable
             $this->init();
         }
 
+
+        $this->setElementClass($this->id);
         $this->setElementClass($this->id.'_'.mt_rand());
     }
 
