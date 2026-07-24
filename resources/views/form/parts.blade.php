@@ -8,6 +8,7 @@
                     data-bs-toggle="tab"
                     data-bs-target="#tab-part-{{ $part['id'] }}"
                     data-part-id="{{ $part['id'] }}"
+                    data-part-name="{{ $part['name'] }}"
                     data-form-id="{{ $part['formId'] }}"
                     data-url="{{ route('admin.handle-part') }}?class={{ urlencode($part['class']) }}&parent_id={{ $part['parentId'] }}&parent_class={{ urlencode($part['parentClass']) }}">
                     {{ $part['title'] }} <i class="icon-exclamation-circle text-red hide"></i>
@@ -22,6 +23,7 @@
             <div class="tab-pane {{ $part['active'] ? 'active' : '' }} px-2"
                 id="tab-part-{{ $part['id'] }}"
                 data-part-id="{{ $part['id'] }}"
+                data-part-name="{{ $part['name'] }}"
                 data-form-id="{{ $part['formId'] }}"
                 data-url="{{ route('admin.handle-part') }}?class={{ urlencode($part['class']) }}&parent_id={{ $part['parentId'] }}&parent_class={{ urlencode($part['parentClass']) }}">
 
@@ -39,6 +41,7 @@
             title: '{{ $part['title'] }}',
             url: '{{ route('admin.handle-part') }}',
             id_part: '{{ $part['id'] }}',
+            name_part: '{{ $part['name'] }}',
             main_class: '{{ urlencode($part['class']) }}',
             parent_id: '{{ $part['parentId'] }}',
             parent_class: '{{ urlencode($part['parentClass']) }}',
