@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Log\Logger;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -139,7 +140,6 @@ class Form implements Renderable
      * @var bool
      */
     protected $isSoftDeletes = false;
-
 
     /**
      * Whether the footer is fixed.
@@ -273,12 +273,14 @@ class Form implements Renderable
      *
      * @return $this
      */
-    public function part($title, $partController, bool $active = false): self
+    public function part($title, $partController, ?string $name = null, bool $active = false): self
     {
         $class          = $partController;
         $parentId       = $this->model->id;
         $parentClass    = get_class($this->model);
-        $this->setPart()->append($title, $class, $parentClass, $parentId, $active);
+        $name           = $name ?? uniqid();
+
+        $this->setPart()->append($title, $class, $parentClass, $parentId, $name, $active);
 
         return $this;
     }
