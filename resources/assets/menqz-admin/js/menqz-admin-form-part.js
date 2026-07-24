@@ -12,6 +12,7 @@ admin.form.part = {
     add: function ({
         title = '',
         id_part = null,
+        name_part = null,
         url = null,
         main_class = null,
         parent_id = null,
@@ -29,6 +30,7 @@ admin.form.part = {
             url: url,
             url_index: urlIndex,
             id_part: id_part,
+            name_part: name_part,
             main_class: main_class,
             parent_id: parent_id,
             parent_class: parent_class,
