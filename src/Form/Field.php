@@ -291,7 +291,7 @@ class Field implements Renderable
 
 
         $this->setElementClass($this->id);
-        $this->setElementClass($this->id.'_'.mt_rand());
+        $this->setElementClass([$this->id.'_'.mt_rand()]);
     }
 
     /**
@@ -1340,7 +1340,6 @@ class Field implements Renderable
     public function getElementClassString()
     {
         $elementClass = $this->getElementClass();
-
         if (Arr::isAssoc($elementClass)) {
             $classes = [];
 
@@ -1348,9 +1347,8 @@ class Field implements Renderable
                 $classes[$index] = is_array($class) ? implode(' ', $class) : $class;
             }
 
-            return $classes;
+            return implode(' ', $classes);
         }
-
         return implode(' ', $elementClass);
     }
 
