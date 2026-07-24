@@ -34,6 +34,11 @@ trait HasAssets
      */
     public static $vite = [];
 
+     /**
+     * @var array
+     */
+    public static $vitePart = [];
+
     /**
      * @var array
      */
@@ -97,6 +102,7 @@ trait HasAssets
         'vendor/menqz-admin/menqz-admin/js/polyfills.js',
         'vendor/menqz-admin/menqz-admin/js/helpers.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin.js',
+        'vendor/menqz-admin/menqz-admin/js/menqz-admin-dialog.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-actions.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-grid.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-grid-inline-edit.js',
@@ -198,15 +204,33 @@ trait HasAssets
      *
      * @return array
      */
-    public static function vite($vitePath = null)
+    public static function vite($vitePath = null, $part = false)
     {
+        if ($part) {
+            return self::vitePart($vitePath);
+        }
+
         if (!is_null($vitePath)) {
             return self::$vite = array_merge(self::$vite, (array) $vitePath);
         }
 
-        $vite = array_filter(array_unique(static::$vite));
+        return array_filter(array_unique(static::$vite));
+    }
 
-        return $vite;
+    /**
+     * Add js or get all js.
+     *
+     * @param null $vitePath
+     *
+     * @return array
+     */
+    public static function vitePart($vitePath = null)
+    {
+        if (!is_null($vitePath)) {
+            return self::$vitePart = array_merge(self::$vitePart, (array) $vitePath);
+        }
+
+        return array_filter(array_unique(static::$vitePart));
     }
 
     /**
