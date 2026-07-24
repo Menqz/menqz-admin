@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use MenqzAdmin\Admin\Grid;
 use MenqzAdmin\Admin\Form;
 use Illuminate\Http\Request;
+use MenqzAdmin\Admin\Facades\Admin;
 use MenqzAdmin\Admin\Traits\HasCustomHooks;
 
 abstract class AdminPartController extends Controller
@@ -46,6 +47,8 @@ abstract class AdminPartController extends Controller
      */
     public function __construct(?Model $parentModel = null)
     {
+        Admin::isPart(true);
+
         $this->parentModel = $parentModel;
 
         $this->hook("alterGrid", function ($scope, $grid) {

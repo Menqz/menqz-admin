@@ -554,6 +554,10 @@ class Builder
         $attributes['action'] = $this->getAction();
         $attributes['method'] = Arr::get($options, 'method', 'post');
         $attributes['class'] = $this->formClass;
+        $isPart = Admin::isPart();
+        if ($isPart) {
+            $attributes['class'] .= ' form-part';
+        }
         if ($this->hasFile()) {
             $attributes['enctype'] = 'multipart/form-data';
         }
@@ -709,10 +713,12 @@ JS;
 
         $this->addCascadeScript();
 
+        $isPart = Admin::isPart();
         $data = [
             'form'      => $this,
             'tabObj'    => $tabObj,
             'partObj'   => $partObj,
+            'isPart'    => $isPart,
             'width'     => $this->width,
             'layout'    => $this->form->getLayout(),
             'fullscreen' => $this->isFullscreen(),
