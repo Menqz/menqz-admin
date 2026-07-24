@@ -68,7 +68,11 @@ class Currency extends Text
      */
     public function render()
     {
-        $this->value(Helper::formatCurrency($this->value));
+        $precision = 2;
+        if (isset($this->options['digits'])) {
+            $precision = $this->options['digits'];
+        }
+        $this->value(Helper::formatCurrency($this->value, $precision));
         $this->inputmask($this->options);
 
         $script = '<script>' . $this->script . '</script>';
@@ -76,6 +80,7 @@ class Currency extends Text
 
         $this->prepend($this->symbol);
         $this->style('max-width', '160px');
+        $this->style('text-align', 'right');
 
         $render = parent::render();
         return $render . $script;
