@@ -59,7 +59,7 @@ admin.form = {
         });
     },
 
-    submit: function (form, result_function, error_function) {
+    submit: async function (form, result_function, error_function) {
         this.disableSubmitButton(form);
         let method = form.getAttribute('method').toLowerCase();
         let url = String(form.getAttribute('action')).split('?')[0];
@@ -80,10 +80,13 @@ admin.form = {
                     admin.ajax.setUrl(url);
                 }
             }
+
             if (typeof result_function === 'function') {
-                admin.ajax.request(url, obj, result_function);
+                await admin.ajax.request(url, obj, result_function, error_function);
+                this.enableSubmitButton(form);
             } else {
-                admin.ajax.load(url, obj);
+                await admin.ajax.load(url, obj);
+                this.enableSubmitButton(form);
             }
         } else {
             this.enableSubmitButton(form);
