@@ -57,7 +57,7 @@ admin.form.part = {
             }
             var url = partObj.url+'?class='+partObj.main_class+'&parent_id='+partObj.parent_id+'&parent_class='+partObj.parent_class;
 
-            admin.form.part.loadPart(url, partObj.container);
+            admin.form.part.loadPart(url, partObj.container, partObj);
         });
 
         part.container.addEventListener('click', function (e) {
@@ -100,7 +100,7 @@ admin.form.part = {
             target = e.target.closest('.icon-fw');
             if (target) {
                 let url = target.getAttribute('href');
-                admin.form.part.loadPart(url, partObj.container);
+                admin.form.part.loadPart(url, partObj.container, partObj);
             }
         });
 
@@ -202,7 +202,7 @@ admin.form.part = {
                     });
 
                     if (response && response.status >= 200 && response.status < 300) {
-                        admin.form.part.loadPart(partObj.url_index, partObj.container);
+                        admin.form.part.loadPart(partObj.url_index, partObj.container, partObj);
                         admin.modal.setLoading(false);
                         admin.modal.close();
 
@@ -282,7 +282,7 @@ admin.form.part = {
                     let data = {_method:'delete'};
                     admin.ajax.post(url,data,function(data){
                         resolve(data);
-                        admin.form.part.loadPart(partObj.url_index, partObj.container);
+                        admin.form.part.loadPart(partObj.url_index, partObj.container, partObj);
 
                         admin.event.emit('admin.form.part.deleted', {
                             part: partObj,
@@ -296,10 +296,13 @@ admin.form.part = {
         }).then(admin.resource.default_swal_response);
     },
 
-    loadPart: function (url, container) {
+    loadPart: function (url, container, partObj) {
         container.innerHTML = this.getLoadingHtml();
         admin.ajax.get(url, {},function(data){
             container.innerHTML = data.data;
+            admin.event.emit('admin.form.part.loaded', {
+                part: partObj
+            });
         });
     },
 
