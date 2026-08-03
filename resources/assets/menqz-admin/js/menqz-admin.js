@@ -267,11 +267,11 @@ admin.ajax = {
 
     // use load for loading without history state
     // and don't refresh the url
-    load: function (url, obj) {
-        this.request(url, obj);
+    load: async function (url, obj) {
+        await this.request(url, obj);
     },
 
-    request: function (url, obj, result_function) {
+    request: async function (url, obj, result_function, error_function) {
         if (typeof obj == 'undefined') {
             obj = {};
         }
@@ -281,7 +281,7 @@ admin.ajax = {
         obj.url = url;
         let axios_obj = merge_default(this.defaults, obj);
 
-        axios(axios_obj)
+        await axios(axios_obj)
             .then(function (response) {
                 if (typeof result_function === 'function') {
                     result_function(response);
@@ -290,7 +290,11 @@ admin.ajax = {
                 }
             })
             .catch(function (error) {
-                admin.ajax.error(error);
+                if (typeof error_function === 'function') {
+                    error_function(error);
+                } else {
+                    admin.ajax.error(error);
+                }
             })
             .then(function () {
                 NProgress.done();
@@ -318,24 +322,24 @@ admin.ajax = {
             const formData = new FormData();
             formData.append('name', value);
          */
-    post: function (url, data, result_function) {
+    post: async function (url, data, result_function, error_function) {
         let obj = {
             method: 'post',
             data: data,
             url: url,
         };
         obj.data._token = LA.token;
-        this.request(url, obj, result_function);
+        await this.request(url, obj, result_function, error_function);
     },
 
-    get: function (url, data, result_function) {
+    get: function (url, data, result_function, error_function) {
         let obj = {
             method: 'get',
             data: data,
             url: url,
         };
         obj.data._token = LA.token;
-        this.request(url, obj, result_function);
+        this.request(url, obj, result_function, error_function);
     },
 
     done: function (response) {
@@ -411,7 +415,7 @@ admin.pages = {
         if (document.querySelector('main h1')) {
             let h1_title = document.querySelector('main h1').innerText;
             if (h1_title) {
-                document.title = 'Admin | ' + h1_title;
+                document.title = 'Global | ' + h1_title;
             }
         }
     },
@@ -428,6 +432,21 @@ admin.pages = {
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
+    },
+};
+
+admin.event = {
+    emit: function (eventName, data = {}) {
+        const detail = Object.assign(data);
+
+        document.dispatchEvent(
+            new CustomEvent(eventName, {
+                detail: detail,
+            })
+        );
+    },
+    on: function (eventName, callback) {
+        document.addEventListener(eventName, callback);
     },
 };
 

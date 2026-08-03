@@ -4,6 +4,7 @@ namespace MenqzAdmin\Admin\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
 
 class PartController extends Controller
 {
@@ -18,8 +19,13 @@ class PartController extends Controller
         }
 
         $parentModel = null;
+        $usePersistent = config('admin.database.use_persistent', false);
         if ($parentId && $parentClass && class_exists($parentClass)) {
-            $parentModel = $parentClass::find($parentId);
+            if ($usePersistent) {
+                $parentModel = $parentClass::withoutGlobalScope('persistent')->find($parentId);
+            } else {
+                $parentModel = $parentClass::find($parentId);
+            }
         }
 
         if (!$modo && !is_numeric($id)) {
@@ -76,7 +82,8 @@ class PartController extends Controller
 
         try {
             $part = new $class($parentModel);
-            return $part->update($id);
+            $result = $part->update($id);
+            return $result;
         } catch (\Exception $e) {
             return response()->json(['success'=> false, 'message'=>$e->getMessage()], 500);
         }

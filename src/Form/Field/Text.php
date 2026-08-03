@@ -59,7 +59,14 @@ class Text extends Field
                 'append'  => $this->append,
             ]);
 
-        return parent::render();
+        $scriptInline = '';
+        if ($this->script) {
+            $scriptInline = '<script>'.$this->script.'</script>';
+            $this->script = '';
+        }
+
+        $render = parent::render();
+        return $render.$scriptInline;
     }
 
     /**

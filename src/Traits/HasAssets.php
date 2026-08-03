@@ -97,6 +97,7 @@ trait HasAssets
         'vendor/menqz-admin/menqz-admin/js/polyfills.js',
         'vendor/menqz-admin/menqz-admin/js/helpers.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin.js',
+        'vendor/menqz-admin/menqz-admin/js/menqz-admin-dialog.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-actions.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-grid.js',
         'vendor/menqz-admin/menqz-admin/js/menqz-admin-grid-inline-edit.js',
@@ -204,9 +205,7 @@ trait HasAssets
             return self::$vite = array_merge(self::$vite, (array) $vitePath);
         }
 
-        $vite = array_filter(array_unique(static::$vite));
-
-        return $vite;
+        return array_filter(array_unique(static::$vite));
     }
 
     /**

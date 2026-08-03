@@ -12,6 +12,7 @@ admin.form.part = {
     add: function ({
         title = '',
         id_part = null,
+        name_part = null,
         url = null,
         main_class = null,
         parent_id = null,
@@ -29,6 +30,7 @@ admin.form.part = {
             url: url,
             url_index: urlIndex,
             id_part: id_part,
+            name_part: name_part,
             main_class: main_class,
             parent_id: parent_id,
             parent_class: parent_class,
@@ -55,7 +57,7 @@ admin.form.part = {
             }
             var url = partObj.url+'?class='+partObj.main_class+'&parent_id='+partObj.parent_id+'&parent_class='+partObj.parent_class;
 
-            admin.form.part.loadPart(url, partObj.container);
+            admin.form.part.loadPart(url, partObj.container, partObj);
         });
 
         part.container.addEventListener('click', function (e) {
@@ -98,7 +100,23 @@ admin.form.part = {
             target = e.target.closest('.icon-fw');
             if (target) {
                 let url = target.getAttribute('href');
-                admin.form.part.loadPart(url, partObj.container);
+                admin.form.part.loadPart(url, partObj.container, partObj);
+            }
+        });
+
+        part.container.addEventListener('dblclick', function (e) {
+            e.preventDefault();
+
+            const partId = this.getAttribute('data-part-id');
+            const partObj = admin.form.part.getPartById(partId);
+
+            let target = e.target.closest('tr');
+            if (target && target.dataset.key) {
+                let btnEdit = target.querySelector('.grid-edit-btn');
+                if (btnEdit) {
+                    let url = btnEdit.getAttribute('href');
+                    admin.form.part.openActionWithMainSave(url, partObj, trans('edit'));
+                }
             }
         });
     },
@@ -130,6 +148,11 @@ admin.form.part = {
         }, function (error) {
             console.log(error);
             Swal.close();
+            admin.event.emit('admin.form.part.error_saving_parent', {
+                part: partObj,
+                error: error,
+                url: url,
+            });
         });
     },
 
@@ -179,9 +202,17 @@ admin.form.part = {
                     });
 
                     if (response && response.status >= 200 && response.status < 300) {
-                        admin.form.part.loadPart(partObj.url_index, partObj.container);
+                        admin.form.part.loadPart(partObj.url_index, partObj.container, partObj);
                         admin.modal.setLoading(false);
                         admin.modal.close();
+
+                        admin.event.emit('admin.form.part.saved', {
+                            part: partObj,
+                            response: response.data,
+                            method: method,
+                            url: url,
+                        });
+
                         return true;
                     }
                     admin.modal.setLoading(false);
@@ -201,7 +232,17 @@ admin.form.part = {
                     admin.modal.setLoading(false);
                     return false;
                 }
-            }
+            },
+            onCancel: async function () {
+                admin.event.emit('admin.form.part.canceled', {
+                    part: partObj,
+                });
+            },
+            onAfterLoad: function (modal) {
+                admin.event.emit('admin.form.part.opened', {
+                    part: partObj
+                });
+            },
         });
     },
 
@@ -241,17 +282,27 @@ admin.form.part = {
                     let data = {_method:'delete'};
                     admin.ajax.post(url,data,function(data){
                         resolve(data);
-                        admin.form.part.loadPart(partObj.url_index, partObj.container);
+                        admin.form.part.loadPart(partObj.url_index, partObj.container, partObj);
+
+                        admin.event.emit('admin.form.part.deleted', {
+                            part: partObj,
+                            response: data,
+                            method: 'delete',
+                            url: url,
+                        });
                     });
                 });
             }
         }).then(admin.resource.default_swal_response);
     },
 
-    loadPart: function (url, container) {
+    loadPart: function (url, container, partObj) {
         container.innerHTML = this.getLoadingHtml();
         admin.ajax.get(url, {},function(data){
             container.innerHTML = data.data;
+            admin.event.emit('admin.form.part.loaded', {
+                part: partObj
+            });
         });
     },
 

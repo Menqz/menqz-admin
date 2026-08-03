@@ -257,7 +257,7 @@ JS;
      *
      * @return $this
      */
-    public function ajaxWithMoreParams($url, $idField = 'id', $textField = 'text', $paramId = '')
+    public function ajaxWithMoreParams($url, $idField = 'id', $textField = 'text', $paramId = '', $paramClass = null, $loadAfterChange = false)
     {
         $this->config = array_merge([
             'removeItems'        => true,
@@ -266,30 +266,50 @@ JS;
             'placeholder'        => $this->label,
         ], $this->config);
 
+        $uniqueElm = uniqid('elm');
+        $uniqueParam = uniqid('elmParam');
+        $paramClass = $paramClass ? urlencode($paramClass) : '';
+
+        $additional_script = '';
+        if ($loadAfterChange) {
+            $additional_script = <<<JS
+                    {$uniqueParam}.addEventListener('addItem', function(event) {
+                        loadOptions_{$uniqueElm}();
+                    });
+                    loadOptions_{$uniqueElm}();
+            JS;
+        }
+
         $this->additional_script = <<<JS
-            var elm = document.querySelector("{$this->getElementClassSelector()}");
-            var elmParam = document.querySelector(".{$paramId}");
+            var {$uniqueElm} = document.querySelector("{$this->getElementClassSelector()}");
+            var {$uniqueParam} = document.querySelector('[name="{$paramId}"]');
             var lookupTimeout;
-            elm.addEventListener('search', function(event) {
+            function loadOptions_{$uniqueElm}() {
+                var query = {$this->choicesObjName()}.input.value;
+                var paramId = {$uniqueParam}.value;
+                let paramClass = '{$paramClass}';
+                admin.ajax.post("{$url}",{query:query, param_id:paramId, param_class:paramClass},function(data){
+                    {$this->choicesObjName()}.setChoices(data.data, '{$idField}', '{$textField}', true);
+                });
+            }
+
+            {$uniqueElm}.addEventListener('search', function(event) {
                 clearTimeout(lookupTimeout);
                 lookupTimeout = setTimeout(function(){
-                    var query = {$this->choicesObjName()}.input.value;
-
-                    var paramId = choices_{$paramId}.getValue(true);
-                    admin.ajax.post("{$url}",{query:query, paramId:paramId},function(data){
-                        {$this->choicesObjName()}.setChoices(data.data, '{$idField}', '{$textField}', true);
-                    })
+                    loadOptions_{$uniqueElm}();
                 }, 250);
             });
 
-            elm.addEventListener('choice', function(event) {
+            {$uniqueElm}.addEventListener('choice', function(event) {
                 {$this->choicesObjName()}.setChoices([], '{$idField}', '{$textField}', true);
             });
 
-            elmParam.addEventListener('choice', function(event) {
+            {$uniqueParam}.addEventListener('choice', function(event) {
                 {$this->choicesObjName()}.clearStore();
                 {$this->choicesObjName()}.clearInput();
             });
+
+            {$additional_script}
         JS;
 
         return $this;
@@ -341,9 +361,11 @@ JS;
      */
     public function readonly($set = true): self
     {
-        $this->useNative();
-        $this->config('readonly', $set);
-        $this->disabled($set);
+        if ($set) {
+            $this->useNative();
+            $this->config('readonly', $set);
+            $this->disabled($set);
+        }
 
         return parent::readonly($set);
     }

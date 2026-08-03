@@ -50,6 +50,11 @@ class Admin
     public static $favicon;
 
     /**
+     * @var bool
+     */
+    protected static $isPart = false;
+
+    /**
      * @var array
      */
     public static $extensions = [];
@@ -416,5 +421,21 @@ class Admin
         $lang_array = json_encode(__('admin'));
 
         return '<script>var admin_lang_arr = '.$lang_array.'</script>';
+    }
+
+    /**
+     * Add js or get all js.
+     *
+     * @param null $isPart
+     *
+     * @return array
+     */
+    public static function isPart($isPart = null)
+    {
+        if (!is_null($isPart)) {
+            return self::$isPart = $isPart;
+        }
+
+        return self::$isPart ?? false;
     }
 }

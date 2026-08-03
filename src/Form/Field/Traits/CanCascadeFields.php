@@ -92,7 +92,9 @@ trait CanCascadeFields
             $value = implode('-', $value);
         }
         $formId = $this->form ? $this->form->getAttribute('id') : '';
-        return sprintf('cascade-%s-%s-%s',$formId, $this->getElementClassString(), $value);
+        $classes = explode(' ', $this->getElementClassString());
+        $classes = $classes[0];
+        return sprintf('cascade-%s-%s-%s',$formId, $classes, $value);
     }
 
     /**

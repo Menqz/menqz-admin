@@ -17,6 +17,7 @@ admin.modal = {
     ajaxUrl: null,
     body: null,
     actionText: '',
+    onAfterLoad: null,
 
     init: function () {
         this.modalContainer = document.getElementById('container-modal');
@@ -61,6 +62,7 @@ admin.modal = {
         cancelText = 'Cancelar',
         onAction = null,
         onCancel = null,
+        onAfterLoad = null,
         showCancelButton = true,
         closeOnlyActionResultTrue = false,
         showSpinOnActionButton = true
@@ -78,6 +80,7 @@ admin.modal = {
         this.ajaxUrl = ajaxUrl;
         this.body = body;
         this.actionText = actionText;
+        this.onAfterLoad = onAfterLoad;
 
         this.reload();
 
@@ -155,6 +158,9 @@ admin.modal = {
                 .then(html => {
                     this.bodyElement.innerHTML = html;
                     executeScripts(this.bodyElement);
+                    if(this.onAfterLoad){
+                        this.onAfterLoad(this);
+                    }
                 })
                 .catch(error => {
                     this.bodyElement.innerHTML = `

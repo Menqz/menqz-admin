@@ -43,13 +43,13 @@ class Part
      *
      * @return $this
      */
-    public function append($title, $class, $parentClass, $parentId, $active = false)
+    public function append($title, $class, $parentClass, $parentId, ?string $name = null, bool $active = false)
     {
 
         $id = 'form-'.($this->parts->count() + 1);
         $formId = $this->form->getAttribute('id');
 
-        $this->parts->push(compact('id', 'title', 'class', 'parentClass', 'parentId', 'active', 'formId'));
+        $this->parts->push(compact('id', 'title', 'class', 'parentClass', 'parentId', 'name', 'active', 'formId'));
 
         return $this;
     }
