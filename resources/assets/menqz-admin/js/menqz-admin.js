@@ -322,14 +322,14 @@ admin.ajax = {
             const formData = new FormData();
             formData.append('name', value);
          */
-    post: function (url, data, result_function, error_function) {
+    post: async function (url, data, result_function, error_function) {
         let obj = {
             method: 'post',
             data: data,
             url: url,
         };
         obj.data._token = LA.token;
-        this.request(url, obj, result_function, error_function);
+        await this.request(url, obj, result_function, error_function);
     },
 
     get: function (url, data, result_function, error_function) {
