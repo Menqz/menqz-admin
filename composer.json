@@ -45,7 +45,8 @@
         ]
     },
     "scripts": {
-        "sass": "sass --watch resources/assets/menqz-admin/scss/styles.scss:resources/assets/menqz-admin/css/styles.css resources/assets/menqz-admin/scss/pages:resources/assets/menqz-admin/css/pages --style compressed",
+        "sass": "sass resources/assets/menqz-admin/scss/styles.scss:resources/assets/menqz-admin/css/styles.css resources/assets/menqz-admin/scss/pages:resources/assets/menqz-admin/css/pages --style compressed",
+        "sass-watch": "sass --watch resources/assets/menqz-admin/scss/styles.scss:resources/assets/menqz-admin/css/styles.css resources/assets/menqz-admin/scss/pages:resources/assets/menqz-admin/css/pages --style compressed", 
         "test": "./vendor/bin/phpunit"
     },
     "suggest": {
