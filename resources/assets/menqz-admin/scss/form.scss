@@ -124,6 +124,18 @@ body .choices {
         margin-bottom:0;
         min-height:30px;
     }
+
+    .choices__input[hidden] {
+        display: block !important;
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        left: 0;
+        bottom: 0;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+    
     .choices__list--single {
         padding: 0px;
     }

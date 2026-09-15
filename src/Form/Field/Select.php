@@ -411,7 +411,10 @@ JS;
                 'text' => $this->label,
             ],
             'classNames' => [
-                'containerOuter' => 'choices '.$this->getElementClassString(),
+                'containerOuter' => [
+                    'choices',
+                    $this->getElementClass(),
+                ],
             ],
         ], $this->config);
         $configs = json_encode($configs);
