@@ -40,6 +40,18 @@ class Button extends Field
         return $this;
     }
 
+    public function visible($visible = null)
+    {
+        if ($visible === null) {
+            $vars = $this->variables();
+            return $vars['visible'] ?? false;
+        }
+
+        $this->addVariables(['visible' => $visible]);
+
+        return $this;
+    }
+
     public function info()
     {
         $this->class = 'btn-info';
