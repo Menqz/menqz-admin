@@ -199,7 +199,19 @@ JS;
                 lookupTimeout = setTimeout(function(){
                     var query = {$this->choicesObjName()}.input.value;
                     admin.ajax.post("{$url}",{query:query},function(data){
-                        {$this->choicesObjName()}.setChoices(data.data, '{$idField}', '{$textField}', true);
+                        const choices = {$this->choicesObjName()};
+                        const values = choices.getValue(true);
+
+                        // Funciona tanto com select simples quanto múltiplo.
+                        const selectedValues = new Set(
+                            (Array.isArray(values) ? values : [values]).map(String)
+                        );
+
+                        const options = data.data.filter(function(item) {
+                            return !selectedValues.has(String(item['{$idField}']));
+                        });
+
+                        choices.setChoices(options, '{$idField}', '{$textField}', true);
                     })
                 }, 250);
             });
