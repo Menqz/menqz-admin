@@ -273,10 +273,9 @@ JS;
         $additional_script = '';
         if ($loadAfterChange) {
             $additional_script = <<<JS
-                    {$uniqueParam}.addEventListener('addItem', function(event) {
-                        loadOptions_{$uniqueElm}();
-                    });
+                {$uniqueParam}.addEventListener('addItem', function(event) {
                     loadOptions_{$uniqueElm}();
+                });
             JS;
         }
 

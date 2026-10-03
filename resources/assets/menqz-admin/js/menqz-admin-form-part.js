@@ -296,10 +296,17 @@ admin.form.part = {
         }).then(admin.resource.default_swal_response);
     },
 
-    loadPart: function (url, container, partObj) {
+    loadPart: function (partObjUrl, container, partObj) {
+        if (typeof partObjUrl === 'object' && partObjUrl !== null) {
+            partObj = partObjUrl;
+            container = partObj.container;
+            partObjUrl = partObj.url_index;
+        }
         container.innerHTML = this.getLoadingHtml();
-        admin.ajax.get(url, {},function(data){
+
+        admin.ajax.get(partObjUrl, {}, function (data) {
             container.innerHTML = data.data;
+
             admin.event.emit('admin.form.part.loaded', {
                 part: partObj
             });
