@@ -33,7 +33,15 @@ class Select extends Field
      */
     protected $native = false;
 
+    /**
+     * @var string
+     */
     public $additional_script = '';
+
+    /**
+     * @var callable
+     */
+    protected $creator;
 
     /**
      * Set options.
@@ -136,7 +144,7 @@ class Select extends Field
                     {$this->choicesObjName($field)}.setChoices(data.data, '{$idField}', '{$textField}', true);
                 })
             });
-JS;
+        JS;
 
         return $this;
     }
@@ -201,10 +209,10 @@ JS;
         $parameters_json = json_encode($parameters);
 
         $this->additional_script .= <<<JS
-        admin.ajax.post("{$url}",{$parameters_json},function(data){
-            {$this->choicesObjName()}.setChoices(data.data, 'id', 'text', true);
-        });
-JS;
+            admin.ajax.post("{$url}",{$parameters_json},function(data){
+                {$this->choicesObjName()}.setChoices(data.data, 'id', 'text', true);
+            });
+        JS;
 
         return $this;
     }
@@ -394,6 +402,49 @@ JS;
             'MenqzAdmin\Admin\Form\Field\MultipleSelect',
             'MenqzAdmin\Admin\Form\Field\Timezone',
         ]);
+    }
+
+    /**
+     * Set creator for options.
+     */
+    public function creatable(callable $creator)
+    {
+        $this->creator = $creator;
+
+        $this->config['addItems'] = true;
+        $this->config['addChoices'] = true;
+        $this->config['addItemText'] = trans('admin.select.addItemText');
+
+        return $this;
+    }
+
+    public function prepare($value)
+    {
+        $value = parent::prepare($value);
+
+        if (!$this->creator || $value === null || $value === '' || $this instanceof MultipleSelect) {
+            return $value;
+        }
+
+        $validos = is_array($this->options)
+            ? array_map('strval', array_keys($this->options))
+            : [];
+
+        $existe = $validos === null
+            ? is_numeric($value)
+            : in_array($value, $validos, true);
+
+        if ($existe) {
+            return $value;
+        }
+
+        $value = trim($value);
+
+        if ($value === '') {
+            return null;
+        }
+
+        return call_user_func($this->creator, $value);
     }
 
     /**
