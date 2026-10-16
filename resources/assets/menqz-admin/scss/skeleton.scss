@@ -313,6 +313,23 @@
             }
         }
     }
+
+    /*
+     * Ao passar o mouse na coluna do menu recolhido, a logo (navbar-brand) também
+     * expande junto com a sidebar, exibindo o logo completo — igual ao menu aberto.
+     */
+    .side-menu-closed:has(#sidebar:hover) {
+        .custom-navbar .navbar-brand {
+            width: var(--menu-width);
+
+            .long {
+                display: block;
+            }
+            .short {
+                display: none;
+            }
+        }
+    }
 }
 
 .user-image {
@@ -387,15 +404,36 @@
 
 aside#sidebar {
     float: left;
-    min-height: calc(100% - 56px);
+    min-height: 0;
     position: fixed;
     transition: all 0.3s;
     bottom: 0;
     left: 0;
     top: 56px;
-    min-height: 100vh;
-    max-height: 80vh;
-    z-index: 999 !important
+    max-height: none;
+    /* a altura vem de top/bottom; habilita a rolagem quando o menu excede a viewport */
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+    z-index: 999 !important;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.15);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.4);
+    }
 }
 
 main#main {
@@ -418,11 +456,6 @@ main#main footer.fixed-bottom {
 }
 
 .side-menu-closed {
-    .custom-menu .collapsing {
-        overflow: none;
-        transition: none;
-        height: auto;
-    }
     main#main footer.fixed-bottom {
         margin-left: var(--menu-closed-width);
     }
@@ -502,7 +535,7 @@ main#main footer.fixed-bottom {
     }
 }
 
-.side-menu-closed {
+.side-menu-closed aside#sidebar:not(:hover) {
     .custom-menu {
         ul {
             li {
@@ -539,42 +572,22 @@ main#main footer.fixed-bottom {
                     transition: opacity 0s !important;
                 }
             }
+        }
 
-            &:hover {
-                > a > span {
-                    display: block;
-                    transition: opacity 0s !important;
+         /*
+         * Ao passar o mouse no menu recolhido, ele expande sobre o conteúdo
+         * (overlay) para permitir a seleção dos itens. A barra de rolagem é
+         * mantida (herdada de aside#sidebar), então um menu longo continua
+         * navegável até o final da página.
+         */
+        aside#sidebar:hover {
+            width: var(--menu-width);
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.35);
+
+            .custom-menu > ul > li a {
+                width: 100%;
+                span {
                     opacity: 1;
-                    position: absolute;
-                    top: -8px;
-                    left: 38px;
-                    background: var(--menu-bg);
-                    width: 220px;
-                    height: 40px;
-                    line-height: 40px;
-                    text-indent: 10px;
-                    border-top-right-radius: 4px;
-                    border-bottom-right-radius: 4px;
-                    z-index: 2030;
-                }
-
-                ul {
-                    display: block;
-                    position: absolute;
-                    padding-top: 4px;
-                    top: 22px;
-                    left: 41px;
-                    background: var(--menu-bg);
-                    width: 220px;
-                    border-bottom-right-radius: 4px;
-                    z-index: 2030;
-
-                    li a {
-                        width: 100%;
-                        span {
-                            opacity: 1;
-                        }
-                    }
                 }
             }
         }
@@ -710,7 +723,7 @@ main#main footer.fixed-bottom {
     }
 }
 
-.side-menu-closed {
+.side-menu-closed  aside#sidebar:not(:hover){
     .sidebar-form {
         width: 0;
         overflow: hidden !important;
