@@ -25,8 +25,12 @@ admin.init = function () {
 /*-------------------------------------------------*/
 
 admin.menu = {
+    storageKey: 'menqz-admin:menu-closed',
+
     init: function () {
         let menuToggle = document.getElementById('menu-toggle');
+
+        this.restoreState();
 
         menuToggle.addEventListener('click', function () {
             if (!document.body.classList.contains('side-menu-closed')) {
@@ -40,6 +44,8 @@ admin.menu = {
                 document.body.classList.toggle('side-menu-closed');
                 document.body.classList.remove('side-menu-open');
             }
+
+            admin.menu.persistState();
         });
 
         window.addEventListener('resize', function () {
@@ -78,6 +84,40 @@ admin.menu = {
         let open_list = document.getElementById('menu').getElementsByClassName('show');
         for (let is_open of open_list) {
             is_open.previousElementSibling.click();
+        }
+    },
+
+    /*
+     * Guarda no navegador se o menu está aberto ou fechado, para que o estado
+     * seja mantido ao trocar de tela / recarregar a página.
+     */
+    restoreState: function () {
+        if (window.innerWidth < 576) {
+            return;
+        }
+
+        try {
+            let closed = localStorage.getItem(admin.menu.storageKey);
+
+            if (closed === '1') {
+                document.body.classList.add('side-menu-closed');
+            } else if (closed === '0') {
+                document.body.classList.remove('side-menu-closed');
+            }
+        } catch (e) {
+            // localStorage indisponível; mantém o estado padrão
+        }
+    },
+
+    persistState: function () {
+        if (window.innerWidth < 576) {
+            return;
+        }
+
+        try {
+            localStorage.setItem(admin.menu.storageKey, document.body.classList.contains('side-menu-closed') ? '1' : '0');
+        } catch (e) {
+            // localStorage indisponível; ignora
         }
     },
 
