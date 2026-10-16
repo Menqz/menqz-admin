@@ -127,9 +127,18 @@ class MultipleSelect extends Select
 
     public function prepare($value)
     {
-        $value = parent::prepare($value);
-        $value = (array) $value;
+        $value = collect(array_filter((array) parent::prepare($value), 'strlen'));
 
-        return array_filter($value, 'strlen');
+        if (!$this->creator) {
+            return $value->all();
+        }
+
+        $validos = is_array($this->options) ? array_map('strval', array_keys($this->options)) : null;
+
+        return $value
+            ->map(fn ($item) => ($validos === null ? is_numeric($item) : in_array((string) $item, $validos, true)) ? $item : call_user_func($this->creator, trim($item)))
+            ->unique()
+            ->values()
+            ->all();
     }
 }
