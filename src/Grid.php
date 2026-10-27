@@ -166,6 +166,7 @@ class Grid
         'show_column_selector'   => true,
         'show_define_empty_page' => true,
         'show_perpage_selector'  => true,
+        'show_mobile_cards'      => false,
     ];
 
     /**
@@ -478,6 +479,16 @@ class Grid
     }
 
     /**
+     * If this grid use stacked cards on mobile.
+     *
+     * @return bool
+     */
+    public function showMobileCards()
+    {
+        return $this->option('show_mobile_cards');
+    }
+
+    /**
      * Set per-page options.
      *
      * @param array $perPages
@@ -718,6 +729,16 @@ class Grid
     public function disableDefineEmptyPage(bool $disable = true)
     {
         return $this->option('show_define_empty_page', !$disable);
+    }
+
+    /**
+     * Converts the grid into stacked cards on mobile devices.
+     *
+     * @return $this
+     */
+    public function useMobileCards(bool $enable = true)
+    {
+        return $this->option('show_mobile_cards', $enable);
     }
 
     /**

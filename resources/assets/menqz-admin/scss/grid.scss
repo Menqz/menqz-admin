@@ -237,6 +237,134 @@ body .table.allow-wrap tr td{
     }
 }
 
+@media (max-width: 768px) {
+    .grid-mobile-cards-container {
+        overflow: visible;
+
+        &.tables-container .table-fixed {
+            display: none !important;
+        }
+
+        &.tables-container .table-main {
+            overflow: visible;
+        }
+    }
+
+    .grid-mobile-cards {
+        display: block;
+        margin-bottom: 0;
+
+        &.table-hover > tbody > tr:hover > * {
+            --bs-table-accent-bg: transparent;
+            color: inherit;
+            background-color: transparent;
+        }
+
+        > thead:first-of-type {
+            display: none;
+        }
+
+        > tbody {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+
+            > tr {
+                position: relative;
+                display: block;
+                padding: 0.75rem;
+                border: 1px solid var(--table-border-color);
+                border-radius: var(--field-border-radius);
+                background-color: var(--bs-body-bg);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+                &.selected {
+                    color: var(--bs-table-selected-color);
+                    background-color: var(--bs-table-selected-bg);
+                }
+
+                > td {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 0.75rem;
+                    height: auto;
+                    padding: 0.25rem 0;
+                    border: 0;
+                    overflow: visible;
+                    background-color: transparent;
+                    box-shadow: none;
+                    white-space: normal;
+
+                    &::before {
+                        content: attr(data-label);
+                        flex-shrink: 0;
+                        color: $secondary;
+                        font-size: 0.875rem;
+                    }
+
+                    &[data-card-title="true"] {
+                        justify-content: flex-start;
+                        margin-bottom: 0.25rem;
+                        padding-right: 2rem;
+                        padding-bottom: 0.5rem;
+                        border-bottom: 1px solid var(--table-border-color);
+                        font-weight: 600;
+
+                        &::before {
+                            display: none;
+                        }
+                    }
+
+                    &.column-__row_selector__ {
+                        position: absolute;
+                        top: 0.75rem;
+                        right: 0.75rem;
+                        width: auto;
+                        padding: 0;
+
+                        &::before {
+                            display: none;
+                        }
+                    }
+
+                    &.column-__actions__ {
+                        flex-wrap: wrap;
+
+                        .__actions__div {
+                            position: static;
+                            display: flex;
+                            flex-wrap: wrap;
+                            justify-content: flex-end;
+                            height: auto;
+                            margin-top: 0;
+                            margin-left: auto;
+                            padding: 0;
+                            line-height: normal;
+                            background: none;
+                        }
+                    }
+
+                    &.empty-grid {
+                        display: block;
+                        padding: 2rem 0;
+                        text-align: center;
+
+                        &::before {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        > tfoot {
+            display: block;
+            margin-top: 0.75rem;
+        }
+    }
+}
+
 /*---------------------------------------------------------*/
 /* inline edit */
 /*---------------------------------------------------------*/
