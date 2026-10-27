@@ -1,11 +1,22 @@
 @include("admin::grid.table-header")
 
-        <div class="table-responsive" autocomplete="off">
-            <table class="table grid-table table-sm table-hover select-table" id="{{ $grid->tableID }}">
+        @php
+            $visibleColumns = $grid->visibleColumns();
+            $mobileCardTitleColumn = $visibleColumns->first(function ($column) {
+                return !in_array($column->getName(), [
+                    \MenqzAdmin\Admin\Grid\Column::SELECT_COLUMN_NAME,
+                    \MenqzAdmin\Admin\Grid\Column::ACTION_COLUMN_NAME,
+                ]);
+            });
+            $mobileCardTitleColumnName = $mobileCardTitleColumn ? $mobileCardTitleColumn->getName() : null;
+        @endphp
+
+        <div class="table-responsive @if($grid->showMobileCards()) grid-mobile-cards-container @endif" autocomplete="off">
+            <table class="table grid-table table-sm table-hover select-table @if($grid->showMobileCards()) grid-mobile-cards @endif" id="{{ $grid->tableID }}">
 
                 <thead>
                     <tr>
-                        @foreach($grid->visibleColumns() as $column)
+                        @foreach($visibleColumns as $column)
                         <th {!! $column->formatHtmlAttributes() !!}>{!! $column->getLabel() !!}{!! $column->renderHeader() !!}</th>
                         @endforeach
                     </tr>
@@ -23,8 +34,12 @@
 
                     @foreach($grid->rows() as $row)
                     <tr {!! $row->getRowAttributes() !!}>
-                        @foreach($grid->visibleColumnNames() as $name)
-                        <td {!! $row->getColumnAttributes($name) !!}>
+                        @foreach($visibleColumns as $column)
+                        @php
+                            $name = $column->getName();
+                            $mobileCardLabel = trim(strip_tags((string) $column->getLabel()));
+                        @endphp
+                        <td {!! $row->getColumnAttributes($name) !!} data-label="{{ $mobileCardLabel }}" @if($name === $mobileCardTitleColumnName) data-card-title="true" @endif>
                             {!! $row->column($name) !!}
                         </td>
                         @endforeach
