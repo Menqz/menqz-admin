@@ -2,7 +2,7 @@
     $menuPermission = \Illuminate\Support\Arr::get($item, 'permission');
     $menuUri = \Illuminate\Support\Arr::get($item, 'uri');
     $menuCan = true;
-    if (\MenqzAdmin\Admin\Auth\PermissionMode::isCrud()) {
+    if (isset($isCrud) && $isCrud) {
         $resource = $menuPermission ?: \MenqzAdmin\Admin\Auth\CrudGate::resourceFromUrl((string) $menuUri);
         $menuCan = $resource ? Admin::user()->crudCan($resource, \MenqzAdmin\Admin\Auth\Database\CrudPermission::ACTION_LIST) : true;
     } else {
