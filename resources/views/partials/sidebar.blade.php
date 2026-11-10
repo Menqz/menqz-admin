@@ -37,7 +37,15 @@
 
         <div class="custom-menu">
             <ul class="list-unstyled ps-0 root" id="menu">
-                @each('admin::partials.menu', Admin::menu(), 'item')
+                @php
+                    $isCrud = \MenqzAdmin\Admin\Auth\PermissionMode::isCrud();
+                @endphp
+                @foreach (Admin::menu() as $item)
+                    @include('admin::partials.menu', [
+                        'item' => $item,
+                        'isCrud' => $isCrud,
+                    ])
+                @endforeach
             </ul>
         </div>
     </nav>
