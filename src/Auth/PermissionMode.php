@@ -11,10 +11,13 @@ class PermissionMode
 
     public static function current(): string
     {
-        try {
-            $mode = AdminSetting::getValue('permissions.mode', config('admin.permissions.mode', self::MODE_ROUTE));
-        } catch (\Throwable $e) {
-            $mode = config('admin.permissions.mode', self::MODE_ROUTE);
+        $mode = config('admin.permissions.mode', null);
+        if ($mode === null) {
+            try {
+                $mode = AdminSetting::getValue('permissions.mode', config('admin.permissions.mode', self::MODE_ROUTE));
+            } catch (\Throwable $e) {
+                $mode = config('admin.permissions.mode', self::MODE_ROUTE);
+            }
         }
         $mode = strtolower((string) $mode);
 
