@@ -18,7 +18,7 @@ trait CanDoubleClick
             tr = e.target.closest("tr");
             if (tr && tr.dataset.key){
                 var url = "{$this->resource()}/"+tr.dataset.key+"/edit";
-                admin.ajax.navigate(url);
+                window.location.href = url;
             }
         });
 SCRIPT;
